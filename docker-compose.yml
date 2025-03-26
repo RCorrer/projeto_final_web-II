@@ -22,7 +22,7 @@ services:
     command: mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=true"
 
   db:
-    image: postgres:17
+    image: postgres:15.5
     environment:
       POSTGRES_DB: WEB_II
       POSTGRES_USER: admin
