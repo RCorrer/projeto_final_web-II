@@ -13,7 +13,7 @@
 Graças à "containerização" do projeto conseguimos padronizar o ambiente de desenvolvimento diminuindo então, problemas de versão entre desenvolvedores e maior facilidade na instalação/uso do programa
 
 #### Instalação:
-Com todos os [README.md#Requitements](Requerimentos) instalados e siga os seguintes passo:
+Com todos os Requeriments instalados e siga os seguintes passo:
 
   1. Baixe o repositório dentro da pasta de sua escolha:
      ```
