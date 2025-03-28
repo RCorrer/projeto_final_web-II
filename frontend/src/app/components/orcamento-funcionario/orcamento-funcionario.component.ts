@@ -9,6 +9,6 @@ import { Component } from '@angular/core';
 export class OrcamentoFuncionarioComponent {
   enviarOrcamento() {
     console.log('BUM! ENVIADO (mentira, só depois de criar um serviço aqui)');
-  
+
   }
 }

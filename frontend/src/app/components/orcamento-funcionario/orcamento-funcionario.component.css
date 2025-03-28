@@ -5,12 +5,10 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 100px;
     background: rgb(149, 197, 255);
-    background: linear-gradient(
-      90deg,
-      rgba(149, 197, 255, 0.699) 0%,
-      rgba(213, 213, 255, 0.651) 49%,
-      rgba(217, 217, 217, 0.774) 100%
-    );
+    background: linear-gradient(90deg,
+            rgba(149, 197, 255, 0.699) 0%,
+            rgba(213, 213, 255, 0.651) 49%,
+            rgba(217, 217, 217, 0.774) 100%);
 }
 
 .orcamento-header {
@@ -32,18 +30,19 @@
 }
 
 .orcamento-left {
-    width: 25%;;
+    width: 25%;
+    ;
 }
 
 .orcamento-right {
     display: flex;
     gap: 75px;
-    width: 60%;    
+    width: 60%;
 }
 
 .orcamento-cliente,
 .orcamento-endereco {
-    flex: 1;  
+    flex: 1;
 }
 
 .orcamento-divider {
