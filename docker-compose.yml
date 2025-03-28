@@ -6,7 +6,7 @@ services:
     working_dir: /home/app
     ports:
       - "80:4200"
-    command: sh -c "npm install -g @angular/cli@19 && npm install && ng serve --host 0.0.0.0 --poll=2000 --port 4200 --disable-host-check"
+    command: sh -c "npm install -g @angular/cli@19 && npm install && npm install @angular/material @angular/cdk @angular/animations && ng serve --host 0.0.0.0 --poll=2000 --port 4200 --disable-host-check"
     volumes:
       - ./frontend:/home/app
       - /home/app/node_modules
