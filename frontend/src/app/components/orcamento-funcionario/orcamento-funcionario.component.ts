@@ -7,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrl: './orcamento-funcionario.component.css'
 })
 export class OrcamentoFuncionarioComponent {
-
+  enviarOrcamento() {
+    console.log('BUM! ENVIADO (mentira, só depois de criar um serviço aqui)');
+  
+  }
 }
