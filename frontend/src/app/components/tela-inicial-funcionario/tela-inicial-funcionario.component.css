@@ -1,0 +1,36 @@
+.layout-container {
+  display: flex;
+  height: 100%;
+  background: rgb(149, 197, 255);
+  background: linear-gradient(
+    90deg,
+    rgba(149, 197, 255, 0.699) 0%,
+    rgba(213, 213, 255, 0.651) 49%,
+    rgba(217, 217, 217, 0.774) 100%
+  );
+}
+
+.content {
+  flex: 1;
+  margin-top: 2rem;
+  padding-inline: 10%;
+}
+
+.solicitacoes-container h2 {
+  margin-bottom: 1rem;
+}
+
+.solicitacoes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem;
+  padding-inline: 10%;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}

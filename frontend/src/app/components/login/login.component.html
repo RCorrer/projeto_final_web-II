@@ -1,0 +1,33 @@
+<div class="login-container">
+     <div class="titulo">
+        <h1>
+            Seja bem-vindo<br>
+            novamente!
+        </h1>
+     </div>
+
+     <div class="login-form">
+         <div>
+            <h2>Realize o seu login</h2>
+         </div>
+
+         <form action=""> 
+            <mat-form-field appearance="fill">
+                 <input matInput placeholder="Insira seu e-mail" type="email">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                 <input matInput placeholder="Insira sua senha" type="password">
+            </mat-form-field>
+
+
+            <button  mat-flat-button (click)="enviarLogin ()" >login</button>
+        </form>
+        
+        <div>
+            <p>Não possuí uma conta?
+                <a>Faça seu cadastro</a>
+            </p>
+        </div>
+    </div>
+</div>
