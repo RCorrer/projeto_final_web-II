@@ -12,6 +12,7 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "esModuleInterop": true,
+    "typeRoots": ["node_modules/@types"],
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
