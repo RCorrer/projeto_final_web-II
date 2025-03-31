@@ -1,10 +1,13 @@
 package com.example.web_II.controllers;
 
+import com.example.web_II.domain.funcionarios.Funcionario;
 import com.example.web_II.domain.usuarios.AuthenticationDTO;
 import com.example.web_II.domain.usuarios.LoginResponseDTO;
-import com.example.web_II.domain.usuarios.RegisterDTO;
+import com.example.web_II.domain.funcionarios.CadastroFuncionarioDTO;
 import com.example.web_II.domain.usuarios.Usuario;
+import com.example.web_II.domain.usuarios.UsuarioRole;
 import com.example.web_II.infra.security.TokenService;
+import com.example.web_II.repositories.FuncionarioRepository;
 import com.example.web_II.repositories.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,9 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UsuarioRepository repository;
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
     @Autowired
     private TokenService tokenService;
 
@@ -32,7 +37,7 @@ public class AuthenticationController {
 
         var token = tokenService.generateToken((Usuario) auth.getPrincipal());
 
-        var userDetails = this.repository.findByEmail(data.login());
+        var userDetails = this.usuarioRepository.findByEmail(data.login());
 
         return ResponseEntity.ok(new LoginResponseDTO(
                 token,
@@ -43,15 +48,18 @@ public class AuthenticationController {
         ));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.repository.findUserDetailsByEmail(data.login()) != null) return ResponseEntity.badRequest().build();
+    @PostMapping("/cadastro/funcionario")
+    public ResponseEntity register(@RequestBody @Valid CadastroFuncionarioDTO data){
+        if(this.usuarioRepository.findUserDetailsByEmail(data.login()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        Usuario newUser = new Usuario(data.name(), data.login(), encryptedPassword, data.role());
+        Usuario novoUsuario = new Usuario(data.name(), data.login(), encryptedPassword, UsuarioRole.FUNCIONARIO);
 
-        this.repository.save(newUser);
+        Funcionario novoFuncionario = new Funcionario(data.dataNascimento(), novoUsuario);
 
-        return ResponseEntity.ok().build();
+        this.usuarioRepository.save(novoUsuario);
+        this.funcionarioRepository.save(novoFuncionario);
+
+        return ResponseEntity.ok("Funcionário cadastrado com sucesso");
     }
 }
