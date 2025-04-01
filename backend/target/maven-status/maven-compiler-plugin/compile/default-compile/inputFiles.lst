@@ -1,10 +1,12 @@
 /app/src/main/java/com/example/web_II/WebIiApplication.java
 /app/src/main/java/com/example/web_II/controllers/AuthenticationController.java
+/app/src/main/java/com/example/web_II/controllers/CategoriaController.java
 /app/src/main/java/com/example/web_II/domain/usuarios/AuthenticationDTO.java
 /app/src/main/java/com/example/web_II/domain/usuarios/LoginResponseDTO.java
 /app/src/main/java/com/example/web_II/domain/usuarios/RegisterDTO.java
 /app/src/main/java/com/example/web_II/domain/usuarios/Usuario.java
 /app/src/main/java/com/example/web_II/domain/usuarios/UsuarioRole.java
+/app/src/main/java/com/example/web_II/infra/CorsConfig.java
 /app/src/main/java/com/example/web_II/infra/security/SecurityConfigurations.java
 /app/src/main/java/com/example/web_II/infra/security/SecurityFilter.java
 /app/src/main/java/com/example/web_II/infra/security/TokenService.java
