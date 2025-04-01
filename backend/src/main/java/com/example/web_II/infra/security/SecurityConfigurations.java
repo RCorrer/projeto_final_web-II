@@ -13,6 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
+
 
 @Configuration
 @EnableWebSecurity
@@ -29,9 +33,10 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/cadastro/funcionario").permitAll()
                         .requestMatchers(HttpMethod.POST, "/cadastro/cliente").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/categoria").permitAll()
                         .requestMatchers(
-                            "/v3/api-docs/**", 
-                            "/swagger-ui/**", 
+                            "/v3/api-docs/**",
+                                "/swagger-ui/**",
                             "/swagger-ui.html"
                         ).permitAll()
                         .anyRequest().authenticated()
