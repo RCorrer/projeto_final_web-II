@@ -11,20 +11,20 @@
             <h2>Realize o seu login</h2>
          </div>
 
-         <form action=""> 
+         <form class="login" action=""> 
             <mat-form-field appearance="fill">
                  <input matInput placeholder="Insira seu e-mail" type="email">
             </mat-form-field>
 
             <mat-form-field appearance="fill">
-                 <input matInput placeholder="Insira sua senha" type="password">
+                 <input matInput color="primary" placeholder="Insira sua senha" type="password">
             </mat-form-field>
 
 
-            <button  mat-flat-button (click)="enviarLogin ()" >login</button>
+            <button mat-flat-button routerLink="/home">Login</button>
         </form>
         
-        <div>
+        <div class="cadastro">
             <p>Não possuí uma conta?
                 <a>Faça seu cadastro</a>
             </p>
