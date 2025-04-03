@@ -8,6 +8,13 @@
   --md-sys-color-surface-1: #ebeaea; /* Altera a cor de fundo dos componentes */
   --md-sys-color-on-surface: #333; /* Cor do texto nos componentes */
   --color-aberto: #d9d9d9; /* Cor da categoria "ABERTO" */
+  --color-orcada: #9C6644; /* Cor da categoria "ORÇADA" */
+  --color-rejeitada: #E26768; /* Cor da categoria "REJEITADA" */
+  --color-aprovada: #FBB91B; /* Cor da categoria "APROVADA" */
+  --color-redirecionada: #8080FF; /* Cor da categoria "REDIRECIONADA" */
+  --color-arrumada: #138EFF; /* Cor da categoria "ARRUMADA" */
+  --color-paga: #fb8b24; /* Cor da categoria "PAGA" */
+  --color-finalizada: #14ae5c; /* Cor da categoria "FINALIZADA" */
   --color-icons: #A6A6A6;
 }
 
