@@ -36,6 +36,57 @@
       >
         Realizar orçamento
       </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-orcada)'"
+        class="action-button-disabled"
+      >
+        Esperando Aceite
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-rejeitada)'"
+        class="action-button-disabled"
+      >
+        Orçamento Rejeitado
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-aprovada)'"
+        routerLink="/realizar-manutencao"
+        class="action-button"
+      >
+        Realizar manutenção
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-redirecionada)'"
+        routerLink="/realizar-manutencao"
+        class="action-button"
+      >
+        Realizar manutenção
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-arrumada)'"
+        class="action-button-disabled"
+      >
+        Esperando pagamento
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-paga)'"
+        class="action-button"
+      >
+        Finalizar Solicitação
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-finalizada)'"
+        class="action-button-disabled"
+      >
+        Finalizada
+      </a>
     </mat-card-actions>
   </mat-card>
 </div>
