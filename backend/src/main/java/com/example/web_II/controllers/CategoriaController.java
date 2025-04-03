@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class CategoriaController {
@@ -20,8 +22,8 @@ public class CategoriaController {
 private CategoriaRepository categoriaRepository;
 
 
-@PostMapping("/categoria")
-public ResponseEntity addCategoria(@RequestBody @Valid CategoriaDTO data){
+@PostMapping("/categoria/adicionar")
+public ResponseEntity<String> addCategoria(@RequestBody @Valid CategoriaDTO data){
 
     if (categoriaRepository.existsByDescricao(data.descricao())){
         return ResponseEntity.status(HttpStatus.CONFLICT).body("Essa categoria já existe");
@@ -31,7 +33,18 @@ public ResponseEntity addCategoria(@RequestBody @Valid CategoriaDTO data){
     return ResponseEntity.ok("Categoria Adicionada!!");
 }
 
+//Melhorar posteriormente
+@GetMapping("/categoria/listar")
+public ResponseEntity<List<Categoria>> listaCategoria(){
+    return ResponseEntity.ok(categoriaRepository.findAll());
+
+}
 
 
 }
+
+
+
+
+
 

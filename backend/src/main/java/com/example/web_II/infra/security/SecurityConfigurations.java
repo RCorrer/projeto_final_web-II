@@ -33,7 +33,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/cadastro/funcionario").permitAll()
                         .requestMatchers(HttpMethod.POST, "/cadastro/cliente").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/categoria").permitAll()
+                        .requestMatchers("/categoria/**").permitAll()
                         .requestMatchers(
                             "/v3/api-docs/**",
                                 "/swagger-ui/**",

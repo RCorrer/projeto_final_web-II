@@ -5,6 +5,8 @@ import lombok.*;
 
 @Table(name = "CategoriaEquipamento")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Getter
 @Setter
