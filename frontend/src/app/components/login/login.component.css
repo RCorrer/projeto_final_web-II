@@ -47,6 +47,14 @@
 
 a {
     color: #138EFF;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+a:hover {
+    color: #1b5994;
+    text-decoration: underline;
 }
 
 .cadastro {
