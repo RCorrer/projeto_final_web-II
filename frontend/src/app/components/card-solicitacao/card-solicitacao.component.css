@@ -6,14 +6,6 @@ mat-card {
   padding: 1rem;
 }
 
-.categoria {
-  max-width: 274px;
-  height: 20px;
-  border-radius: 0.5rem;
-  padding-top: 5px;
-  background-color: var(--color-aberto);
-}
-
 mat-card-header {
   display: flex;
   align-items: flex-start;
