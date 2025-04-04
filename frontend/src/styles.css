@@ -1,7 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100..900&display=swap");
 
-/* VARIAVEIS */
+/* Variáveis Globais */
 :root {
+
+  
+  /* CORES QUE O LUCAS COLOCOU */
   --md-sys-color-primary: #2f48e0; /* Altera a cor primária */
   --md-sys-color-secondary: #732fe0; /* Altera a cor secundária */
   --md-sys-color-surface: #ffffff; /* Altera a cor de fundo dos componentes */
@@ -18,36 +21,73 @@
   --color-icons: #A6A6A6;
 }
 
-html,
-body {
-  margin: 0;
-  height: 100%;
-  font-family:  Roboto, "Helvetica Neue", sans-serif,
-  color: var(--md-sys-color-on-surface);
+
+/* CORES QUE A SOPHIA COLOCOU */
+  /* 🔹 Cores Principais */
+  --color-primary: #2f48e0;
+  --color-secondary: #732fe0;
+
+  /* 🔹 Superfícies */
+  --color-surface: #ffffff;
+  --color-surface-alt: #ebeaea;
+  --color-text: #333;
+  --colors-gradient:  #eeeeee,  #C4D7FF;
+
+  /* 🔹 Estados e Elementos */
+  --color-status-open: #d9d9d9;
+  --color-icon: #a6a6a6;
+
+    /* 🔹 Cores  */
 }
 
-* {
+/* 🔹 Reset & Estilização Básica */
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-li {
-  list-style: none;
+html, body {
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  overflow-x: hidden;
 }
 
-a {
-  text-decoration: none;
-  color: var(--md-sys-color-on-surface);
-}
-
+/* 🔹 Tipografia */
 h1, h2, h3 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
 }
 
 .poppins-light {
   font-family: "Poppins", sans-serif;
   font-weight: 300;
-  font-style: normal;
+}
+
+/* 🔹 Links e listas */
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+li {
+  list-style: none;
+}
+
+/* 🔹 Páginas - elementos gerais */
+.layout-container {
+  display: flex;
+  height: 100%;
+  background: linear-gradient(90deg, var(--colors-gradient));
+}
+
+.content {
+  flex: 1;
+  padding-inline: 10%;
+}
+
+.dialog-content {
+  padding: 1rem;
 }

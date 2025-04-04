@@ -1,0 +1,22 @@
+<div class="card-funcionario">
+  <mat-icon class="mat-18">person</mat-icon>
+  <div class="card-funcionario-info">
+    <p>Fulaninho da Silva</p>
+    <p>fulaninho&#64;gmail.com</p>
+  </div>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="abrirDialog()">
+      <mat-icon>edit</mat-icon>
+      Editar
+    </button>
+    <button mat-menu-item (click)="excluir()">
+      <mat-icon>delete</mat-icon>
+      Excluir
+    </button>
+  </mat-menu>
+</div>
