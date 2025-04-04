@@ -1,7 +1,7 @@
 import { Component, inject } from "@angular/core";
 import { materialImports } from "../../material-imports";
 import { MatDialog } from "@angular/material/dialog";
-import { PrimeiroDialogComponent } from "../primeiro-dialog/primeiro-dialog.component";
+import { DadosFuncionarioComponent } from "../dados-funcionario/dados-funcionario.component";
 
 @Component({
   selector: "app-card-funcionario",
@@ -13,7 +13,17 @@ import { PrimeiroDialogComponent } from "../primeiro-dialog/primeiro-dialog.comp
 export class CardFuncionarioComponent {
   private dialog = inject(MatDialog);
 
-  abrirPrimeiroDialog(): void {
-    this.dialog.open(PrimeiroDialogComponent);
+  editar() {
+    console.log("Editar funcionário");
+  }
+
+  excluir() {
+    console.log("Excluir funcionário");
+  }
+
+  abrirDialog() {
+    this.dialog.open(DadosFuncionarioComponent, {
+      width: "600px",
+    });
   }
 }
