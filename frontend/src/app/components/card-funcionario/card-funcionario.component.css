@@ -1,0 +1,17 @@
+.card-funcionario {
+    display: flex;
+    background-color: var(--color-surface);
+    align-items: center;
+    border-radius: .5rem;
+    margin-block-end: 1rem;
+    padding-inline: 1rem;
+    width: fit-content;
+}
+
+.card-funcionario-info {
+    margin-inline: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+}
