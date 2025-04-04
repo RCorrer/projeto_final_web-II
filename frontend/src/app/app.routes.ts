@@ -35,7 +35,8 @@ export const routes: Routes = [
   {
     path: 'home-cliente',
     component: TelaInicialClienteComponent  
-  }
+  },
+  {
     path: "equipamentos",
     component: CrudEquipamentosComponent,
   },
