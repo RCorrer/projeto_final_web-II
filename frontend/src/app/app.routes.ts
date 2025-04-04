@@ -3,6 +3,7 @@ import { OrcamentoFuncionarioComponent } from './components/orcamento-funcionari
 import { TelaInicialFuncionarioComponent } from './components/tela-inicial-funcionario/tela-inicial-funcionario.component';
 import { LoginComponent } from './components/login/login.component';
 import { CadastroComponent } from './components/cadastro/cadastro.component';
+import { TelaInicialClienteComponent } from './components/tela-inicial-cliente/tela-inicial-cliente.component';
 
 
 export const routes: Routes = [
@@ -31,5 +32,10 @@ export const routes: Routes = [
   {
     path: 'home',
     component: TelaInicialFuncionarioComponent  
+  },
+
+  {
+    path: 'home-cliente',
+    component: TelaInicialClienteComponent  
   }
 ];
