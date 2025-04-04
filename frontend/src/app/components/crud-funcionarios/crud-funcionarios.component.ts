@@ -1,7 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { NavbarComponent } from "../navbar/navbar.component";
 import { materialImports } from "../../material-imports";
 import { CardFuncionarioComponent } from "../card-funcionario/card-funcionario.component";
+import { MatDialog } from "@angular/material/dialog";
+import { DadosFuncionarioComponent } from "../dados-funcionario/dados-funcionario.component";
 
 @Component({
   selector: "app-crud-funcionarios",
@@ -10,4 +12,11 @@ import { CardFuncionarioComponent } from "../card-funcionario/card-funcionario.c
   templateUrl: "./crud-funcionarios.component.html",
   styleUrl: "./crud-funcionarios.component.css",
 })
-export class CrudFuncionariosComponent {}
+export class CrudFuncionariosComponent {
+  private dialog = inject(MatDialog);
+  abrirDialog() {
+    this.dialog.open(DadosFuncionarioComponent, {
+      width: "600px",
+    });
+  }
+}
