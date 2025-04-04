@@ -1,4 +1,4 @@
-<div class="categoria">
+<div class="categoria" [style.background]="backgroundColor" style="max-width: 274px; height: 20px; border-radius: 0.5rem; padding-top: 5px;">
   <mat-card appearance="outlined">
     <mat-card-header>
       <div class="header-title">
@@ -29,7 +29,65 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <a href="/efetuar-orcamento" class="action-button">Realizar orçamento</a>
+      <a
+        *ngIf="backgroundColor === 'var(--color-aberto)'"
+        (click)="backgroundColor = 'var(--color-orcada)'"
+        class="action-button"
+        routerLink="/efetuar-orcamento"
+      >
+        Realizar orçamento
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-orcada)'"
+        class="action-button-disabled"
+      >
+        Esperando Aceite
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-rejeitada)'"
+        class="action-button-disabled"
+      >
+        Orçamento Rejeitado
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-aprovada)'"
+        routerLink="/realizar-manutencao"
+        class="action-button"
+      >
+        Realizar manutenção
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-redirecionada)'"
+        routerLink="/realizar-manutencao"
+        class="action-button"
+      >
+        Realizar manutenção
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-arrumada)'"
+        class="action-button-disabled"
+      >
+        Esperando pagamento
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-paga)'"
+        class="action-button"
+      >
+        Finalizar Solicitação
+      </a>
+
+      <a
+        *ngIf="backgroundColor === 'var(--color-finalizada)'"
+        class="action-button-disabled"
+      >
+        Finalizada
+      </a>
     </mat-card-actions>
   </mat-card>
 </div>
