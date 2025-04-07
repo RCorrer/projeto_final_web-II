@@ -7,6 +7,8 @@ import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, String> {
+
     boolean existsByDescricao(String descricao);
+
     Optional<Categoria> findByDescricao(String descricao);
 }

@@ -4,6 +4,7 @@ package com.example.web_II.controllers;
 import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.categoria.CategoriaDTO;
 import com.example.web_II.repositories.CategoriaRepository;
+import com.example.web_II.services.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,27 +19,29 @@ import java.util.stream.Collectors;
 @RestController
 public class CategoriaController {
 
-@Autowired
-private CategoriaRepository categoriaRepository;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private CategoriaService categoriaService;
 
 
-@PostMapping("/categoria/adicionar")
-public ResponseEntity<String> addCategoria(@RequestBody @Valid CategoriaDTO data){
 
-    if (categoriaRepository.existsByDescricao(data.descricao())){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Essa categoria já existe");
+    @PostMapping("/categoria/adicionar")
+    public ResponseEntity<String> addCategoria(@RequestBody @Valid CategoriaDTO data){
+        return categoriaService.addCategoryResponse(data);
     }
-    Categoria novaCategoria = new Categoria(data.descricao());
-    this.categoriaRepository.save(novaCategoria);
-    return ResponseEntity.ok("Categoria Adicionada!!");
-}
 
-//Melhorar posteriormente
-@GetMapping("/categoria/listar")
-public ResponseEntity<List<Categoria>> listaCategoria(){
-    return ResponseEntity.ok(categoriaRepository.findAll());
+    //Melhorar posteriormente
+    @GetMapping("/categoria/listar")
+    public ResponseEntity<List<String>> listaCategoria(){
+        return categoriaService.listCategoryResponse();
+    }
 
-}
+    @DeleteMapping("/categoria/excluir/{descricao}")
+    public ResponseEntity<String> removeCategoria(@PathVariable String descricao){
+        return categoriaService.deleteCategoryResponse(descricao);
+    }
 
 
 }
