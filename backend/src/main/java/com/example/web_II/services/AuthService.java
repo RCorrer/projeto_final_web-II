@@ -9,6 +9,7 @@ import com.example.web_II.domain.usuarios.AuthenticationDTO;
 import com.example.web_II.domain.usuarios.LoginResponseDTO;
 import com.example.web_II.domain.usuarios.Usuario;
 import com.example.web_II.domain.usuarios.UsuarioRole;
+import com.example.web_II.exceptions.LoginNotFoundException;
 import com.example.web_II.infra.security.TokenService;
 import com.example.web_II.repositories.ClienteRepository;
 import com.example.web_II.repositories.EnderecoRepository;
@@ -17,6 +18,7 @@ import com.example.web_II.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,19 +44,28 @@ public class AuthService {
     private TokenService tokenService;
 
     public LoginResponseDTO authenticate(AuthenticationDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        var auth = authenticationManager.authenticate(usernamePassword);
-
-        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
         var userDetails = usuarioRepository.findByEmail(data.login());
 
-        return new LoginResponseDTO(
-                token,
-                userDetails.getNome(),
-                userDetails.getId(),
-                userDetails.getRole().toString(),
-                "Login efetuado com sucesso"
-        );
+        if (userDetails == null) {
+            throw new LoginNotFoundException();
+        }
+
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+            var auth = authenticationManager.authenticate(usernamePassword);
+
+            var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+
+            return new LoginResponseDTO(
+                    token,
+                    userDetails.getNome(),
+                    userDetails.getId(),
+                    userDetails.getRole().toString(),
+                    "Login efetuado com sucesso"
+            );
+        } catch (BadCredentialsException ex) {
+            throw new BadCredentialsException("Senha inválida");
+        }
     }
 
     public ResponseEntity registerFuncionario(CadastroFuncionarioDTO data) {
