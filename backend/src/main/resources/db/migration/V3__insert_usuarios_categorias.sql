@@ -1,3 +1,15 @@
+DELETE FROM Receita;
+DELETE FROM RedirecionamentoFuncionario;
+DELETE FROM HistoricoAlteracao;
+DELETE FROM SolicitacaoManutencao;
+DELETE FROM EstadoSolicitacao;
+DELETE FROM CategoriaEquipamento;
+DELETE FROM Funcionarios;
+DELETE FROM Clientes;
+DELETE FROM Usuarios;
+DELETE FROM Endereco;
+
+
 INSERT INTO Usuarios (id, nome, email, senha) VALUES
 ('f1', 'Maria Silva', 'maria@empresa.com', 'senha123'),
 ('f2', 'Mário Souza', 'mario@empresa.com', 'senha123');
@@ -30,12 +42,3 @@ INSERT INTO CategoriaEquipamento (id, descricao) VALUES
 ('cat3', 'Impressora'),
 ('cat4', 'Mouse'),
 ('cat5', 'Teclado');
-
-INSERT INTO EstadoSolicitacao (id, descricao) VALUES
-('1', 'Aberto'),
-('2', 'Em análise'),
-('3', 'Orçamento enviado'),
-('4', 'Aprovado'),
-('5', 'Recusado'),
-('6', 'Em manutenção'),
-('7', 'Concluído');

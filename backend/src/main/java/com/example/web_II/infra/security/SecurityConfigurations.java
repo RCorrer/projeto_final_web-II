@@ -52,6 +52,7 @@ public class SecurityConfigurations {
 
                         // Rotas de teste (ajuste conforme sua necessidade)
                         .requestMatchers("/solicitacao/criar").permitAll()
+                        .requestMatchers("/solicitacao/buscar/{id}").permitAll()
                         .requestMatchers("/categoria/**").permitAll()
 
                         // Todas as outras rotas requerem autenticação
