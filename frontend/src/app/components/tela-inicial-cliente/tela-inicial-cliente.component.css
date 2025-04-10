@@ -1,16 +1,12 @@
   .layout-container {
-    display: flex;
     margin: auto;
     height: auto;
-    background: linear-gradient(90deg, var(--colors-gradient));
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .content {
-    flex: 1;
     margin-top: 2rem;
-    padding-inline: 2%;
   }
   
   h2 {
