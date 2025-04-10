@@ -1,19 +1,14 @@
-.layout-container {
-    display: flex;
-    height: 100%;
-  }
-
 .orcamento-container {
     display: flex;
     flex-direction: column;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 100px;
-    background: rgb(149, 197, 255);
+    padding: 10%;
+    /* background: rgb(149, 197, 255);
     background: linear-gradient(90deg,
             rgba(149, 197, 255, 0.699) 0%,
             rgba(213, 213, 255, 0.651) 49%,
-            rgba(217, 217, 217, 0.774) 100%);
+            rgba(217, 217, 217, 0.774) 100%); */
 }
 
 .orcamento-header {
@@ -36,13 +31,16 @@
 
 .orcamento-left {
     width: 25%;
-    ;
 }
 
 .orcamento-right {
     display: flex;
     gap: 75px;
     width: 60%;
+}
+
+.orcamento-content p {
+    margin-top: 10px;
 }
 
 .orcamento-cliente,

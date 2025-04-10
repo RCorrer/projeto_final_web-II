@@ -39,6 +39,7 @@ export const routes: Routes = [
   {
     path: "equipamentos",
     component: CrudEquipamentosComponent,
-  },
+  }
+
 
 ];
