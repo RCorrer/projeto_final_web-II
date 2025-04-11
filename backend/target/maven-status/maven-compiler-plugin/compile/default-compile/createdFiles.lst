@@ -17,6 +17,7 @@ com/example/web_II/domain/enderecos/Endereco.class
 com/example/web_II/controllers/CategoriaController.class
 com/example/web_II/domain/usuarios/UsuarioRole.class
 com/example/web_II/domain/categoria/Categoria.class
+com/example/web_II/services/AuthService.class
 com/example/web_II/repositories/UsuarioRepository.class
 com/example/web_II/repositories/ClienteRepository.class
 com/example/web_II/domain/usuarios/Usuario.class

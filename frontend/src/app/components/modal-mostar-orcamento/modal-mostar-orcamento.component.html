@@ -1,0 +1,27 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="close()">
+    <div class="modal" (click)="$event.stopPropagation()">
+        <div class="top">
+            <a (click)="close()">X</a>
+        </div>
+
+        <div class="content">
+            <h1>Aprovar orçamento</h1>
+            
+            <h3>Descrição do Equipamento</h3>
+            <p>Impressora Xerox</p>
+
+            <h3>Categoria do Equipamento</h3>
+            <p>Impressora</p>
+
+            <h3>Descrição do defeito</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+
+            <h2>Valor do orçamento</h2>
+            <p id="valor">100,00</p>
+
+            <button mat-button color="var(--color-finalizada)">Aceitar</button>
+            <button mat-stroked-button border-color="var(--color-rejeitada)">Recusar</button>
+        </div>
+
+    </div>
+</div>

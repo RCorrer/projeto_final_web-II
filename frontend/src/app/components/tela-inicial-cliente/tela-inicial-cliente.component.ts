@@ -13,7 +13,6 @@ import { NavbarComponent } from '../navbar/navbar.component';
   styleUrl: './tela-inicial-cliente.component.css'
 })
 export class TelaInicialClienteComponent {
-
   solicitacoes = [
     { id: 1, dataHora: '2025-04-05 14:30', equipamento: 'Notebook Dell', estado: 'ABERTA' },
     { id: 2, dataHora: '2025-04-02 15:15', equipamento: 'Impressora Xerox', estado: 'ORÇADA' },
