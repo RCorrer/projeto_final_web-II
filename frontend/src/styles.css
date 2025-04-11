@@ -2,53 +2,36 @@
 
 /* Variáveis Globais */
 :root {
+  --color-primary: #2f48e0; /* Altera a cor primária */
+  --color-secondary: #732fe0; /* Altera a cor secundária */
+  --color-surface: #ffffff; /* Altera a cor de fundo dos componentes */
+  --color-surface-rgb: 255, 255, 255;
+  --color-surface-alt: #ebeaea; /* Altera a cor de fundo dos componentes */
+  --color-text: #333; /* Cor do texto nos componentes */
 
-  
-  /* CORES QUE O LUCAS COLOCOU */
-  --md-sys-color-primary: #2f48e0; /* Altera a cor primária */
-  --md-sys-color-secondary: #732fe0; /* Altera a cor secundária */
-  --md-sys-color-surface: #ffffff; /* Altera a cor de fundo dos componentes */
-  --md-sys-color-surface-1: #ebeaea; /* Altera a cor de fundo dos componentes */
-  --md-sys-color-on-surface: #333; /* Cor do texto nos componentes */
   --color-aberto: #d9d9d9; /* Cor da categoria "ABERTO" */
-  --color-orcada: #9C6644; /* Cor da categoria "ORÇADA" */
-  --color-rejeitada: #E26768; /* Cor da categoria "REJEITADA" */
-  --color-aprovada: #FBB91B; /* Cor da categoria "APROVADA" */
-  --color-redirecionada: #8080FF; /* Cor da categoria "REDIRECIONADA" */
-  --color-arrumada: #138EFF; /* Cor da categoria "ARRUMADA" */
+  --color-orcada: #9c6644; /* Cor da categoria "ORÇADA" */
+  --color-rejeitada: #e26768; /* Cor da categoria "REJEITADA" */
+  --color-aprovada: #fbb91b; /* Cor da categoria "APROVADA" */
+  --color-redirecionada: #8080ff; /* Cor da categoria "REDIRECIONADA" */
+  --color-arrumada: #138eff; /* Cor da categoria "ARRUMADA" */
   --color-paga: #fb8b24; /* Cor da categoria "PAGA" */
   --color-finalizada: #14ae5c; /* Cor da categoria "FINALIZADA" */
-  --color-finalizada-hover: #0c703b;
-  --color-icons: #A6A6A6;
-
-
-  
-/* CORES QUE A SOPHIA COLOCOU */
-  /* 🔹 Cores Principais */
-  --color-primary: #2f48e0;
-  --color-secondary: #732fe0;
-
-  /* 🔹 Superfícies */
-  --color-surface: #ffffff;
-  --color-surface-alt: #ebeaea;
-  --color-text: #333;
-  --colors-gradient:  #eeeeee,  #C4D7FF;
-
-  /* 🔹 Estados e Elementos */
-  --color-status-open: #d9d9d9;
-  --color-icon: #a6a6a6;
-
-    /* 🔹 Cores  */
+  --color-icons: 166, 166, 166;
+  --colors-gradient: #eeeeee, #c4d7ff;
 }
 
-/* 🔹 Reset & Estilização Básica */
-*, *::before, *::after {
+/* Reset e estilização básica */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: "Inter", sans-serif;
   color: var(--color-text);
@@ -56,8 +39,10 @@ html, body {
   overflow-x: hidden;
 }
 
-/* 🔹 Tipografia */
-h1, h2, h3 {
+/* Tipografia */
+h1,
+h2,
+h3 {
   font-family: "Poppins", sans-serif;
   font-weight: 600;
 }
@@ -67,7 +52,7 @@ h1, h2, h3 {
   font-weight: 300;
 }
 
-/* 🔹 Links e listas */
+/* Links e listas */
 a {
   text-decoration: none;
   color: var(--color-primary);
@@ -77,11 +62,18 @@ li {
   list-style: none;
 }
 
-/* 🔹 Páginas - elementos gerais */
+/* Páginas - elementos gerais */
 .layout-container {
   display: flex;
   height: 100%;
   background: linear-gradient(90deg, var(--colors-gradient));
+}
+
+.container {
+  padding-top: 3rem;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
 }
 
 .content {
@@ -91,4 +83,53 @@ li {
 
 .dialog-content {
   padding: 1rem;
+}
+
+.dashboard-container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.funcionarios-container {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.cards-funcionario {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.info-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-icons);
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background-color: rgba(var(--color-surface-rgb), 0.7);
+  border-radius: 8px;
+}
+
+.info-icon {
+  color: var(--color-primary);
 }

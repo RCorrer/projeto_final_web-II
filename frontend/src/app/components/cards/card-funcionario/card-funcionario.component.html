@@ -1,0 +1,22 @@
+<div class="card-funcionario">
+  <div class="card-content">
+    <mat-icon class="mat-18">person</mat-icon>
+    <div class="card-funcionario-info">
+      <h3>{{ funcionario.usuario.nome }}</h3>
+      <p>{{ funcionario.usuario.email }}</p>
+    </div>
+  </div>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-button color="primary" (click)="editar.emit(funcionario)">
+      Editar
+    </button>
+    <button mat-button color="warn" (click)="excluir.emit(funcionario)">
+      Excluir
+    </button>
+  </mat-menu>
+</div>

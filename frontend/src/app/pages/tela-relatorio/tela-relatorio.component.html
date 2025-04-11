@@ -1,0 +1,58 @@
+<div class="layout-container">
+    <app-navbar class="sidenav"></app-navbar>
+  
+    <main class="content">
+      <section class="container">
+        <header>
+          <h1 class="title">Relatórios</h1>
+          <p class="subtitle">Gerencie os relatórios da sua empresa</p>
+        </header>
+  
+        <form [formGroup]="filtroForm" class="filtro">
+          <!-- Filtro por período -->
+          <div class="date-filter-container">
+            <mat-form-field appearance="outline" class="date-filter">
+              <mat-label>Selecione o período</mat-label>
+              <mat-date-range-input
+                [rangePicker]="picker"
+                [formGroup]="filtroForm"
+              >
+                <input
+                  matStartDate
+                  formControlName="start"
+                  placeholder="Data inicial"
+                />
+                <input
+                  matEndDate
+                  formControlName="end"
+                  placeholder="Data final"
+                />
+              </mat-date-range-input>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+            </mat-form-field>
+            <!-- Datepicker posicionado abaixo -->
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </div>
+        </form>
+  
+        <!-- Exibição dos dados -->
+        <div *ngIf="relatorio.length > 0" class="relatorio-lista">
+          <div *ngFor="let item of relatorio" class="relatorio-item">
+            <h2>{{ item.data }}</h2>
+            <p>Receita: {{ item.receita | currency: 'BRL' }}</p>
+          </div>
+        </div>
+  
+        <!-- Botão (sem funcionalidade por enquanto) -->
+        <div class="relatorio-buttons">
+          <button mat-raised-button color="primary" (click)="gerarRelatorio()">
+            Gerar Relatório
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+  

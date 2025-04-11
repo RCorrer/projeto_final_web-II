@@ -7,6 +7,10 @@ import { MatListModule } from "@angular/material/list";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { JsonPipe } from "@angular/common";
+import { MatOptionModule } from "@angular/material/core";
 
 export const materialImports = [
   MatCardModule,
@@ -18,4 +22,8 @@ export const materialImports = [
   MatToolbarModule,
   MatMenuModule,
   MatFormFieldModule,
+  MatDatepickerModule,
+  FormsModule,
+  ReactiveFormsModule,
+  MatOptionModule
 ];
