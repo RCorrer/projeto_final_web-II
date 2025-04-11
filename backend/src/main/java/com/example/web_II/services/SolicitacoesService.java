@@ -44,4 +44,21 @@ public class SolicitacoesService {
 
 
     }
+
+    public ResponseEntity<String> orcamentoService(String id, float valor) {
+        if (!solicitacaoRepository.existsById(id)){
+            return ResponseEntity.ok("Esta OS não existe!!");
+        }
+
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(id);
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+
+        solicitacao.setFk_estado("2");
+        solicitacao.setOrcamento(valor);
+
+        solicitacaoRepository.save(solicitacao);
+
+        return ResponseEntity.ok("Orçamento realizado com sucesso.");
+    }
 }

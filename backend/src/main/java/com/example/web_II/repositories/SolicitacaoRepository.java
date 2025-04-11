@@ -11,4 +11,6 @@ public interface SolicitacaoRepository extends JpaRepository<Solicitacao, String
     boolean existsById(String id);
 
     Optional<Solicitacao> findById(String id);
+
+
 }

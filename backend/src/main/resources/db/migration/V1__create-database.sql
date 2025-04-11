@@ -51,7 +51,7 @@ CREATE TABLE SolicitacaoManutencao (
     fk_estado TEXT REFERENCES EstadoSolicitacao(id) NOT NULL,
     fk_categoria_equipamento TEXT REFERENCES CategoriaEquipamento(descricao) NOT NULL,
     descricao_defeito TEXT NOT NULL,
-    orcamento DECIMAL(10,2) DEFAULT 0,
+    orcamento DECIMAL(10,2) DEFAULT null,
     fk_funcionario TEXT REFERENCES Funcionarios(id)
 );
 
