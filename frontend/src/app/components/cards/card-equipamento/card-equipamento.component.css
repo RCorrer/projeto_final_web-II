@@ -2,10 +2,9 @@
   display: flex;
   background-color: var(--color-surface);
   justify-content: space-between;
-    align-items: center;
+  align-items: center;
   border-radius: 0.5rem;
   margin-block-end: 1rem;
-  width: 300px;
 }
 
 .card-equipamento-info {
