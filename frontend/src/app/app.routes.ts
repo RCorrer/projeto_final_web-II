@@ -7,6 +7,8 @@ import { CrudFuncionariosComponent } from "./components/crud-funcionarios/crud-f
 import { CrudEquipamentosComponent } from "./components/crud-equipamentos/crud-equipamentos.component";
 import { CadastroComponent } from './components/cadastro/cadastro.component';
 import { TelaInicialClienteComponent } from './components/tela-inicial-cliente/tela-inicial-cliente.component';
+import { Component } from "@angular/core";
+import { TelaSolicitarManutencaoComponent } from "./components/tela-solicitar-manutencao/tela-solicitar-manutencao.component";
 
 export const routes: Routes = [
   {
@@ -23,6 +25,7 @@ export const routes: Routes = [
     path: "home",
     component: TelaInicialFuncionarioComponent,
   },
+
   {
     path:"cadastro",
     component: CadastroComponent
@@ -32,14 +35,19 @@ export const routes: Routes = [
     path: "funcionarios",
     component: CrudFuncionariosComponent,
   },
+  
   {
     path: 'home-cliente',
     component: TelaInicialClienteComponent  
   },
+  
   {
     path: "equipamentos",
     component: CrudEquipamentosComponent,
+  },
+  
+  {
+    Path: "abrir-solicitacao",
+    component: TelaSolicitarManutencaoComponent,
   }
-
-
 ];
