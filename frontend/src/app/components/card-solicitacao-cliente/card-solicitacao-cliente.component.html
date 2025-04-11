@@ -11,4 +11,9 @@
   <button *ngIf="solicitacao.estado === 'ARRUMADA'" mat-button color="primary" (click)="emitir('pagar', solicitacao.id)">Pagar Serviço</button>
 </div>
 
-<app-modal-mostar-orcamento [isOpen]="modalAberto" (closed)="fecharModal()"></app-modal-mostar-orcamento>
+<app-modal-mostar-orcamento 
+  [isOpen]="modalAberto"
+  [solicitacao]="solicitacao"
+  (closed)="fecharModal()"
+  (alterarEstado)="onAlterarEstado($event)">
+</app-modal-mostar-orcamento>

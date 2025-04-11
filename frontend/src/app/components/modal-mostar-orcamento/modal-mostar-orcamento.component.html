@@ -20,8 +20,20 @@
             <p id="valor">100,00</p>
 
             <div class="buttons">
-                <button id="aceitar" mat-button color="var(--color-finalizada)">Aceitar</button>
-                <button id="rejeitar" mat-stroked-button border-color="var(--color-rejeitada)">Recusar</button>
+                <button
+                    id="aceitar"
+                    mat-button
+                    (click)="aceitarOrcamento()"
+                    >
+                        Aceitar
+                </button>
+                <button
+                    id="rejeitar"
+                    mat-stroked-button
+                    (click)="recusarOrcamento()"
+                    >
+                        Recusar    
+                </button>
             </div>
         </div>
 

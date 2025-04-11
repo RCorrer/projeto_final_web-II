@@ -17,6 +17,7 @@ export class CardSolicitacaoClienteComponent {
   @Output() mostrarOrcamento = new EventEmitter<number>();
   @Output() resgatarServico = new EventEmitter<number>();
   @Output() pagarServico = new EventEmitter<number>();
+  @Output() alterarEstado = new EventEmitter<{ id: number, novoEstado: string }>();
 
   emitir(evento: string, id: number) {
     switch (evento) {
@@ -35,5 +36,10 @@ export class CardSolicitacaoClienteComponent {
 
   fecharModal() {
     this.modalAberto = false;
+  }
+
+  onAlterarEstado(evento: { id: number, novoEstado: string }) {
+    this.alterarEstado.emit(evento);
+    this.fecharModal();
   }
 }

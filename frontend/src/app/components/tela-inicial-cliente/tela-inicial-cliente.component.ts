@@ -45,4 +45,11 @@ export class TelaInicialClienteComponent {
   pagarServico(id: number) {
     console.log(`Pagando serviço para solicitação ID: ${id}`);
   }
+
+  alterarEstadoSolicitacao(evento: {id: number, novoEstado: string}) {
+    const solicitacao = this.solicitacoes.find(s => s.id === evento.id);
+    if (solicitacao) {
+      solicitacao.estado = evento.novoEstado;
+    }
+  }
 }
