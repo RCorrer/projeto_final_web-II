@@ -17,26 +17,26 @@ import { CommonModule } from "@angular/common";
 export class TelaFuncionariosComponent {
   funcionarios: Funcionario[] = [
     // Lista de funcionários fictícios para testes
-    // {
-    //   id: "1",
-    //   dataNascimento: "1990-05-15",
-    //   senha: "123456",
-    //   usuario: {
-    //     id: "u1",
-    //     nome: "Maria Souza",
-    //     email: "maria@example.com",
-    //   },
-    // },
-    // {
-    //   id: "2",
-    //   dataNascimento: "1985-12-22",
-    //   senha: "123456",
-    //   usuario: {
-    //     id: "u2",
-    //     nome: "João Silva",
-    //     email: "joao@example.com",
-    //   },
-    // },
+    {
+      id: "1",
+      dataNascimento: "1990-05-15",
+      senha: "123456",
+      usuario: {
+        id: "u1",
+        nome: "Maria Souza",
+        email: "maria@example.com",
+      },
+    },
+    {
+      id: "2",
+      dataNascimento: "1985-12-22",
+      senha: "123456",
+      usuario: {
+        id: "u2",
+        nome: "João Silva",
+        email: "joao@example.com",
+      },
+    },
   ];
 
   private dialog = inject(MatDialog);

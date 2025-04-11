@@ -1,24 +1,4 @@
-.funcionarios-container {
-  padding: 2rem;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
 
-.funcionarios-header {
-  margin-bottom: 2rem;
-}
-
-.funcionarios-title {
-  font-size: 2rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 0.5rem;
-}
-
-.funcionarios-subtitle {
-  color: #64748b;
-  margin-bottom: 1.5rem;
-}
 
 .add-button {
   margin-bottom: 1.5rem;
@@ -29,21 +9,6 @@
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.info-text {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #64748b;
-  margin-bottom: 1.5rem;
-  padding: 0.75rem;
-  background-color: #f1f5f9;
-  border-radius: 8px;
-}
-
-.info-icon {
-  color: #3b82f6;
 }
 
 .funcionarios-grid {
@@ -67,7 +32,7 @@
   font-size: 3rem;
   width: 3rem;
   height: 3rem;
-  color: #cbd5e1;
+  color: rgba(var(--color-icons), 0.7);
   margin-bottom: 1rem;
 }
 
