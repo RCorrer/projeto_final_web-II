@@ -13,7 +13,6 @@ import { NavbarComponent } from '../navbar/navbar.component';
   styleUrl: './tela-inicial-cliente.component.css'
 })
 export class TelaInicialClienteComponent {
-
   solicitacoes = [
     { id: 1, dataHora: '2025-04-05 14:30', equipamento: 'Notebook Dell', estado: 'ABERTA' },
     { id: 2, dataHora: '2025-04-02 15:15', equipamento: 'Impressora Xerox', estado: 'ORÇADA' },
@@ -45,5 +44,12 @@ export class TelaInicialClienteComponent {
 
   pagarServico(id: number) {
     console.log(`Pagando serviço para solicitação ID: ${id}`);
+  }
+
+  alterarEstadoSolicitacao(evento: {id: number, novoEstado: string}) {
+    const solicitacao = this.solicitacoes.find(s => s.id === evento.id);
+    if (solicitacao) {
+      solicitacao.estado = evento.novoEstado;
+    }
   }
 }

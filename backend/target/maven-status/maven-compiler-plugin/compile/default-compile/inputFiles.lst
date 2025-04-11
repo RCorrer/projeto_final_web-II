@@ -21,4 +21,5 @@
 /app/src/main/java/com/example/web_II/repositories/EnderecoRepository.java
 /app/src/main/java/com/example/web_II/repositories/FuncionarioRepository.java
 /app/src/main/java/com/example/web_II/repositories/UsuarioRepository.java
+/app/src/main/java/com/example/web_II/services/AuthService.java
 /app/src/main/java/com/example/web_II/services/AuthorizationService.java

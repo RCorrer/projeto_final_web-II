@@ -6,7 +6,14 @@
 
 <div class="acoes">
   <button mat-button color="primary" (click)="emitir('visualizar', solicitacao.id)">Visualizar</button>
-  <button *ngIf="solicitacao.estado === 'ORÇADA'" mat-button color="primary" (click)="emitir('orcamento', solicitacao.id)">Aprovar/Rejeitar</button>
+  <button *ngIf="solicitacao.estado === 'ORÇADA'" mat-button color="primary" (click)="emitir('orcamento', solicitacao.id)" (click)="abrirModal()">Aprovar/Rejeitar</button>
   <button *ngIf="solicitacao.estado === 'REJEITADA'" mat-button color="primary" (click)="emitir('resgatar', solicitacao.id)">Resgatar Serviço</button>
   <button *ngIf="solicitacao.estado === 'ARRUMADA'" mat-button color="primary" (click)="emitir('pagar', solicitacao.id)">Pagar Serviço</button>
 </div>
+
+<app-modal-mostar-orcamento 
+  [isOpen]="modalAberto"
+  [solicitacao]="solicitacao"
+  (closed)="fecharModal()"
+  (alterarEstado)="onAlterarEstado($event)">
+</app-modal-mostar-orcamento>
