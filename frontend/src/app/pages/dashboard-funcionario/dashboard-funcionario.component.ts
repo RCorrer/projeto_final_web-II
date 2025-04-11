@@ -7,7 +7,7 @@ import { CardFuncionarioComponent } from "../../components/cards/card-funcionari
 import { CardEquipamentoComponent } from "../../components/cards/card-equipamento/card-equipamento.component";
 
 @Component({
-  selector: "app-tela-inicial-funcionario",
+  selector: "app-dashboard-funcionario",
   imports: [
     ...materialImports,
     CardSolicitacaoComponent,
@@ -16,7 +16,7 @@ import { CardEquipamentoComponent } from "../../components/cards/card-equipament
     CardFuncionarioComponent,
     CardEquipamentoComponent,
   ],
-  templateUrl: "./tela-inicial-funcionario.component.html",
-  styleUrl: "./tela-inicial-funcionario.component.css",
+  templateUrl: "./dashboard-funcionario.component.html",
+  styleUrl: "./dashboard-funcionario.component.css",
 })
-export class TelaInicialFuncionarioComponent {}
+export class DashboardFuncionarioComponent {}
