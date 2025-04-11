@@ -1,0 +1,58 @@
+<div class="layout-container">
+  <app-navbar class="sidenav"></app-navbar>
+
+  <main class="content">
+    <section class="funcionarios-container">
+      <header class="funcionarios-header">
+        <h1 class="funcionarios-title">Funcionários</h1>
+        <p class="funcionarios-subtitle">
+          Gerencie os colaboradores da sua empresa
+        </p>
+
+        <button
+          mat-raised-button
+          (click)="abrirDialog()"
+          color="primary"
+          aria-label="Adicionar funcionário"
+          class="btn-add-funcionario"
+          matTooltip="Adicionar funcionário"
+        >
+          <mat-icon>person_add</mat-icon>
+          Adicionar funcionário
+        </button>
+      </header>
+
+      <div class="funcionarios-content">
+        <div class="info-text">
+          <mat-icon class="info-icon" aria-hidden="true">info</mat-icon>
+          <p>
+            Visualize todos os funcionários, com detalhes como nome e e-mail.
+          </p>
+        </div>
+
+        <ng-container *ngIf="funcionarios.length > 0; else vazio">
+          <app-card-funcionario
+            *ngFor="let funcionario of funcionarios"
+            [funcionario]="funcionario"
+            (editar)="abrirDialog()"
+            (excluir)="abrirDialog()"
+          ></app-card-funcionario>
+        </ng-container>
+
+        <ng-template #vazio>
+          <div class="sem-funcionarios">
+            <div>
+              <mat-icon class="sem-funcionarios-icon" aria-hidden="true">group_off</mat-icon>
+              <h3>Nenhum funcionário cadastrado</h3>
+              <p>Comece adicionando seu primeiro colaborador</p>
+            </div>
+            
+            <button mat-stroked-button (click)="abrirDialog()">
+              Adicionar Funcionário
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </section>
+  </main>
+</div>

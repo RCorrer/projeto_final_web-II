@@ -15,7 +15,7 @@ nav {
 h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--md-sys-color-primary);
+  color: var(--color-primary);
 }
 
 ul {
@@ -33,7 +33,7 @@ li {
 }
 
 li, a {
-  color: var(--color-icon);
+  color: var(--color-icons);
 }
 
 li:hover {
