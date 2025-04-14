@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { materialImports } from '../../material-imports';
-import { CardSolicitacaoComponent } from '../card-solicitacao/card-solicitacao.component';
+import { CardSolicitacaoComponent } from '../cards/card-solicitacao/card-solicitacao.component';
 import { NavbarComponent } from '../navbar/navbar.component';
+
 
 @Component({
   selector: 'app-tela-visualizar-solicitacoes',

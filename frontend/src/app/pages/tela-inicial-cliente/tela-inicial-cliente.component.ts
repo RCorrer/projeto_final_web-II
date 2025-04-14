@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
-import { CardSolicitacaoClienteComponent } from '../card-solicitacao-cliente/card-solicitacao-cliente.component';
-import { NavbarComponent } from '../navbar/navbar.component';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { CardSolicitacaoClienteComponent } from '../../components/card-solicitacao-cliente/card-solicitacao-cliente.component';
 
 @Component({
   selector: 'app-tela-inicial-cliente',
