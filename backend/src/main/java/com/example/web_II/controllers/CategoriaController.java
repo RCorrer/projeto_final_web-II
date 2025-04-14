@@ -42,6 +42,9 @@ public class CategoriaController {
         return categoriaService.deleteCategoryResponse(descricao);
     }
 
+    //ENDPOINT DE BUSCAR PRECISA SER FEITO
+
+
 
 }
 

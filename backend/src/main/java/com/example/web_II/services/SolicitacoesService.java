@@ -3,12 +3,16 @@ package com.example.web_II.services;
 
 import com.example.web_II.domain.solicitacoes.AbrirSolicitacaoDTO;
 import com.example.web_II.domain.solicitacoes.Solicitacao;
+import com.example.web_II.repositories.ClienteRepository;
 import com.example.web_II.repositories.SolicitacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,6 +20,9 @@ public class SolicitacoesService {
 
     @Autowired
     private SolicitacaoRepository solicitacaoRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
 
     public ResponseEntity<String> criarSolicitacao (AbrirSolicitacaoDTO data){
@@ -45,6 +52,17 @@ public class SolicitacoesService {
 
     }
 
+    public ResponseEntity<List<Solicitacao>> buscarSolicitacaoCliente(String cliente){
+        if (!clienteRepository.existsById(cliente)){
+            return ResponseEntity.notFound().build();
+        }
+        List<Solicitacao> listaSoliciacoes = solicitacaoRepository.findByFkCliente(cliente);
+
+        return ResponseEntity.ok(listaSoliciacoes);
+
+
+    }
+
     public ResponseEntity<String> orcamentoService(String id, float valor) {
         if (!solicitacaoRepository.existsById(id)){
             return ResponseEntity.ok("Esta OS não existe!!");
@@ -61,4 +79,6 @@ public class SolicitacoesService {
 
         return ResponseEntity.ok("Orçamento realizado com sucesso.");
     }
+
+
 }
