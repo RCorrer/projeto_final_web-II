@@ -16,6 +16,13 @@ services:
     working_dir: /app
     ports:
       - "8080:8080"
+    environment:
+      - SPRING_MAIL_HOST=smtp.gmail.com
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=BipBipConsertos@gmail.com
+      - SPRING_MAIL_PASSWORD=ugmoyxiwuiqpeyhr
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
     volumes:
       - ./backend:/app
       - ~/.m2:/root/.m2
