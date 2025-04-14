@@ -1,0 +1,39 @@
+  .layout-container {
+    margin: auto;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .content {
+    margin-top: 2rem;
+  }
+  
+  h2 {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    text-align: left;
+    margin-top: 50px;
+  }
+  
+  mat-list {
+    width: 100%;
+  }
+  
+  mat-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem;
+    margin-bottom: 0,5rem;
+    border-bottom: 1px solid #ddd;
+    transition: background 0.3s ease;
+    min-height: 150px;
+  }
+  
+  mat-list-item:hover {
+    background: #a9a9a9;
+  }
