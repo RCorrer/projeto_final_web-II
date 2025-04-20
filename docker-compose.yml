@@ -6,7 +6,7 @@ services:
     working_dir: /home/app
     ports:
       - "80:4200"
-    command: sh -c "npm install -g @angular/cli@19.2.4 && npm install --legacy-peer-deps && ng serve --host 0.0.0.0 --poll=2000 --port 4200 --disable-host-check" 
+    command: sh -c "rm -rf /home/app/.angular/cache && npm install -g @angular/cli@19.2.4 && npm install --legacy-peer-deps && ng serve --host 0.0.0.0 --poll=2000 --port 4200 --disable-host-check"
     volumes:
       - ./frontend:/home/app
       - /home/app/node_modules
@@ -16,6 +16,13 @@ services:
     working_dir: /app
     ports:
       - "8080:8080"
+    environment:
+      - SPRING_MAIL_HOST=smtp.gmail.com
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=BipBipConsertos@gmail.com
+      - SPRING_MAIL_PASSWORD=ugmoyxiwuiqpeyhr
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
     volumes:
       - ./backend:/app
       - ~/.m2:/root/.m2
