@@ -168,4 +168,64 @@ public class SolicitacoesService {
 
         return ResponseEntity.ok("Orçamento rejeitado com sucesso");
     }
+
+    public ResponseEntity<String> atribuirFuncionario(AtribuirFuncionarioDTO data) {
+        if (!solicitacaoRepository.existsById(data.idSolicitacao())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Solicitação não encontrada");
+        }
+
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(data.idSolicitacao());
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao recuperar solicitação");
+        }
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+        String estadoAnterior = solicitacao.getFk_estado();
+
+        solicitacao.setFk_funcionario(data.idFuncionario());
+        solicitacaoRepository.save(solicitacao);
+
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                data.idSolicitacao(),
+                "Solicitação capturada pelo funcionário " + data.idFuncionario(),
+                estadoAnterior,
+                solicitacao.getFk_estado()
+        );
+        historicoAlteracaoRepository.save(historico);
+
+        return ResponseEntity.ok("Solicitação capturada com sucesso pelo funcionário " + data.idFuncionario());
+    }
+
+    public ResponseEntity<String> redirecionarSolicitacao(RedirecionarSolicitacaoDTO data) {
+        if (!solicitacaoRepository.existsById(data.idSolicitacao())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Solicitação não encontrada");
+        }
+
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(data.idSolicitacao());
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao recuperar solicitação");
+        }
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+
+        if (!data.idFuncionarioOrigem().equals(solicitacao.getFk_funcionario())) {
+            return ResponseEntity.badRequest().body("A solicitação não está atribuída ao funcionário de origem informado");
+        }
+
+        String estadoAnterior = solicitacao.getFk_estado();
+
+        solicitacao.setFk_funcionario(data.idFuncionarioDestino());
+        solicitacao.setFk_estado("5");
+        solicitacaoRepository.save(solicitacao);
+
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                data.idSolicitacao(),
+                "Solicitação redirecionada de " + data.idFuncionarioOrigem() + " para " + data.idFuncionarioDestino(),
+                estadoAnterior,
+                "5"
+        );
+        historicoAlteracaoRepository.save(historico);
+
+        return ResponseEntity.ok("Solicitação redirecionada com sucesso para o funcionário " + data.idFuncionarioDestino());
+    }
 }
