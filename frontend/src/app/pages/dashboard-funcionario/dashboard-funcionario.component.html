@@ -15,10 +15,10 @@
         </div>
 
         <div class="cards-container">
-          <app-card-solicitacao></app-card-solicitacao>
-          <app-card-solicitacao></app-card-solicitacao>
-          <app-card-solicitacao></app-card-solicitacao>
-          <app-card-solicitacao></app-card-solicitacao>
+          <app-card-solicitacao
+            *ngFor="let solicitacao of solicitacoes"
+            [solicitacao]="solicitacao">
+          </app-card-solicitacao>
 
         </div>
       </div>
