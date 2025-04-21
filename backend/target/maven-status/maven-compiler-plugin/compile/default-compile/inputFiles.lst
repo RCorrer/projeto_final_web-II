@@ -13,6 +13,7 @@
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AbrirSolicitacaoDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AtribuirFuncionarioDTO.java
+/app/src/main/java/com/example/web_II/domain/solicitacoes/MudarEstadoDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/OrcamentoDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/RedirecionarSolicitacaoDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/Solicitacao.java

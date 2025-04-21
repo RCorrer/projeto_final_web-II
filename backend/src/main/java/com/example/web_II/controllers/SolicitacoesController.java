@@ -1,12 +1,7 @@
 package com.example.web_II.controllers;
 
 
-import com.example.web_II.domain.solicitacoes.AbrirSolicitacaoDTO;
-import com.example.web_II.domain.solicitacoes.AprovarRejeitarDTO;
-import com.example.web_II.domain.solicitacoes.OrcamentoDTO;
-import com.example.web_II.domain.solicitacoes.AtribuirFuncionarioDTO;
-import com.example.web_II.domain.solicitacoes.RedirecionarSolicitacaoDTO;
-import com.example.web_II.domain.solicitacoes.Solicitacao;
+import com.example.web_II.domain.solicitacoes.*;
 import com.example.web_II.repositories.SolicitacaoRepository;
 import com.example.web_II.services.SolicitacoesService;
 import jakarta.validation.Valid;
@@ -75,5 +70,25 @@ public class SolicitacoesController {
     @PostMapping("/solicitacao/redirecionarSolicitacao")
     public ResponseEntity<String> redirecionarSolicitacao(@RequestBody @Valid RedirecionarSolicitacaoDTO data) {
         return solicitacoesService.redirecionarSolicitacao(data);
+    }
+
+    @PostMapping("/solicitacao/atualizarEstado/arrumada")
+    public ResponseEntity<String> marcarComoArrumada(@RequestBody @Valid MudarEstadoDTO data) {
+        return solicitacoesService.marcarComoArrumada(data);
+    }
+
+    @PostMapping("/solicitacao/atualizarEstado/paga")
+    public ResponseEntity<String> marcarComoPaga(@RequestBody @Valid MudarEstadoDTO data) {
+        return solicitacoesService.marcarComoPaga(data);
+    }
+
+    @PostMapping("/solicitacao/atualizarEstado/finalizada")
+    public ResponseEntity<String> marcarComoFinalizada(@RequestBody @Valid MudarEstadoDTO data) {
+        return solicitacoesService.marcarComoFinalizada(data);
+    }
+
+    @PostMapping("/solicitacao/atualizarEstado/entregue")
+    public ResponseEntity<String> marcarComoEntregue(@RequestBody @Valid MudarEstadoDTO data) {
+        return solicitacoesService.marcarComoEntregue(data);
     }
 }

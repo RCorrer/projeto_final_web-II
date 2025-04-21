@@ -2,6 +2,7 @@ com/example/web_II/infra/security/SecurityFilter.class
 com/example/web_II/domain/solicitacoes/RedirecionarSolicitacaoDTO.class
 com/example/web_II/domain/usuarios/AuthenticationDTO.class
 com/example/web_II/exceptions/LoginNotFoundException.class
+com/example/web_II/domain/solicitacoes/MudarEstadoDTO.class
 com/example/web_II/domain/solicitacoes/OrcamentoDTO.class
 com/example/web_II/exceptions/CpfInvalidoException.class
 com/example/web_II/domain/solicitacoes/AtribuirFuncionarioDTO.class

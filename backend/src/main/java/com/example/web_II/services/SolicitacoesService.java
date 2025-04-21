@@ -228,4 +228,47 @@ public class SolicitacoesService {
 
         return ResponseEntity.ok("Solicitação redirecionada com sucesso para o funcionário " + data.idFuncionarioDestino());
     }
+
+    public ResponseEntity<String> marcarComoArrumada(MudarEstadoDTO data) {
+        return mudarEstado(data, "6", "ARRUMADA");
+    }
+
+    public ResponseEntity<String> marcarComoPaga(MudarEstadoDTO data) {
+        return mudarEstado(data, "7", "PAGA");
+    }
+
+    public ResponseEntity<String> marcarComoFinalizada(MudarEstadoDTO data) {
+        return mudarEstado(data, "8", "FINALIZADA");
+    }
+
+    public ResponseEntity<String> marcarComoEntregue(MudarEstadoDTO data) {
+        return mudarEstado(data, "9", "ENTREGADA");
+    }
+
+    private ResponseEntity<String> mudarEstado(MudarEstadoDTO data, String novoEstado, String nomeEstado) {
+        if (!solicitacaoRepository.existsById(data.idSolicitacao())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Solicitação não encontrada");
+        }
+
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(data.idSolicitacao());
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao recuperar solicitação");
+        }
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+        String estadoAnterior = solicitacao.getFk_estado();
+
+        solicitacao.setFk_estado(novoEstado);
+        solicitacaoRepository.save(solicitacao);
+
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                data.idSolicitacao(),
+                "Solicitação atualizada para " + nomeEstado,
+                estadoAnterior,
+                novoEstado
+        );
+        historicoAlteracaoRepository.save(historico);
+
+        return ResponseEntity.ok("Solicitação atualizada para " + nomeEstado + " com sucesso");
+    }
 }
