@@ -51,6 +51,6 @@ public class SolicitacoesController {
 
     @PostMapping("/solicitacao/atualizarEstado/orcado")
     public ResponseEntity<String> atualizarEstado(@RequestBody @Valid OrcamentoDTO data) {
-        return solicitacoesService.orcamentoService(data.id(), data.valor());
+        return solicitacoesService.orcamentoService(data);
     }
 }

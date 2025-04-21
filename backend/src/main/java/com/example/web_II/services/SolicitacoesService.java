@@ -2,6 +2,7 @@ package com.example.web_II.services;
 
 import com.example.web_II.domain.solicitacoes.AbrirSolicitacaoDTO;
 import com.example.web_II.domain.solicitacoes.HistoricoAlteracao;
+import com.example.web_II.domain.solicitacoes.OrcamentoDTO;
 import com.example.web_II.domain.solicitacoes.Solicitacao;
 import com.example.web_II.repositories.ClienteRepository;
 import com.example.web_II.repositories.HistoricoAlteracaoRepository;
@@ -65,8 +66,6 @@ public class SolicitacoesService {
                 solicitacaoBuscada.get().getFk_estado() + "\n" +
                 solicitacaoBuscada.get().getData_hora() + "\n" +
                 solicitacaoBuscada.get().getFk_funcionario());
-
-
     }
 
     public ResponseEntity<List<Solicitacao>> buscarSolicitacaoCliente(String cliente){
@@ -76,26 +75,36 @@ public class SolicitacoesService {
         List<Solicitacao> listaSoliciacoes = solicitacaoRepository.findByFkCliente(cliente);
 
         return ResponseEntity.ok(listaSoliciacoes);
-
-
     }
 
-    public ResponseEntity<String> orcamentoService(String id, float valor) {
-        if (!solicitacaoRepository.existsById(id)){
+    public ResponseEntity<String> orcamentoService(OrcamentoDTO data) {
+
+        if (!solicitacaoRepository.existsById(data.id())) {
             return ResponseEntity.ok("Esta OS não existe!!");
         }
 
-        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(id);
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(data.id());
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.ok("Erro ao recuperar a OS");
+        }
 
         Solicitacao solicitacao = solicitacaoOpt.get();
 
+        String estadoAnterior = solicitacao.getFk_estado();
+
         solicitacao.setFk_estado("2");
-        solicitacao.setOrcamento(valor);
+        solicitacao.setOrcamento(data.valor());
 
         solicitacaoRepository.save(solicitacao);
 
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                data.id(),
+                "Orçamento de R$ " + data.valor() + " registrado",
+                estadoAnterior,
+                "2"
+        );
+        historicoAlteracaoRepository.save(historico);
+
         return ResponseEntity.ok("Orçamento realizado com sucesso.");
     }
-
-
 }
