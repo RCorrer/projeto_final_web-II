@@ -1,12 +1,19 @@
-version: '3.8'
-
 services:
+  angular-cache-cleaner:
+    image: alpine
+    command: sh -c "rm -rf /home/app/node_modules/* && rm -rf /home/app/.angular/cache/*"
+    volumes:
+      - ./frontend:/home/app
+    restart: "no"  
+
   frontend:
     image: node:20-alpine
+    depends_on:
+      - angular-cache-cleaner 
     working_dir: /home/app
     ports:
       - "80:4200"
-    command: sh -c "rm -rf /home/app/.angular/cache && npm install -g @angular/cli@19.2.4 && npm install --legacy-peer-deps && ng serve --host 0.0.0.0 --poll=2000 --port 4200 --disable-host-check"
+    command: sh -c "npm install -g @angular/cli@19.2.4 && npm install --legacy-peer-deps && ng serve --host 0.0.0.0 --poll=2000 --port 4200 --disable-host-check"
     volumes:
       - ./frontend:/home/app
       - /home/app/node_modules
