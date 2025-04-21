@@ -1,9 +1,10 @@
 package com.example.web_II.services;
 
-
 import com.example.web_II.domain.solicitacoes.AbrirSolicitacaoDTO;
+import com.example.web_II.domain.solicitacoes.HistoricoAlteracao;
 import com.example.web_II.domain.solicitacoes.Solicitacao;
 import com.example.web_II.repositories.ClienteRepository;
+import com.example.web_II.repositories.HistoricoAlteracaoRepository;
 import com.example.web_II.repositories.SolicitacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,15 +25,31 @@ public class SolicitacoesService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private HistoricoAlteracaoRepository historicoAlteracaoRepository;
 
-    public ResponseEntity<String> criarSolicitacao (AbrirSolicitacaoDTO data){
-        Solicitacao novaSolicitacao = new Solicitacao(data.idCliente(),data.descEquip(),data.categoria(),data.descDefeito(),"1");
 
-        this.solicitacaoRepository.save(novaSolicitacao);
-        return ResponseEntity.ok("Solicitação criada com sucesso:\n"
-                + "ID do cliente: " + novaSolicitacao.getFkCliente() + "\n" +
-                "Descricao defeito:" + novaSolicitacao.getDescricao_defeito());
+    public ResponseEntity<String> criarSolicitacao(AbrirSolicitacaoDTO data) {
+        Solicitacao novaSolicitacao = new Solicitacao(
+                data.idCliente(),
+                data.descEquip(),
+                data.categoria(),
+                data.descDefeito(),
+                "1"
+        );
 
+        Solicitacao solicitacaoSalva = this.solicitacaoRepository.save(novaSolicitacao);
+
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                solicitacaoSalva.getId(),
+                "Solicitação criada",
+                null,
+                "1"
+        );
+
+        this.historicoAlteracaoRepository.save(historico);
+
+        return ResponseEntity.ok("Solicitação criada com sucesso!");
     }
 
     public ResponseEntity<String> buscarSolicitacao(String id){
