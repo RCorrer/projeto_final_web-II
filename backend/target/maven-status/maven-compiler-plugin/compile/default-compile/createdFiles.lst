@@ -33,6 +33,7 @@ com/example/web_II/repositories/HistoricoAlteracaoRepository.class
 com/example/web_II/repositories/UsuarioRepository.class
 com/example/web_II/services/EmailService.class
 com/example/web_II/domain/solicitacoes/SolicitacoesResponseDTO.class
+com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.class
 com/example/web_II/repositories/ClienteRepository.class
 com/example/web_II/domain/usuarios/Usuario.class
 com/example/web_II/controllers/SolicitacoesController.class

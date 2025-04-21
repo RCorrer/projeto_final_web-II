@@ -1,9 +1,7 @@
 package com.example.web_II.services;
 
-import com.example.web_II.domain.solicitacoes.AbrirSolicitacaoDTO;
+import com.example.web_II.domain.solicitacoes.*;
 import com.example.web_II.domain.solicitacoes.HistoricoAlteracao;
-import com.example.web_II.domain.solicitacoes.OrcamentoDTO;
-import com.example.web_II.domain.solicitacoes.Solicitacao;
 import com.example.web_II.repositories.ClienteRepository;
 import com.example.web_II.repositories.HistoricoAlteracaoRepository;
 import com.example.web_II.repositories.SolicitacaoRepository;
@@ -106,5 +104,68 @@ public class SolicitacoesService {
         historicoAlteracaoRepository.save(historico);
 
         return ResponseEntity.ok("Orçamento realizado com sucesso.");
+    }
+
+    public ResponseEntity<String> aprovarOrcamento(AprovarRejeitarDTO data) {
+        String id = data.id();
+
+        if (!solicitacaoRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("OS não encontrada");
+        }
+
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(id);
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao recuperar OS");
+        }
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+        String estadoAnterior = solicitacao.getFk_estado();
+
+        solicitacao.setFk_estado("3");
+        solicitacaoRepository.save(solicitacao);
+
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                id,
+                "Orçamento aprovado",
+                estadoAnterior,
+                "3"
+        );
+        historicoAlteracaoRepository.save(historico);
+
+        return ResponseEntity.ok("Orçamento aprovado com sucesso");
+    }
+
+    public ResponseEntity<String> rejeitarOrcamento(AprovarRejeitarDTO data) {
+        String id = data.id();
+
+        if (!solicitacaoRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("OS não encontrada");
+        }
+
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(id);
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao recuperar OS");
+        }
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+        String estadoAnterior = solicitacao.getFk_estado();
+
+        if (!"2".equals(estadoAnterior)) {
+            return ResponseEntity.badRequest().body("Só é possível rejeitar orçamentos em estado 'ORÇADO'");
+        }
+
+        solicitacao.setFk_estado("4"); // 4 = REJEITADA
+        solicitacaoRepository.save(solicitacao);
+
+        String motivo = data.motivo() != null ? data.motivo() : "Motivo não informado";
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                id,
+                "Orçamento rejeitado. Motivo: " + motivo,
+                estadoAnterior,
+                "4"
+        );
+        historicoAlteracaoRepository.save(historico);
+
+        return ResponseEntity.ok("Orçamento rejeitado com sucesso");
     }
 }

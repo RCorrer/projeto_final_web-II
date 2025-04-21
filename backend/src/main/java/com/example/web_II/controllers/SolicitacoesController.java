@@ -2,6 +2,7 @@ package com.example.web_II.controllers;
 
 
 import com.example.web_II.domain.solicitacoes.AbrirSolicitacaoDTO;
+import com.example.web_II.domain.solicitacoes.AprovarRejeitarDTO;
 import com.example.web_II.domain.solicitacoes.OrcamentoDTO;
 import com.example.web_II.domain.solicitacoes.Solicitacao;
 import com.example.web_II.repositories.SolicitacaoRepository;
@@ -52,5 +53,15 @@ public class SolicitacoesController {
     @PostMapping("/solicitacao/atualizarEstado/orcado")
     public ResponseEntity<String> atualizarEstado(@RequestBody @Valid OrcamentoDTO data) {
         return solicitacoesService.orcamentoService(data);
+    }
+
+    @PostMapping("/solicitacao/atualizarEstado/aprovar")
+    public ResponseEntity<String> aprovarOrcamento(@RequestBody @Valid AprovarRejeitarDTO data) {
+        return solicitacoesService.aprovarOrcamento(data);
+    }
+
+    @PostMapping("/solicitacao/atualizarEstado/rejeitar")
+    public ResponseEntity<String> rejeitarOrcamento(@RequestBody @Valid AprovarRejeitarDTO data) {
+        return solicitacoesService.rejeitarOrcamento(data);
     }
 }
