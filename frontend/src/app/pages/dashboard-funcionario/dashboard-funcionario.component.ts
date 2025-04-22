@@ -23,7 +23,7 @@ import { MatSelect } from "@angular/material/select";
 })
 export class DashboardFuncionarioComponent implements OnInit{
   solicitacoes: Solicitacao[] = [];
-  filtroStatus: string = '';
+  filtroStatus: string = 'ABERTA';
 
   get solicitacoesFiltradas(): Solicitacao[] {
     if (!this.filtroStatus) return this.solicitacoes;
