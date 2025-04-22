@@ -1,6 +1,7 @@
 /app/src/main/java/com/example/web_II/WebIiApplication.java
 /app/src/main/java/com/example/web_II/controllers/AuthenticationController.java
 /app/src/main/java/com/example/web_II/controllers/CategoriaController.java
+/app/src/main/java/com/example/web_II/controllers/FuncionarioController.java
 /app/src/main/java/com/example/web_II/controllers/SolicitacoesController.java
 /app/src/main/java/com/example/web_II/domain/categoria/Categoria.java
 /app/src/main/java/com/example/web_II/domain/categoria/CategoriaDTO.java
@@ -9,6 +10,7 @@
 /app/src/main/java/com/example/web_II/domain/enderecos/Endereco.java
 /app/src/main/java/com/example/web_II/domain/funcionarios/CadastroFuncionarioDTO.java
 /app/src/main/java/com/example/web_II/domain/funcionarios/Funcionario.java
+/app/src/main/java/com/example/web_II/domain/funcionarios/FuncionarioListagemDTO.java
 /app/src/main/java/com/example/web_II/domain/historico/HistoricoAlteracao.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AbrirSolicitacaoDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.java
@@ -42,4 +44,5 @@
 /app/src/main/java/com/example/web_II/services/AuthorizationService.java
 /app/src/main/java/com/example/web_II/services/CategoriaService.java
 /app/src/main/java/com/example/web_II/services/EmailService.java
+/app/src/main/java/com/example/web_II/services/FuncionarioService.java
 /app/src/main/java/com/example/web_II/services/SolicitacoesService.java
