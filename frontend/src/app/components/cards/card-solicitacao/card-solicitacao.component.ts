@@ -2,10 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { materialImports } from '../../../material-imports';
 import { CommonModule } from '@angular/common';
 import { Solicitacao } from '../../../models/Solicitacao.model';
+import { DataBrasileiraPipe } from '../../../shared/data-brasileira.pipe';
 
 @Component({
   selector: 'app-card-solicitacao',
-  imports: [...materialImports, CommonModule],
+  imports: [...materialImports, CommonModule, DataBrasileiraPipe],
   templateUrl: './card-solicitacao.component.html',
   styleUrl: './card-solicitacao.component.css'
 })

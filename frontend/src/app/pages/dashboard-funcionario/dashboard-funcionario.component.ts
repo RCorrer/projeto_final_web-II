@@ -41,5 +41,12 @@ export class DashboardFuncionarioComponent implements OnInit{
         { id: 107, data: '2025-02-10', hora: '08:45', cliente: 'Maria Joaquina', equipamento: 'Monitor Tubo', estado: 'PAGA' },
         { id: 108, data: '2025-04-08', hora: '11:20', cliente: 'Maria Joaquina', equipamento: 'Monitor LG 24"', estado: 'FINALIZADA' }
       ];
+      
+// ordenacao por data/hora
+      this.solicitacoes = this.solicitacoes.sort((a, b) => {
+        const dataHoraA = new Date(`${a.data}T${a.hora}`);
+        const dataHoraB = new Date(`${b.data}T${b.hora}`);
+        return dataHoraA.getTime() - dataHoraB.getTime();
+      });
   }
 }
