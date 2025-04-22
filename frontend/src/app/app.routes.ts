@@ -47,7 +47,7 @@ export const routes: Routes = [
   },
   
   {
-    Path: "abrir-solicitacao",
+    path: "abrir-solicitacao",
     component: TelaSolicitarManutencaoComponent,
   }
 ];
