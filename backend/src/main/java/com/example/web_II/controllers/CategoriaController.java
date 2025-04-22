@@ -42,8 +42,11 @@ public class CategoriaController {
         return categoriaService.deleteCategoryResponse(descricao);
     }
 
-    //ENDPOINT DE BUSCAR PRECISA SER FEITO
 
+    @PutMapping("/categoria/edita/{descricao}")
+    public ResponseEntity<String> editarCategoria(@PathVariable String descricao ,@RequestBody CategoriaDTO data){
+        return categoriaService.editarCategoria(descricao,data);
+    }
 
 
 }

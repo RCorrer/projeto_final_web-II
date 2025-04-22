@@ -1,0 +1,8 @@
+ALTER TABLE SolicitacaoManutencao
+DROP CONSTRAINT solicitacaomanutencao_fk_categoria_equipamento_fkey;
+
+ALTER TABLE SolicitacaoManutencao
+ADD CONSTRAINT solicitacaomanutencao_fk_categoria_equipamento_fkey
+FOREIGN KEY (fk_categoria_equipamento) REFERENCES CategoriaEquipamento(id)
+ON UPDATE CASCADE;
+

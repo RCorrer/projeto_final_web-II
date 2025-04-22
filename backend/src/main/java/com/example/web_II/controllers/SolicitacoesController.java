@@ -29,7 +29,7 @@ public class SolicitacoesController {
     {
       "idCliente": "cli1",
       "descEquip": "string",
-      "categoria": "Notebook",
+      "categoria": "cat2",
       "descDefeito": "string"
      }
      */
