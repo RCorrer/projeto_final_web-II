@@ -4,6 +4,8 @@ import { CardSolicitacaoComponent } from "../../components/cards/card-solicitaca
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { Solicitacao } from "../../models/Solicitacao.model";
 import { CommonModule } from "@angular/common";
+import { MatFormField } from "@angular/material/form-field";
+import { MatSelect } from "@angular/material/select";
 
 
 @Component({
@@ -12,13 +14,21 @@ import { CommonModule } from "@angular/common";
     CommonModule,
     ...materialImports,
     CardSolicitacaoComponent,
-    NavbarComponent
+    NavbarComponent,
+    MatFormField,
+    MatSelect
   ],
   templateUrl: "./dashboard-funcionario.component.html",
   styleUrl: "./dashboard-funcionario.component.css"
 })
 export class DashboardFuncionarioComponent implements OnInit{
   solicitacoes: Solicitacao[] = [];
+  filtroStatus: string = '';
+
+  get solicitacoesFiltradas(): Solicitacao[] {
+    if (!this.filtroStatus) return this.solicitacoes;
+    return this.solicitacoes.filter (s => s.estado === this.filtroStatus);
+  }
 
   ngOnInit(): void {
       this.solicitacoes = [
@@ -31,6 +41,5 @@ export class DashboardFuncionarioComponent implements OnInit{
         { id: 107, data: '2025-02-10', hora: '08:45', cliente: 'Maria Joaquina', equipamento: 'Monitor Tubo', estado: 'PAGA' },
         { id: 108, data: '2025-04-08', hora: '11:20', cliente: 'Maria Joaquina', equipamento: 'Monitor LG 24"', estado: 'FINALIZADA' }
       ];
-      console.log('Solicitações carregadas:', this.solicitacoes);
   }
 }

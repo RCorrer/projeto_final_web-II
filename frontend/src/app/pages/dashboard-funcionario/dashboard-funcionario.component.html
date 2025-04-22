@@ -14,9 +14,27 @@
           <p>Visualize todas as solicitações.</p>
         </div>
 
+        <div class="filtro-container">
+          <mat-form-field appearance="outline" floatLabel="auto">
+            <mat-label>Status</mat-label>
+            <mat-select [(value)]="filtroStatus">
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="ABERTA">Aberta</mat-option>
+              <mat-option value="ORÇADA">Orçada</mat-option>
+              <mat-option value="REJEITADA">Rejeitada</mat-option>
+              <mat-option value="APROVADA">Aprovada</mat-option>
+              <mat-option value="REDIRECIONADA">Redirecionada</mat-option>
+              <mat-option value="ARRUMADA">Arrumada</mat-option>
+              <mat-option value="PAGA">Paga</mat-option>
+              <mat-option value="FINALIZADA">Finalizada</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
         <div class="cards-container">
           <app-card-solicitacao
-            *ngFor="let solicitacao of solicitacoes"
+            *ngFor="let solicitacao of solicitacoesFiltradas"
             [solicitacao]="solicitacao">
           </app-card-solicitacao>
 
