@@ -29,7 +29,7 @@
                         <button
                             id="cancelar"
                             mat-stroked-button
-                            routerLink="/home-cliente"
+                            (click)="mostarModalRejeitar()"
                         >
                             Cancelar
                         </button>
@@ -44,6 +44,29 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="mostrarRejeicao" (click)="cancelarRejeicao()">
+    <div class="modal-confirmacao" (click)="$event.stopPropagation()">
+        <h4>Você tem certeza que deseja cancelar a solicitação?</h4>
+        <div class="btnsRejeitar">
+            <button 
+                id="btnRejeitar"
+                mat-stroked-button
+                (click)="confirmarRejeicao()"
+                routerLink="/home-cliente"
+                >
+                    Sim
+            </button>
+            <button 
+                id="btnCancelar"
+                mat-button
+                (click)="cancelarRejeicao()"
+                >
+                    Não
+            </button>
         </div>
     </div>
 </div>

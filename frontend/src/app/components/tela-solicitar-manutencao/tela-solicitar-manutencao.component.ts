@@ -19,6 +19,8 @@ export class TelaSolicitarManutencaoComponent {
   categoria: string = '';
   defeito: string = '';
 
+  mostrarRejeicao = false;
+
   constructor(private solicitacaoService: SolicitacaoService, private router: Router) {}
 
   abrirSolicitacao() {
@@ -32,5 +34,17 @@ export class TelaSolicitarManutencaoComponent {
 
       this.router.navigate(['/home-cliente']);
     }
+  }
+
+  mostarModalRejeitar(){
+    this.mostrarRejeicao = true;
+  }
+
+  cancelarRejeicao(){
+    this.mostrarRejeicao = false;
+  }
+
+  confirmarRejeicao(){
+    this.mostrarRejeicao = false;
   }
 }
