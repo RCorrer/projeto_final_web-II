@@ -9,6 +9,7 @@ import { TelaInicialClienteComponent } from './components/tela-inicial-cliente/t
 import { Component } from "@angular/core";
 import { TelaSolicitarManutencaoComponent } from "./components/tela-solicitar-manutencao/tela-solicitar-manutencao.component";
 import { TelaVisualizarComponent } from "./components/tela-visualizar/tela-visualizar.component";
+import { TelaEfetuarManutencaoComponent } from "./components/tela-efetuar-manutencao/tela-efetuar-manutencao.component";
 
 export const routes: Routes = [
   {
@@ -54,5 +55,10 @@ export const routes: Routes = [
   {
     path: "visualizar/:id",
     component: TelaVisualizarComponent,
+  },
+
+  {
+    path: "manutencao",
+    component: TelaEfetuarManutencaoComponent
   }
 ];

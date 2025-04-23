@@ -53,8 +53,7 @@
 
       <a
         *ngIf="solicitacao?.estado === 'APROVADA'"
-        (click)="realizarAcao('ARRUMADA')"
-        routerLink="/realizar-manutencao"
+        routerLink="/manutencao"
         class="action-button"
       >
         Realizar manutenção
@@ -62,8 +61,7 @@
 
       <a
         *ngIf="solicitacao?.estado === 'REDIRECIONADA'"
-        (click)="realizarAcao('ARRUMADA')"
-        routerLink="/realizar-manutencao"
+        routerLink="/manutencao"
         class="action-button"
       >
         Realizar manutenção
