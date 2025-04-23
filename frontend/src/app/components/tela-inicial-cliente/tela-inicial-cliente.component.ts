@@ -5,11 +5,12 @@ import { MatListModule } from '@angular/material/list';
 import { CardSolicitacaoClienteComponent } from '../card-solicitacao-cliente/card-solicitacao-cliente.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { SolicitacaoService } from '../../services/solicitacao.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-tela-inicial-cliente',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatListModule, CardSolicitacaoClienteComponent, NavbarComponent],
+  imports: [CommonModule, MatButtonModule, MatListModule, CardSolicitacaoClienteComponent, NavbarComponent, RouterLink],
   templateUrl: './tela-inicial-cliente.component.html',
   styleUrl: './tela-inicial-cliente.component.css'
 })
