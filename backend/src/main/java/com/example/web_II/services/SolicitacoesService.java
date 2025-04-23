@@ -1,5 +1,7 @@
 package com.example.web_II.services;
 
+import com.example.web_II.domain.historico.HistoricoAlteracaoDTO;
+import com.example.web_II.domain.historico.SolicitacaoComHistoricoDTO;
 import com.example.web_II.domain.solicitacoes.*;
 import com.example.web_II.domain.solicitacoes.HistoricoAlteracao;
 import com.example.web_II.repositories.ClienteRepository;
@@ -14,6 +16,7 @@ import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SolicitacoesService {
@@ -26,6 +29,9 @@ public class SolicitacoesService {
 
     @Autowired
     private HistoricoAlteracaoRepository historicoAlteracaoRepository;
+
+    @Autowired
+    private FuncionarioService funcionarioService;
 
 
     public ResponseEntity<String> criarSolicitacao(AbrirSolicitacaoDTO data) {
@@ -270,5 +276,47 @@ public class SolicitacoesService {
         historicoAlteracaoRepository.save(historico);
 
         return ResponseEntity.ok("Solicitação atualizada para " + nomeEstado + " com sucesso");
+    }
+
+    public ResponseEntity<SolicitacaoComHistoricoDTO> getSolicitacaoComHistorico(String id) {
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findByIdWithHistorico(id);
+
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+
+        String funcionarioNome = "Não atribuído";
+        if (solicitacao.getFk_funcionario() != null) {
+            funcionarioNome = funcionarioService.getNomeFuncionarioById(solicitacao.getFk_funcionario())
+                    .orElse("Funcionário não encontrado");
+        }
+
+        List<HistoricoAlteracaoDTO> historicoDTOs = solicitacao.getHistoricoAlteracoes().stream()
+                .map(historico -> {
+                    return new HistoricoAlteracaoDTO(
+                            historico.getDescricao(),
+                            historico.getEstadoAnterior(),
+                            historico.getEstadoNovo(),
+                            historico.getDataHora()
+                    );
+                })
+                .collect(Collectors.toList());
+
+        SolicitacaoComHistoricoDTO response = new SolicitacaoComHistoricoDTO(
+                solicitacao.getId(),
+                solicitacao.getFkCliente(),
+                solicitacao.getDescricao_equipamento(),
+                solicitacao.getFk_categoria_equipamento(),
+                solicitacao.getDescricao_defeito(),
+                solicitacao.getFk_estado(),
+                funcionarioNome,
+                solicitacao.getOrcamento(),
+                solicitacao.getData_hora(),
+                historicoDTOs
+        );
+
+        return ResponseEntity.ok(response);
     }
 }

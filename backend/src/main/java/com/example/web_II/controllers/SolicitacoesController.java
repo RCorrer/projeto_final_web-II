@@ -1,6 +1,7 @@
 package com.example.web_II.controllers;
 
 
+import com.example.web_II.domain.historico.SolicitacaoComHistoricoDTO;
 import com.example.web_II.domain.solicitacoes.*;
 import com.example.web_II.repositories.SolicitacaoRepository;
 import com.example.web_II.services.SolicitacoesService;
@@ -90,5 +91,10 @@ public class SolicitacoesController {
     @PostMapping("/solicitacao/atualizarEstado/entregue")
     public ResponseEntity<String> marcarComoEntregue(@RequestBody @Valid MudarEstadoDTO data) {
         return solicitacoesService.marcarComoEntregue(data);
+    }
+
+    @GetMapping("/solicitacao/detalhes/{id}")
+    public ResponseEntity<SolicitacaoComHistoricoDTO> getSolicitacaoComHistorico(@PathVariable String id) {
+        return solicitacoesService.getSolicitacaoComHistorico(id);
     }
 }

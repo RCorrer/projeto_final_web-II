@@ -1,3 +1,4 @@
+com/example/web_II/domain/historico/HistoricoAlteracaoDTO.class
 com/example/web_II/infra/security/SecurityFilter.class
 com/example/web_II/domain/solicitacoes/RedirecionarSolicitacaoDTO.class
 com/example/web_II/domain/usuarios/AuthenticationDTO.class
@@ -11,6 +12,7 @@ com/example/web_II/controllers/AuthenticationController.class
 com/example/web_II/infra/CorsConfig.class
 com/example/web_II/exceptions/CpfJaCadastradoException.class
 com/example/web_II/domain/funcionarios/FuncionarioListagemDTO.class
+com/example/web_II/domain/historico/SolicitacaoComHistoricoDTO.class
 com/example/web_II/domain/solicitacoes/HistoricoAlteracao.class
 com/example/web_II/domain/usuarios/LoginResponseDTO.class
 com/example/web_II/domain/cliente/CadastroClienteDTO.class

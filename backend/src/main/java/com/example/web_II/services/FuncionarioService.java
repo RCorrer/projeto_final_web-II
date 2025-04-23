@@ -5,6 +5,9 @@ import com.example.web_II.repositories.FuncionarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class FuncionarioService {
@@ -18,5 +21,11 @@ public class FuncionarioService {
     public Page<FuncionarioListagemDTO> listarTodosFuncionarios(Pageable pageable) {
         return funcionarioRepository.findAll(pageable)
                 .map(FuncionarioListagemDTO::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<String> getNomeFuncionarioById(String funcionarioId) {
+        return funcionarioRepository.findById(funcionarioId)
+                .map(funcionario -> funcionario.getUsuario().getNome());
     }
 }
