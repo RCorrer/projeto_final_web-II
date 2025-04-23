@@ -1,0 +1,7 @@
+.initial-load {
+    display: none;
+}
+  
+.initial-loaded .initial-load {
+    display: block;
+}

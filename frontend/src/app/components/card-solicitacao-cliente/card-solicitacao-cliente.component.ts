@@ -1,15 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 import { ModalMostarOrcamentoComponent } from '../modal-mostar-orcamento/modal-mostar-orcamento.component';
 
 @Component({
   selector: 'app-card-solicitacao-cliente',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ModalMostarOrcamentoComponent],
+  imports: [CommonModule, MatButtonModule, ModalMostarOrcamentoComponent, RouterModule],
   templateUrl: './card-solicitacao-cliente.component.html',
   styleUrl: './card-solicitacao-cliente.component.css'
 })
+
 export class CardSolicitacaoClienteComponent {
   @Input() solicitacao: any;
 
