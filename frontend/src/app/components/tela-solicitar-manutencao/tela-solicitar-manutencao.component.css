@@ -38,3 +38,29 @@
     flex-direction: column;
     width: 100%;
 }
+
+.botoes {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+    margin-top: 48px;
+}
+
+#cancelar {
+    border-color: var(--color-rejeitada);
+    color: var(--color-rejeitada);
+    width: 150px;
+}
+
+#abrir {
+    background-color: var(--color-finalizada);
+    color: white;
+    width: 150px;
+    transition: 0.3s ease;
+}
+
+#abrir:hover {
+    background-color: var(--color-finalizada-hover);
+}

@@ -22,24 +22,26 @@
 
                     <label>Descrição do Defeito</label>
                     <mat-form-field appearance="outline">
-                        <textarea matInput placeholder="Descrição do Defeito" [(ngModel)]="defeito" name="defeito"></textarea>
+                        <textarea matInput rows="8" placeholder="Descrição do Defeito" style="resize:none;" [(ngModel)]="defeito" name="defeito"></textarea>
                     </mat-form-field>
-
-                    <button
-                    id="cancelar"
-                    mat-stroked-button
-                    routerLink="/home-cliente"
-                    >
-                        Cancelar
-                    </button>
-
-                    <button
-                        id="aceitar"
-                        mat-button
-                        (click)="abrirSolicitacao()"
-                    >
-                        Abrir Solicitação
-                    </button>
+                    
+                    <div class="botoes">
+                        <button
+                            id="cancelar"
+                            mat-stroked-button
+                            routerLink="/home-cliente"
+                        >
+                            Cancelar
+                        </button>
+                    
+                        <button
+                            id="abrir"
+                            mat-button
+                            (click)="abrirSolicitacao()"
+                        >
+                            Abrir Solicitação
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
