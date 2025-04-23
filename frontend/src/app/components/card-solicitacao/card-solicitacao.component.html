@@ -31,15 +31,15 @@
     <mat-card-actions align="end">
       <a
         *ngIf="solicitacao?.estado === 'ABERTA'"
-        (click)="realizarAcao('ORÇADA')"
+        (click)="realizarAcao('ORCADA')"
         class="action-button"
         routerLink="/efetuar-orcamento"
       >
-        Realizar orçamento
+        Realizar orcamento
       </a>
 
       <a
-        *ngIf="solicitacao?.estado === 'ORÇADA'"
+        *ngIf="solicitacao?.estado === 'ORCADA'"
         class="action-button-disabled"
       >
         Esperando Aceite
@@ -54,7 +54,7 @@
 
       <a
         *ngIf="solicitacao?.estado === 'APROVADA'"
-      ( click)="realizarAcao('REDIRECIONADA')"
+        (click)="realizarAcao('ARRUMADA')"
         routerLink="/realizar-manutencao"
         class="action-button"
       >

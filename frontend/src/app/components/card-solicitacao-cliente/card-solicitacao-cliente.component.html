@@ -1,12 +1,25 @@
 <div class="solicitacao-info">
-    <p><strong>Equipamento:</strong> {{ solicitacao.equipamento }}</p>
-    <p><strong>Data/Hora:</strong> {{ solicitacao.dataHora }}</p>
-    <p><strong>Estado:</strong> <span class="status {{ solicitacao.estado | lowercase }}">{{ solicitacao.estado }}</span></p>
+    <p>
+      <strong>Equipamento:</strong>
+        {{ solicitacao.equipamento }}
+    </p>
+    
+    <p>
+      <strong>Data/Hora:</strong>
+        {{ solicitacao.dataHora }}
+    </p>
+    
+    <p>
+      <strong>Estado:</strong>
+      <span class="status {{ solicitacao.estado | lowercase }}">
+        {{ getEstadoDisplay(solicitacao.estado) }}
+      </span>
+    </p>
 </div>
 
 <div class="acoes">
   <button mat-button color="primary" (click)="emitir('visualizar', solicitacao.id)">Visualizar</button>
-  <button *ngIf="solicitacao.estado === 'ORÇADA'" mat-button color="primary" (click)="emitir('orcamento', solicitacao.id)" (click)="abrirModal()">Aprovar/Rejeitar</button>
+  <button *ngIf="solicitacao.estado === 'ORCADA'" mat-button color="primary" (click)="emitir('orcamento', solicitacao.id)" (click)="abrirModal()">Aprovar/Rejeitar</button>
   <button *ngIf="solicitacao.estado === 'REJEITADA'" mat-button color="primary" (click)="emitir('resgatar', solicitacao.id)">Resgatar Serviço</button>
   <button *ngIf="solicitacao.estado === 'ARRUMADA'" mat-button color="primary" (click)="emitir('pagar', solicitacao.id)">Pagar Serviço</button>
 </div>

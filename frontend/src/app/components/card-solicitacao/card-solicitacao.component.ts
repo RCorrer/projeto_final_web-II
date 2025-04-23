@@ -16,9 +16,9 @@ export class CardSolicitacaoComponent {
   constructor(private solicitacaoService: SolicitacaoService) {}
 
   getBackgroundColor(): string {
-    switch (this.solicitacao?.estado) {
+    switch (this.solicitacao?.estado.toUpperCase()) {
       case 'ABERTA' : return 'var(--color-aberto)';
-      case 'ORÇADA' : return 'var(--color-orcada)';
+      case 'ORCADA' : return 'var(--color-orcada)';
       case 'REJEITADA' : return 'var(--color-rejeitada)';
       case 'APROVADA' : return 'var(--color-aprovada)';
       case 'REDIRECIONADA' : return 'var(--color-redirecionada)';
@@ -31,6 +31,7 @@ export class CardSolicitacaoComponent {
 
   realizarAcao(novoEstado: string) {
     if (this.solicitacao) {
+      const estadoPadronizado = novoEstado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       this.solicitacaoService.atualizarSolicitacao(this.solicitacao.id, novoEstado);
     }
   }

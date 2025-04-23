@@ -22,7 +22,7 @@
   }
 
   .status.aberta { color: #a9a9a9; }
-  .status.orçada { color: #9C6644; }
+  .status.orcada { color: #9C6644; }
   .status.rejeitada { color: #E26768; }
   .status.aprovada { color: #FBB91B; }
   .status.redirecionada { color: #8080FF; }

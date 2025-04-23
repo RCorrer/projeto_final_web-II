@@ -42,4 +42,12 @@ export class CardSolicitacaoClienteComponent {
     this.alterarEstado.emit(evento);
     this.fecharModal();
   }
+
+  getEstadoDisplay(estado: string) {
+    const map: {[key: string]: string} = {
+      'ORCADA': 'ORÇADA'
+    };
+
+    return map[estado] || estado;
+  }
 }
