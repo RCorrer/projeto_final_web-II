@@ -1,15 +1,6 @@
 services:
-  angular-cache-cleaner:
-    image: alpine
-    command: sh -c "rm -rf /home/app/node_modules/* && rm -rf /home/app/.angular/cache/*"
-    volumes:
-      - ./frontend:/home/app
-    restart: "no"  
-
   frontend:
     image: node:20-alpine
-    depends_on:
-      - angular-cache-cleaner 
     working_dir: /home/app
     ports:
       - "80:4200"
@@ -17,6 +8,9 @@ services:
     volumes:
       - ./frontend:/home/app
       - /home/app/node_modules
+      - /home/app/.angular
+    environment:
+      NODE_ENV: development
 
   backend:
     image: maven:3.8.4-openjdk-17-slim
@@ -31,7 +25,8 @@ services:
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
     volumes:
-      - ./backend:/app
+      - ./backend/src:/app/src
+      - ./backend/pom.xml:/app/pom.xml
       - ~/.m2:/root/.m2
     command: mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=true"
 
@@ -43,3 +38,8 @@ services:
       POSTGRES_PASSWORD: admin
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
