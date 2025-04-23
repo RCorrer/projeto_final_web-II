@@ -31,9 +31,8 @@
     <mat-card-actions align="end">
       <a
         *ngIf="solicitacao?.estado === 'ABERTA'"
-        (click)="realizarAcao('ORCADA')"
         class="action-button"
-        routerLink="/efetuar-orcamento"
+        [routerLink]="['/efetuar-orcamento', solicitacao?.id]"
       >
         Realizar orcamento
       </a>

@@ -17,7 +17,7 @@ export const routes: Routes = [
   },
 
   {
-    path: "efetuar-orcamento",
+    path: "efetuar-orcamento/:id",
     component: OrcamentoFuncionarioComponent,
   },
 

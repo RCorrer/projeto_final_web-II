@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
 
 interface Solicitacao {
   id: number;
@@ -33,21 +33,27 @@ export class SolicitacaoService {
     this.solicitacoesSource.next([...solicitacoesAtuais, novaSolicitacao]);
   }
 
-  atualizarSolicitacao(id: number, novoEstado: string) {
-    const solicitacoesAtuais = this.solicitacoesSource.value;
-    const solicitacaoIndex = solicitacoesAtuais.findIndex(s => s.id === id);
-
-    if (solicitacaoIndex !== -1) {
-      const solicitacoesAtualizadas = [...solicitacoesAtuais];
-      solicitacoesAtualizadas[solicitacaoIndex] = {
-        ...solicitacoesAtualizadas[solicitacaoIndex],
-        estado: novoEstado
-      };
-      this.solicitacoesSource.next(solicitacoesAtualizadas);
+  atualizarSolicitacao(id: number, novoEstado: string): Observable<any> {
+    const solicitacoesAtuais = [...this.solicitacoesSource.value];
+    const index = solicitacoesAtuais.findIndex(s => s.id === id);
+    
+    if (index !== -1) {
+        solicitacoesAtuais[index] = {
+            ...solicitacoesAtuais[index],
+            estado: novoEstado
+        };
+        this.solicitacoesSource.next(solicitacoesAtuais);
+        return of({ success: true });
     }
+    
+    return throwError(() => new Error('Solicitação não encontrada'));
   }
 
   getSolicitacoes() {
     return this.solicitacoesSource.value;
+  }
+
+  getSolicitacaoById(id: number): any {
+    return this.solicitacoesSource.value.find(s => s.id === id);
   }
 }

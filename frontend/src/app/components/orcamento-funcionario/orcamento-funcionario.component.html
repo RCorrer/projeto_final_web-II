@@ -20,7 +20,14 @@
                     </div>
                     
                     <div class="orcamento-button">
-                        <button id="orcamento-button"  mat-button color="primary" routerLink="/home" (click)="enviarOrcamento()">Enviar</button>
+                        <button
+                            id="orcamento-button" 
+                            mat-button
+                            color="primary"
+                            (click)="realizarAcao('ORCADA')"
+                        >
+                            Enviar
+                        </button>
                     </div>
                 </div>
             </div>

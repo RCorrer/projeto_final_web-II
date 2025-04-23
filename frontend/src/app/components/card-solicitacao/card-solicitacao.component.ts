@@ -2,16 +2,25 @@ import { Component, Input } from '@angular/core';
 import { materialImports } from '../../material-imports';
 import { CommonModule } from '@angular/common';
 import { SolicitacaoService } from '../../services/solicitacao.service';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-card-solicitacao',
-  imports: [...materialImports, CommonModule, RouterLink],
+  imports: [...materialImports, CommonModule, RouterLink, RouterModule],
   templateUrl: './card-solicitacao.component.html',
   styleUrl: './card-solicitacao.component.css'
 })
 export class CardSolicitacaoComponent {
   @Input() solicitacao: any;
+
+  ngOnInit() {
+    this.solicitacaoService.solicitacoes$.subscribe(solicitacoes => {
+      const solicitacaoAtualizada = solicitacoes.find(s => s.id === this.solicitacao?.id);
+      if (solicitacaoAtualizada) {
+        this.solicitacao = solicitacaoAtualizada;
+      }
+    });
+  }
 
   constructor(private solicitacaoService: SolicitacaoService) {}
 
