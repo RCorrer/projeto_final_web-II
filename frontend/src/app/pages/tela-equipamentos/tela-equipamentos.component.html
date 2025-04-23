@@ -31,8 +31,10 @@
           <app-card-equipamento
             *ngFor="let equipamento of equipamentos"
             [equipamento]="equipamento"
-            (editar)="abrirDialog()"
-            (excluir)="abrirDialog()"
+            (editar)="abrirDialog(equipamento.descricao)"
+            (excluir)="excluirEquipamento(equipamento.descricao)"
+
+            >
           ></app-card-equipamento>
         </ng-container>
 
