@@ -7,12 +7,12 @@
                     <label>Descrição do Equipamento</label>
 
                     <mat-form-field appearance="outline">
-                        <input matInput placeholder="Descrição do Equipamento" type="text">
+                        <input matInput placeholder="Descrição do Equipamento" type="text" [(ngModel)]="equipamento" name="equipamento">
                     </mat-form-field>
 
                     <label>Escolha a categoria do Equipamento</label>
                     <mat-form-field appearance="outline">
-                        <mat-select placeholder="Categoria do Equipamento">
+                        <mat-select placeholder="Categoria do Equipamento" [(ngModel)]="categoria" name="categoria">
                             <mat-option value="computador">Computador</mat-option>
                             <mat-option value="periferico">Periférico</mat-option>
                             <mat-option value="monitor">Monitor</mat-option>
@@ -22,8 +22,24 @@
 
                     <label>Descrição do Defeito</label>
                     <mat-form-field appearance="outline">
-                        <textarea matInput placeholder="Descrição do Defeito"></textarea>
+                        <textarea matInput placeholder="Descrição do Defeito" [(ngModel)]="defeito" name="defeito"></textarea>
                     </mat-form-field>
+
+                    <button
+                    id="cancelar"
+                    mat-stroked-button
+                    routerLink="/home-cliente"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        id="aceitar"
+                        mat-button
+                        (click)="abrirSolicitacao()"
+                    >
+                        Abrir Solicitação
+                    </button>
                 </form>
             </div>
         </div>
