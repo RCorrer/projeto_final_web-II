@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { ModalMostarOrcamentoComponent } from '../modal-mostar-orcamento/modal-mostar-orcamento.component';
+import { SolicitacaoService } from '../../services/solicitacao.service';
 
 @Component({
   selector: 'app-card-solicitacao-cliente',
@@ -21,6 +22,9 @@ export class CardSolicitacaoClienteComponent {
   @Output() pagarServico = new EventEmitter<number>();
   @Output() alterarEstado = new EventEmitter<{ id: number, novoEstado: string }>();
 
+  modalAberto = false;
+  mostrarResgate = false;
+
   emitir(evento: string, id: number) {
     switch (evento) {
       case 'visualizar': this.visualizar.emit(id); break;
@@ -30,7 +34,7 @@ export class CardSolicitacaoClienteComponent {
     }
   }
 
-  modalAberto = false;
+  constructor(private solicitacaoService: SolicitacaoService) {}
 
   abrirModal() {
     this.modalAberto = true;
@@ -38,6 +42,22 @@ export class CardSolicitacaoClienteComponent {
 
   fecharModal() {
     this.modalAberto = false;
+  }
+
+  modalResgatarServico() {
+    this.mostrarResgate = true;
+  }
+
+  cancelarResgate() {
+    this.mostrarResgate = false;
+  }
+
+  confirmarResgate() {
+    this.alterarEstado.emit({
+      id: this.solicitacao.id,
+      novoEstado: 'APROVADA'
+    });
+    this.mostrarResgate = false;
   }
 
   onAlterarEstado(evento: { id: number, novoEstado: string }) {

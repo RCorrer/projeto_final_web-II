@@ -27,7 +27,7 @@
   </button>
   
   <button *ngIf="solicitacao.estado === 'ORCADA'" mat-button color="primary" (click)="emitir('orcamento', solicitacao.id)" (click)="abrirModal()">Aprovar/Rejeitar</button>
-  <button *ngIf="solicitacao.estado === 'REJEITADA'" mat-button color="primary" (click)="emitir('resgatar', solicitacao.id)">Resgatar Serviço</button>
+  <button *ngIf="solicitacao.estado === 'REJEITADA'" mat-button color="primary" (click)="modalResgatarServico()">Resgatar Serviço</button>
   <button *ngIf="solicitacao.estado === 'ARRUMADA'" mat-button color="primary" (click)="emitir('pagar', solicitacao.id)">Pagar Serviço</button>
 </div>
 
@@ -37,3 +37,27 @@
   (closed)="fecharModal()"
   (alterarEstado)="onAlterarEstado($event)">
 </app-modal-mostar-orcamento>
+
+<div class="modal-overlay" *ngIf="mostrarResgate" (click)="cancelarResgate()">
+  <div class="modal-confirmacao" (click)="$event.stopPropagation()">
+    <h4>Você tem certeza que deseja resgatar o serviço?</h4>
+    <div class="btnsRejeitar">
+      <button
+        id="btnCancelar"
+        mat-stroked-button
+        (click)="cancelarResgate()"
+      >
+        Não
+      </button>
+      <button
+        id="btnRejeitar"
+        mat-button
+        (click)="confirmarResgate()"
+        routerLink="/home-cliente"
+      >
+        Sim
+      </button>
+    </div>
+  </div>
+
+</div>

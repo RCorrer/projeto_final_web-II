@@ -18,41 +18,26 @@ import { Observable, of } from 'rxjs';
 
 export class OrcamentoFuncionarioComponent implements OnInit{
   @Input() solicitacao: any;
+  isLoaded = false;
   
   valorOrcamento: string = '';
+
+  constructor(public currencyPipe: CurrencyPipe, private solicitacaoService: SolicitacaoService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const id = +params['id'];
       const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(id);
 
-      if (solicitacaoExistente) {
-        this.solicitacao = solicitacaoExistente;
-      } else {
-        this.solicitacao = {
-          id: id,
-          equipamento: 'Teclado DELL KB216 USB',
-          problema: 'Teclas ctrl, alt e del não funcionam, espaço solto e barulhento.',
-          cliente: {
-            nome: 'Joana Joaquina',
-            cpf: '000.000.000-00',
-            email: 'joana.joaquina@gmail.com',
-            telefone: '(00) 00000-0000',
-            endereco: {
-              cep: '00000-000',
-              logradouro: 'R. Dr. Alcides Vieira Arcoverde, 1225',
-              complemento: 'Bloco A',
-              cidade: 'Curitiba',
-              estado: 'Paraná'
-            }
-          },
-          estado: 'ABERTA'
-        };
-      }
+      this.solicitacao = this.mergeWithDefault(solicitacaoExistente || { id });
+
+      this.solicitacao.idFormatado = 'OS-' + this.solicitacao.id.toString().padStart(6, '0');
+
+      setTimeout(() => {
+        this.isLoaded = true;
+      }, 100);
     });
   }
-
-  constructor(public currencyPipe: CurrencyPipe, private solicitacaoService: SolicitacaoService, private router: Router, private route: ActivatedRoute) {}
 
   formatarMoeda() {
     let valor = this.valorOrcamento.replace(/\D/g, '');
@@ -89,5 +74,36 @@ export class OrcamentoFuncionarioComponent implements OnInit{
     }
 
     return of({ success: true});
+  }
+
+  private mergeWithDefault(solicitacao: any): any {
+    const cliente = typeof solicitacao.cliente === 'string' 
+      ? { nome: solicitacao.cliente }
+      : solicitacao.cliente || {};
+  
+    const endereco = cliente.endereco || {};
+    
+    return {
+      id: solicitacao.id || 0,
+      idFormatado: 'OS-' + (solicitacao.id || 0).toString().padStart(6, '0'),
+      equipamento: solicitacao.equipamento || 'Teclado DELL KB216 USB',
+      categoria: solicitacao.categoria || 'Periférico',
+      problema: solicitacao.defeito || solicitacao.problema || 'N/A',
+      cliente: {
+        nome: cliente.nome || 'Joana Joaquina',
+        cpf: cliente.cpf || '000.000.000-00',
+        email: cliente.email || 'joana@gmail.com',
+        telefone: cliente.telefone || '(00) 00000-0000',
+        endereco: {
+          cep: endereco.cep || '00000-000',
+          logradouro: endereco.logradouro || 'Rua dos bobos',
+          complemento: endereco.complemento || 'N/A',
+          cidade: endereco.cidade || 'Bobolópolis',
+          estado: endereco.estado || 'Bobolândia'
+        }
+      },
+      estado: solicitacao.estado || 'ABERTA',
+      dataHora: solicitacao.dataHora || new Date().toISOString()
+    };
   }
 }

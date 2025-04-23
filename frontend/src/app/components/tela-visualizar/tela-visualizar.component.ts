@@ -1,12 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { SolicitacaoService } from '../../services/solicitacao.service';
-import { MatButton } from '@angular/material/button';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tela-visualizar',
-  imports: [MatButton, CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './tela-visualizar.component.html',
   styleUrl: './tela-visualizar.component.css'
 })

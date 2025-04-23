@@ -29,3 +29,49 @@
   .status.arrumada { color: #138EFF; }
   .status.paga { color: #FB8B24; }
   .status.finalizada { color: #14AE5C; }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-confirmacao{
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    width: 50vh;
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.btnsRejeitar{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+#btnCancelar{
+    border-color: var(--color-rejeitada);
+    color: var(--color-rejeitada);
+    width: 100px;
+}
+
+#btnRejeitar{
+    background-color: var(--color-finalizada);
+    color: white;
+    width: 100px;
+}
