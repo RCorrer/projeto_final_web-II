@@ -4,10 +4,11 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, CurrencyPipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-orcamento-funcionario',
-  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, NavbarComponent],
+  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, NavbarComponent, MatButtonModule, RouterLink],
   providers: [CurrencyPipe],
   templateUrl: './orcamento-funcionario.component.html',
   styleUrl: './orcamento-funcionario.component.css'
