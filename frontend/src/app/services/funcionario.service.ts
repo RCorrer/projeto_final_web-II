@@ -31,28 +31,39 @@ export class FuncionarioService {
       return this.funcionariosSource.value;
     }
 
-  atualizarFuncionario(id: number, nome: string, email: string): Observable<any> {
-    const funcionariosAtuais = [...this.funcionariosSource.value];
-    const index = funcionariosAtuais.findIndex(f => f.id === id);
-  
-    if (index !== -1) {
-      const funcionario = funcionariosAtuais[index];
-      
-      funcionariosAtuais[index] = {
-        ...funcionario,
-        usuario: {
-          ...funcionario.usuario,
-          nome,
-          email,
-        },
-      };
-  
-      this.funcionariosSource.next(funcionariosAtuais);
-      return of({ success: true });
+    atualizarFuncionario(
+      id: number,
+      dadosAtualizados: {
+        nome: string;
+        email: string;
+        senha: string;
+        dataNascimento: string;
+      }
+    ): Observable<any> {
+      const funcionariosAtuais = [...this.funcionariosSource.value];
+      const index = funcionariosAtuais.findIndex(f => f.id === id);
+    
+      if (index !== -1) {
+        const funcionario = funcionariosAtuais[index];
+    
+        funcionariosAtuais[index] = {
+          ...funcionario,
+          senha: dadosAtualizados.senha,
+          dataNascimento: dadosAtualizados.dataNascimento,
+          usuario: {
+            ...funcionario.usuario,
+            nome: dadosAtualizados.nome,
+            email: dadosAtualizados.email,
+          },
+        };
+    
+        this.funcionariosSource.next(funcionariosAtuais);
+        return of({ success: true });
+      }
+    
+      return throwError(() => new Error('Funcionário não encontrado'));
     }
-  
-    return throwError(() => new Error('Funcionário não encontrado'));
-  }
+    
   
 
   getFuncionarios() {
