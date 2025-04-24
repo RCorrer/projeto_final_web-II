@@ -32,7 +32,7 @@
 
 html,
 body {
-  height: auto;
+  height: 100%;
   font-family: "Inter", sans-serif;
   color: var(--color-text);
   background-color: var(--color-surface);
