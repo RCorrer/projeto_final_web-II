@@ -8,6 +8,7 @@ import { CardEquipamentoComponent } from "../../components/cards/card-equipament
 import { materialImports } from "../../material-imports";
 import { Equipamento } from "../../models/equipamento.model";
 import { EquipamentoService } from "../../services/equipamento.service";
+import { DialogEquipamentoComponent } from "../../components/dialog-equipamento/dialog-equipamento.component";
 
 @Component({
   selector: "app-tela-equipamentos",
@@ -34,17 +35,30 @@ export class TelaEquipamentosComponent implements OnInit {
     });
   }
 
-  abrirDialog(equipamentoExistente?: Equipamento) {
-    const novaDescricao = prompt('Descrição do equipamento:', equipamentoExistente?.descricao || '');
+  abrirDialog(equipamentoEditando?: Equipamento) {
+    const dialogRef = this.dialog.open(DialogEquipamentoComponent, {
+      data: {
+        titulo: equipamentoEditando ? "Editar Equipamento" : "Novo Equipamento",
+        descricao: equipamentoEditando?.descricao || "",
+      },
+    });
   
-    if (novaDescricao) {
-      if (equipamentoExistente) {
-        this.equipamentoService.atualizarEquipamento(equipamentoExistente.id, novaDescricao).subscribe();
-      } else {
-        this.equipamentoService.adicionarEquipamento({ descricao: novaDescricao });
+    dialogRef.afterClosed().subscribe((dados) => {
+      if (dados) {
+        if (equipamentoEditando) {
+          this.equipamentoService
+            .atualizarEquipamento(equipamentoEditando.id, dados.descricao)
+            .subscribe();
+        } else {
+          // Não passamos o id aqui
+          this.equipamentoService.adicionarEquipamento({
+            descricao: dados.descricao,  // Apenas a descrição, sem o id
+          });
+        }
       }
-    }
+    });
   }
+  
   
   excluirEquipamento(equipamento: Equipamento): void {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
