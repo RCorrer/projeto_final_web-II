@@ -1,9 +1,14 @@
 mat-card {
   background-color: var(--color-surface);
+  width: 100%;
   max-width: 300px;
   border-radius: 8px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   padding: 1rem;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 mat-card-header {
