@@ -34,8 +34,8 @@
           <app-card-funcionario
             *ngFor="let funcionario of funcionarios"
             [funcionario]="funcionario"
-            (editar)="abrirDialog()"
-            (excluir)="abrirDialog()"
+            (editar)="abrirDialog(funcionario)"
+            (excluir)="excluirFuncionario(funcionario)"
           ></app-card-funcionario>
         </ng-container>
 
@@ -46,7 +46,7 @@
               <h3>Nenhum funcionário cadastrado</h3>
               <p>Comece adicionando seu primeiro colaborador</p>
             </div>
-            
+
             <button mat-stroked-button (click)="abrirDialog()">
               Adicionar Funcionário
             </button>

@@ -1,37 +1,64 @@
-import { Component, inject } from "@angular/core";
-import { materialImports } from "../../material-imports";
-import { NavbarComponent } from "../../components/navbar/navbar.component";
-import { MatDialog } from "@angular/material/dialog";
-
-import { CardEquipamentoComponent } from "../../components/cards/card-equipamento/card-equipamento.component";
-import { DadosEquipamentoComponent } from "../../components/dados-equipamento/dados-equipamento.component";
-import { Equipamento } from "../../models/equipamento.model";
+import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { MatDialog } from "@angular/material/dialog";
+import { DialogConfirmComponent } from "../../components/dialog/dialog.component";
+
+import { NavbarComponent } from "../../components/navbar/navbar.component";
+import { CardEquipamentoComponent } from "../../components/cards/card-equipamento/card-equipamento.component";
+import { materialImports } from "../../material-imports";
+import { Equipamento } from "../../models/equipamento.model";
+import { EquipamentoService } from "../../services/equipamento.service";
 
 @Component({
-  selector: "app-crud-equipamentos",
+  selector: "app-tela-equipamentos",
+  standalone: true,
   imports: [
     ...materialImports,
     NavbarComponent,
     CardEquipamentoComponent,
     CommonModule,
+    DialogConfirmComponent
   ],
   templateUrl: "./tela-equipamentos.component.html",
   styleUrl: "./tela-equipamentos.component.css",
 })
-export class TelaEquipamentosComponent {
-  equipamentos: Equipamento[] = [
-    { descricao: "Computador" },
-    { descricao: "Periférico" },
-    { descricao: "Monitor" },
-    { descricao: "Rede" },
-    { descricao: "Impressora" },
-  ];
+export class TelaEquipamentosComponent implements OnInit {
+  equipamentos: Equipamento[] = [];
 
   private dialog = inject(MatDialog);
-  abrirDialog() {
-    this.dialog.open(DadosEquipamentoComponent, {
-      width: "600px",
+  private equipamentoService = inject(EquipamentoService);
+
+  ngOnInit(): void {
+    this.equipamentoService.equipamentos$.subscribe((equipamentos) => {
+      this.equipamentos = equipamentos;
     });
   }
-}
+
+  abrirDialog(equipamentoExistente?: Equipamento) {
+    const novaDescricao = prompt('Descrição do equipamento:', equipamentoExistente?.descricao || '');
+  
+    if (novaDescricao) {
+      if (equipamentoExistente) {
+        this.equipamentoService.atualizarEquipamento(equipamentoExistente.id, novaDescricao).subscribe();
+      } else {
+        this.equipamentoService.adicionarEquipamento({ descricao: novaDescricao });
+      }
+    }
+  }
+  
+  excluirEquipamento(equipamento: Equipamento): void {
+    const dialogRef = this.dialog.open(DialogConfirmComponent, {
+      data: {
+        titulo: 'Confirmação',
+        mensagem: 'Deseja realmente excluir o equipamento?',
+      },
+    });
+  
+    dialogRef.afterClosed().subscribe((confirmado) => {
+      if (confirmado) {
+        this.equipamentoService.removerEquipamento(equipamento.id);
+      }
+    });
+  }
+  
+}  
