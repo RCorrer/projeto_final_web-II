@@ -12,10 +12,10 @@
   </button>
 
   <mat-menu #menu="matMenu">
-    <button mat-button color="primary" (click)="editar.emit(funcionario)">
+    <button mat-button color="primary" (click)="editar.emit()">
       Editar
     </button>
-    <button mat-button color="warn" (click)="excluir.emit(funcionario)">
+    <button mat-button color="warn" (click)="excluir.emit()">
       Excluir
     </button>
   </mat-menu>

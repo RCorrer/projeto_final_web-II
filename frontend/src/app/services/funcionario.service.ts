@@ -1,54 +1,56 @@
-import { Injectable } from "@angular/core";
-import { Funcionario } from "../models/funcionario.model";
-import { Observable, of } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
+import { Funcionario } from '../models/funcionario.model';
 
 @Injectable({
-  providedIn: "root", // já deixa o serviço injetável no app inteiro
+  providedIn: 'root'
 })
+
 export class FuncionarioService {
-  // Array de funcionários fictícios
-  private funcionariosMock: Funcionario[] = [
-    {
-      id: "1",
-      dataNascimento: "1990-05-15",
-      senha: "senha123",
-      usuario: {
-        id: "u1",
-        nome: "Maria Souza",
-        email: "maria@example.com",
-      },
-    },
-    {
-      id: "2",
-      dataNascimento: "1985-12-22",
-      senha: "senha123",
-      usuario: {
-        id: "u2",
-        nome: "João Silva",
-        email: "joao@example.com",
-      },
-    },
-  ];
+  private funcionariosSource = new BehaviorSubject<Funcionario[]>([]);
+  funcionarios$ = this.funcionariosSource.asObservable();
 
-  // Simula um GET no backend
-  listar(): Observable<Funcionario[]> {
-    return of(this.funcionariosMock);
+  constructor() {}
+
+  adicionarFuncionario(funcionario: Omit<Funcionario, 'id'>) {
+    const funcionariosAtuais = this.funcionariosSource.value;
+    const novaFuncionario: Funcionario = {
+      ...funcionario,
+      id: funcionariosAtuais.length + 1,
+    };
+
+    this.funcionariosSource.next([...funcionariosAtuais, novaFuncionario]);
   }
 
-  // Simula um DELETE
-  excluir(id: string): Observable<void> {
-    this.funcionariosMock = this.funcionariosMock.filter((f) => f.id !== id);
-    return of(undefined);
-  }
-
-  // Simula um PUT ou POST
-  salvar(func: Funcionario): Observable<Funcionario> {
-    const existente = this.funcionariosMock.find((f) => f.id === func.id);
-    if (existente) {
-      Object.assign(existente, func);
-    } else {
-      this.funcionariosMock.push({ ...func, id: crypto.randomUUID() });
+  atualizarFuncionario(id: number, nome: string, email: string): Observable<any> {
+    const funcionariosAtuais = [...this.funcionariosSource.value];
+    const index = funcionariosAtuais.findIndex(f => f.id === id);
+  
+    if (index !== -1) {
+      const funcionario = funcionariosAtuais[index];
+      
+      funcionariosAtuais[index] = {
+        ...funcionario,
+        usuario: {
+          ...funcionario.usuario,
+          nome,
+          email,
+        },
+      };
+  
+      this.funcionariosSource.next(funcionariosAtuais);
+      return of({ success: true });
     }
-    return of(func);
+  
+    return throwError(() => new Error('Funcionário não encontrado'));
+  }
+  
+
+  getFuncionarios() {
+    return this.funcionariosSource.value;
+  }
+
+  getFuncionarioById(id: number): any {
+    return this.funcionariosSource.value.find(s => s.id === id);
   }
 }
