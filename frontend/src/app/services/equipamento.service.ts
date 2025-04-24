@@ -1,37 +1,48 @@
-import { Injectable } from "@angular/core";
-import { Equipamento } from "../models/equipamento.model";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
+import { Equipamento } from '../models/equipamento.model';
 
-// Injeção de dependência do serviço de equipamentos - cria uma única instância disponível em toda a aplicação
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class EquipamentoService {
-  private baseUrl = 'http://localhost:8080/categoria';
-  constructor(private http: HttpClient) {}
+  private equipamentosSource = new BehaviorSubject<Equipamento[]>([]);
+  equipamentos$ = this.equipamentosSource.asObservable();
 
-  listarEquipamentos(): Observable<Equipamento[]> {
-    return this.http.get<Equipamento[]>(`${this.baseUrl}/listar`);
+  private idCounter = 1;
+
+  adicionarEquipamento(equipamento: Omit<Equipamento, 'id'>) {
+    const equipamentosAtuais = this.equipamentosSource.value;
+    const novoEquipamento: Equipamento = {
+      id: this.idCounter++,
+      ...equipamento
+    };
+    this.equipamentosSource.next([...equipamentosAtuais, novoEquipamento]);
   }
 
-  adicionarEquipamento(descricao: string): Observable<string> {
-    return this.http.post(`${this.baseUrl}/adicionar`, { descricao }, { responseType: 'text' });
+  atualizarEquipamento(id: number, novaDescricao: string): Observable<any> {
+    const equipamentosAtuais = [...this.equipamentosSource.value];
+    const index = equipamentosAtuais.findIndex(f => f.id === id);
+
+    if (index !== -1) {
+      equipamentosAtuais[index] = {
+        ...equipamentosAtuais[index],
+        descricao: novaDescricao,
+      };
+
+      this.equipamentosSource.next(equipamentosAtuais);
+      return of({ success: true });
+    }
+
+    return throwError(() => new Error('Equipamento não encontrado'));
   }
 
-  excluirEquipamento(descricao: string): Observable<string> {
-    return this.http.delete(`${this.baseUrl}/excluir/${descricao}`, { responseType: 'text' });
+  removerEquipamento(id: number) {
+    const equipamentosAtualizados = this.equipamentosSource.value.filter(e => e.id !== id);
+    this.equipamentosSource.next(equipamentosAtualizados);
   }
-
-  private equipamentos: Equipamento[] = [
-    { descricao: "Impressora" },
-    { descricao: "Periférico" },
-    { descricao: "Computador" },
-    { descricao: "Monitor" },
-    { descricao: "Rede" },
-  ];
 
   getEquipamentos(): Equipamento[] {
-    return this.equipamentos;
+    return this.equipamentosSource.value;
   }
 }

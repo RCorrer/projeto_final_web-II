@@ -75,9 +75,7 @@
               </li>
             </ul>
             <div class="total-dia">
-              <mat-icon class="mat-18">attach_money</mat-icon>
-              <span>Total arrecadado:</span>
-              <span>R${{ grupo.total }}</span>
+              <span>Total arrecadado: R${{ grupo.total | number: '1.2-2' }}</span>
             </div>
           </div>
         </div>

@@ -22,6 +22,15 @@ export class FuncionarioService {
     this.funcionariosSource.next([...funcionariosAtuais, novaFuncionario]);
   }
 
+    removerFuncionario(id: number) {
+      const funcionariosAtualizados = this.funcionariosSource.value.filter(e => e.id !== id);
+      this.funcionariosSource.next(funcionariosAtualizados);
+    }
+  
+    getFuncionario(): Funcionario[] {
+      return this.funcionariosSource.value;
+    }
+
   atualizarFuncionario(id: number, nome: string, email: string): Observable<any> {
     const funcionariosAtuais = [...this.funcionariosSource.value];
     const index = funcionariosAtuais.findIndex(f => f.id === id);

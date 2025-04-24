@@ -1,7 +1,6 @@
 .filtros {
   display: flex;
   flex-direction: column;
-  background-color: antiquewhite;
 }
 
 .date-filter-container {

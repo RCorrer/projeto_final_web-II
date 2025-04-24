@@ -31,19 +31,18 @@
           <app-card-equipamento
             *ngFor="let equipamento of equipamentos"
             [equipamento]="equipamento"
-            (editar)="abrirDialog(equipamento.descricao)"
-            (excluir)="excluirEquipamento(equipamento.descricao)"
-
-            >
-          ></app-card-equipamento>
+            (editar)="abrirDialog(equipamento)"
+            (excluir)="excluirEquipamento(equipamento)"
+          >
+          </app-card-equipamento>
         </ng-container>
 
         <ng-template #vazio>
           <div class="sem-equipamentos">
             <div>
-              <mat-icon class="sem-equipamentos-icon" aria-hidden="true"
-                >group_off</mat-icon
-              >
+              <mat-icon class="sem-equipamentos-icon" aria-hidden="true">
+                desktop_access_disabled
+              </mat-icon>
               <h3>Nenhum equipamento cadastrado</h3>
               <p>Comece adicionando seu primeiro equipamento</p>
             </div>
