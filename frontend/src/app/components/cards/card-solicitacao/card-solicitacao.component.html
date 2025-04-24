@@ -1,0 +1,93 @@
+<div class="categoria" [style.background]="backgroundColor" style="width: 230px; border-radius: 0.5rem; padding-top: 5px;">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <div class="header-title">
+        OS-{{solicitacao.id.toString().padStart(4, '0') || '0000'}}
+      </div>
+
+      <div class="icons">
+        <div class="icons-items">
+          <p>{{ solicitacao.data | dataBrasileira}}</p>
+          <mat-icon class="mat-18" fontIcon="calendar_month"></mat-icon>
+        </div>
+        <div class="icons-items">
+          <p>{{ solicitacao.hora }}</p>
+          <mat-icon class="mat-18" fontIcon="schedule"></mat-icon>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="card-content-div">
+        <p class="poppins-light card-content-title">Cliente</p>
+        <p class="card-content-p">{{ solicitacao.cliente }}</p>
+      </div>
+      <div class="card-content-div">
+        <p class="poppins-light card-content-title">Descrição do equipamento</p>
+        <p class="card-content-p"> {{ solicitacao.equipamento.length > 30 ? (solicitacao.equipamento | slice:0:30) + '...' : solicitacao.equipamento }} </p>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <a
+        *ngIf="solicitacao?.estado === 'ABERTA'"
+        class="action-button"
+        [routerLink]="['/efetuar-orcamento', solicitacao.id]"
+      >
+        Realizar orcamento
+      </a>
+
+      <a
+        *ngIf="solicitacao?.estado === 'ORCADA'"
+        class="action-button-disabled"
+      >
+        Esperando Aceite
+      </a>
+
+      <a
+        *ngIf="solicitacao?.estado === 'REJEITADA'"
+        class="action-button-disabled"
+      >
+        Orçamento Rejeitado
+      </a>
+
+      <a
+        *ngIf="solicitacao?.estado === 'APROVADA'"
+        routerLink="/manutencao"
+        class="action-button"
+      >
+        Realizar manutenção
+      </a>
+
+      <a
+        *ngIf="solicitacao?.estado === 'REDIRECIONADA'"
+        routerLink="/manutencao"
+        class="action-button"
+      >
+        Realizar manutenção
+      </a>
+
+      <a
+        *ngIf="solicitacao?.estado === 'ARRUMADA'"
+        class="action-button-disabled"
+      >
+        Esperando pagamento
+      </a>
+
+      <a
+        *ngIf="solicitacao?.estado === 'PAGA'"
+        (click)="realizarAcao('FINALIZADA')"
+        class="action-button"
+      >
+        Finalizar Solicitação
+      </a>
+
+      <a
+        *ngIf="solicitacao?.estado === 'FINALIZADA'"
+        class="action-button-disabled"
+      >
+        Finalizada
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</div>

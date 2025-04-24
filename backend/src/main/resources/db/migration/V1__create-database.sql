@@ -49,9 +49,9 @@ CREATE TABLE SolicitacaoManutencao (
     data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     descricao_equipamento VARCHAR(255) NOT NULL,
     fk_estado TEXT REFERENCES EstadoSolicitacao(id) NOT NULL,
-    fk_categoria_equipamento TEXT REFERENCES CategoriaEquipamento(id) NOT NULL,
+    fk_categoria_equipamento TEXT REFERENCES CategoriaEquipamento(descricao) NOT NULL,
     descricao_defeito TEXT NOT NULL,
-    orcamento DECIMAL(10,2),
+    orcamento DECIMAL(10,2) DEFAULT null,
     fk_funcionario TEXT REFERENCES Funcionarios(id)
 );
 
