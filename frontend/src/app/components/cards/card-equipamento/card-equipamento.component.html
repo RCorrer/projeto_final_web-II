@@ -9,6 +9,10 @@
 </div>
 
 <mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="abrirDialog()">Editar</button>
-  <button mat-menu-item (click)="abrirDialog()">Excluir</button>
+  <button mat-icon-button (click)="editar.emit(equipamento)" aria-label="Editar">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button (click)="excluir.emit(equipamento)" aria-label="Excluir">
+    <mat-icon>delete</mat-icon>
+  </button>
 </mat-menu>

@@ -3,23 +3,23 @@
   <ul>
     <li>
       <mat-icon class="mat-18">space_dashboard</mat-icon>
-      <a href="/home">Dashboard</a>
+      <a [routerLink]="'/home'" routerLinkActive="active">Dashboard</a>
     </li>
     <li>
       <mat-icon class="mat-18">add_box</mat-icon>
-      <a href="/home">Solicitações</a>
+      <a [routerLink]="'/solicitacoes'" routerLinkActive="active">Solicitações</a>
     </li>
     <li>
       <mat-icon class="mat-18">group</mat-icon>
-      <a href="/funcionarios">Funcionários</a>
+      <a [routerLink]="'/funcionarios'" routerLinkActive="active">Funcionários</a>
     </li>
     <li>
       <mat-icon class="mat-18">devices</mat-icon>
-      <a href="/equipamentos">Equipamentos</a>
+      <a [routerLink]="'/equipamentos'" routerLinkActive="active">Equipamentos</a>
     </li>
     <li>
       <mat-icon class="mat-18">description</mat-icon>
-      <a href="/relatorios">Relatórios</a>
+      <a [routerLink]="'/relatorios'" routerLinkActive="active">Relatórios</a>
     </li>
   </ul>
 </nav>
