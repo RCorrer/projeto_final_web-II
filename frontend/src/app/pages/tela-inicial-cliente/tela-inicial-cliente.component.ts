@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
-import { CardSolicitacaoClienteComponent } from '../card-solicitacao-cliente/card-solicitacao-cliente.component';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { SolicitacaoService } from '../../services/solicitacao.service';
 import { RouterLink } from '@angular/router';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { CardSolicitacaoClienteComponent } from '../../components/card-solicitacao-cliente/card-solicitacao-cliente.component';
+import { Solicitacao } from "../../models/Solicitacao.model";
 
 @Component({
   selector: 'app-tela-inicial-cliente',
@@ -15,7 +16,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './tela-inicial-cliente.component.css'
 })
 export class TelaInicialClienteComponent {
-  solicitacoes: any[] = [];
+  solicitacoes: Solicitacao[] = [];
 
   constructor(private solicitacaoService: SolicitacaoService) {}
 
@@ -23,7 +24,7 @@ export class TelaInicialClienteComponent {
     this.solicitacaoService.solicitacoes$.subscribe(solicitacoes => {
       this.solicitacoes = solicitacoes
         .filter(s => s.cliente === 'Maria Joaquina')
-        .sort((a, b) => new Date (b.dataHora).getTime() - new Date (a.dataHora).getTime());
+        .sort((a, b) => new Date (`${a.data}T${a.hora}`).getTime() - new Date (`${b.data}T${b.hora}`).getTime());
     });
   }
 

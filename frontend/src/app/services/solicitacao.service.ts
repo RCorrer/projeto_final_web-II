@@ -1,15 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
-
-interface Solicitacao {
-  id: number;
-  equipamento: string;
-  categoria: string;
-  defeito: string;
-  dataHora: string;
-  estado: string;
-  cliente: string;
-}
+import { Solicitacao } from '../models/Solicitacao.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +12,13 @@ export class SolicitacaoService {
 
   constructor() {}
 
-  adicionarSolicitacao(solicitacao: Omit<Solicitacao, 'id' | 'dataHora' | 'estado'>) {
+  adicionarSolicitacao(solicitacao: Omit<Solicitacao, 'id' | 'data' | 'hora' | 'estado'>) {
     const solicitacoesAtuais = this.solicitacoesSource.value;
     const novaSolicitacao: Solicitacao = {
       ...solicitacao,
       id: solicitacoesAtuais.length + 1,
-      dataHora: new Date().toISOString(),
+      data: new Date().toISOString(),
+      hora: new Date().toTimeString(),
       estado: 'ABERTA'
     };
 
