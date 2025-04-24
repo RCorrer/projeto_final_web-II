@@ -1,0 +1,73 @@
+<div class="dialog-container">
+<form #form="ngForm">
+  <h2 mat-dialog-title>{{ data.titulo }}</h2>
+
+  <mat-dialog-content class="dialog-content">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Nome</mat-label>
+      <input
+        matInput
+        name="nome"
+        [(ngModel)]="data.nome"
+        #nomeInput="ngModel"
+        required
+      />
+      <mat-error *ngIf="nomeInput.invalid && nomeInput.touched">
+        O nome é obrigatório.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        name="email"
+        [(ngModel)]="data.email"
+        #emailInput="ngModel"
+        required
+      />
+      <mat-error *ngIf="emailInput.invalid && emailInput.touched">
+        O e-mail é obrigatório.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Senha</mat-label>
+      <input
+        matInput
+        name="senha"
+        #senhaInput="ngModel"
+        [(ngModel)]="data.senha"
+        type="password"
+        required
+      />
+      <mat-error *ngIf="senhaInput.invalid && senhaInput.touched">
+        A senha é obrigatória.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Data de Nascimento</mat-label>
+      <input
+        matInput
+        name="dataNascimento"
+        [(ngModel)]="data.dataNascimento"
+        type="date"
+      />
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="dialogRef.close()">Cancelar</button>
+    <button
+      mat-button
+      color="primary"
+      [disabled]="form.invalid"
+      [mat-dialog-close]="data"
+    >
+      Salvar
+    </button>
+  </mat-dialog-actions>
+</form>
+
+</div>

@@ -49,12 +49,16 @@ export class TelaFuncionariosComponent implements OnInit {
       if (dadosFuncionario) {
         if (funcionarioEditando) {
           this.funcionarioService
-            .atualizarFuncionario(
-              funcionarioEditando.id,
-              dadosFuncionario,
-              funcionarioEditando.usuario.email
-            )
-            .subscribe();
+          this.funcionarioService.atualizarFuncionario(
+            funcionarioEditando.id,
+            {
+              nome: dadosFuncionario.nome,
+              email: dadosFuncionario.email,
+              senha: dadosFuncionario.senha,
+              dataNascimento: dadosFuncionario.dataNascimento
+            }
+          ).subscribe();
+          
         } else {
           this.funcionarioService.adicionarFuncionario({
             dataNascimento: dadosFuncionario.dataNascimento,
