@@ -6,8 +6,9 @@
                 <form>
                     <label>Descrição do Equipamento</label>
 
-                    <mat-form-field appearance="outline">
-                        <input matInput placeholder="Descrição do Equipamento" type="text" [(ngModel)]="equipamento" name="equipamento">
+                    <mat-form-field id="topo" appearance="outline">
+                        <input matInput placeholder="Descrição do Equipamento" maxlength="30" type="text" [(ngModel)]="equipamento" name="equipamento">
+                        <mat-hint class="dica">*Máximo de 30 caracteres</mat-hint>
                     </mat-form-field>
 
                     <label>Escolha a categoria do Equipamento</label>

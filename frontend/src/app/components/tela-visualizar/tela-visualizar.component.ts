@@ -3,6 +3,11 @@ import { SolicitacaoService } from '../../services/solicitacao.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+interface Etapa {
+  nome: string;
+  estado: 'completo' | 'ativo' | 'incompleto';
+}
+
 @Component({
   selector: 'app-tela-visualizar',
   imports: [CommonModule, RouterLink],
@@ -12,6 +17,10 @@ import { CommonModule } from '@angular/common';
 export class TelaVisualizarComponent {
   @Input() solicitacao: any;
   isLoaded = false;
+
+  etapas: Etapa[] = [];
+  etapasNormais = ['ABERTA', 'ORÇADA', 'APROVADA', 'ARRUMADA', 'PAGA', 'FINALIZADA'];
+  etapaRejeitada = 'REJEITADA';
 
   constructor (private solicitacaoService: SolicitacaoService,private route: ActivatedRoute, private router: Router) {}
 
@@ -24,10 +33,59 @@ export class TelaVisualizarComponent {
 
       this.solicitacao.idFormatado = 'OS-' + this.solicitacao.id.toString().padStart(6, '0');
 
+      this.atualizarEtapas();
+
       setTimeout(() => {
         this.isLoaded = true;
       }, 100);
     });
+  }
+
+  private atualizarEtapas(): void {
+    const estadoAtual = this.solicitacao.estado;
+    const temRejeitada = estadoAtual === 'REJEITADA' || 
+                        (this.solicitacao.historicoEstados && 
+                         this.solicitacao.historicoEstados.includes('REJEITADA'));
+  
+    this.etapas = [];
+  
+    for (let i = 0; i < this.etapasNormais.length; i++) {
+      const etapaNome = this.etapasNormais[i];
+      
+      if (etapaNome === 'APROVADA' && temRejeitada) {
+        this.etapas.push({
+          nome: this.etapaRejeitada,
+          estado: estadoAtual === 'REJEITADA' ? 'ativo' : 'completo'
+        });
+      }
+  
+      this.etapas.push({
+        nome: etapaNome,
+        estado: this.getEstadoEtapa(etapaNome, estadoAtual, i)
+      });
+    }
+  
+    if (estadoAtual === 'REJEITADA') {
+      const indexRejeitada = this.etapas.findIndex(e => e.nome === 'REJEITADA');
+      this.etapas = this.etapas.slice(0, indexRejeitada + 1);
+    }
+  }
+
+  private getEstadoEtapa(etapaNome: string, estadoAtual: string, index: number): 'completo' | 'ativo' | 'incompleto' {
+    const estadoIndex = this.etapasNormais.indexOf(estadoAtual);
+    const etapaIndex = this.etapasNormais.indexOf(etapaNome);
+  
+    if (estadoAtual === 'REJEITADA') {
+      return 'incompleto';
+    }
+  
+    if (etapaIndex < estadoIndex) {
+      return 'completo';
+    } else if (etapaNome === estadoAtual) {
+      return 'ativo';
+    } else {
+      return 'incompleto';
+    }
   }
 
   private mergeWithDefault(solicitacao: any): any {
@@ -56,7 +114,7 @@ export class TelaVisualizarComponent {
           estado: endereco.estado || 'Bobolândia'
         }
       },
-      estado: solicitacao.estado || 'ABERTA',
+      estado: solicitacao.estado === 'ORCADA' ? 'ORÇADA' : solicitacao.estado || 'ABERTA',
       dataHora: solicitacao.dataHora || new Date().toISOString()
     };
   }

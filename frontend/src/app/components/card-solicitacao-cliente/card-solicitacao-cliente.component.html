@@ -38,6 +38,22 @@
   (alterarEstado)="onAlterarEstado($event)">
 </app-modal-mostar-orcamento>
 
+<div class="modal-overlay" *ngIf="mostrarAprovacao" (click)="confirmarAprovacao()">
+  <div class="modal-confirmacao" (click)="$event.stopPropagation()">
+    <h4>Serviço Aprovado no Valor R$XXXX,XX</h4>
+    <div class="btnsRejeitar">
+      <button
+        id="btnOk"
+        mat-button
+        (click)="confirmarAprovacao()"
+        routerLink="/home-cliente"
+      >
+        Ok
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" *ngIf="mostrarResgate" (click)="cancelarResgate()">
   <div class="modal-confirmacao" (click)="$event.stopPropagation()">
     <h4>Você tem certeza que deseja resgatar o serviço?</h4>
@@ -59,5 +75,4 @@
       </button>
     </div>
   </div>
-
 </div>

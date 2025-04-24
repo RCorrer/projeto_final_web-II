@@ -24,6 +24,7 @@ export class CardSolicitacaoClienteComponent {
 
   modalAberto = false;
   mostrarResgate = false;
+  mostrarAprovacao = false;
 
   emitir(evento: string, id: number) {
     switch (evento) {
@@ -53,11 +54,16 @@ export class CardSolicitacaoClienteComponent {
   }
 
   confirmarResgate() {
+    this.mostrarResgate = false;
+    this.mostrarAprovacao = true;
+  }
+
+  confirmarAprovacao() {
     this.alterarEstado.emit({
       id: this.solicitacao.id,
       novoEstado: 'APROVADA'
     });
-    this.mostrarResgate = false;
+    this.mostrarAprovacao = false;
   }
 
   onAlterarEstado(evento: { id: number, novoEstado: string }) {

@@ -39,6 +39,14 @@
     width: 100%;
 }
 
+mat-hint {
+    color: var(--color-rejeitada);
+}
+
+#topo {
+    margin-bottom: 10px;
+}
+
 .botoes {
     align-self: center;
     display: flex;

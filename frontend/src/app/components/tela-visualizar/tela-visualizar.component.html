@@ -39,8 +39,25 @@
 
         <div class="visualizar-bottom">
             <div class="passos">
+                <div class="stepper">
+                  <div *ngFor="let etapa of etapas; let i = index" class="step">
+                    <div
+                        class="step-connector" *ngIf="i !== 0" 
+                        [class.completo]="etapa.estado === 'completo' || etapa.estado === 'ativo'" 
+                        [class.rejeitado]="etapa.nome === 'REJEITADA'"
+                    >
+                    </div>
 
-            </div>
+                    <div class="step-circle" 
+                        [class.completo]="etapa.estado === 'completo'" 
+                        [class.ativo]="etapa.estado === 'ativo'"
+                        [class.rejeitado]="etapa.nome === 'REJEITADA' || (solicitacao.estado === 'REJEITADA' && etapa.estado === 'completo')">
+                        <span *ngIf="etapa.estado === 'completo' || etapa.estado === 'ativo'">✓</span>
+                    </div>
+                    <div class="step-label">{{ etapa.nome }}</div>
+                  </div>
+                </div>
+              </div>
         </div>
     </div>
 </div>

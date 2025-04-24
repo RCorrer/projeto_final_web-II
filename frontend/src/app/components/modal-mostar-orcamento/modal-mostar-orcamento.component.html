@@ -60,3 +60,19 @@
         </div>
     </div>
 </div>
+
+<div class="modal-overlay" *ngIf="mostrarAprovacao" (click)="confirmarAprovacao()">
+    <div class="modal-confirmacao" (click)="$event.stopPropagation()">
+      <h4>Serviço Aprovado no Valor R$XXXX,XX</h4>
+      <div class="btnsRejeitar">
+        <button
+          id="btnOk"
+          mat-button
+          (click)="confirmarAprovacao()"
+          routerLink="/home-cliente"
+        >
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>
