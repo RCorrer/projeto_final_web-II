@@ -62,4 +62,44 @@ export class CardSolicitacaoComponent {
     }
   }
 
+  formatarData(data: string): string {
+    if (!data) return 'Data inválida';
+    
+    try {
+      const dateObj = new Date(data);
+      
+      if (isNaN(dateObj.getTime())) {
+        return 'Data inválida';
+      }
+      
+      const dia = dateObj.getDate().toString().padStart(2, '0');
+      const mes = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+      const ano = dateObj.getFullYear();
+      
+      return `${dia}/${mes}/${ano}`;
+    } catch (error) {
+      console.error('Erro ao formatar data:', error);
+      return 'Data inválida';
+    }
+  }
+  
+  formatarHora(data: string): string {
+    if (!data) return 'Hora inválida';
+    
+    try {
+      const dateObj = new Date(data);
+      
+      if (isNaN(dateObj.getTime())) {
+        return 'Hora inválida';
+      }
+      
+      const horas = dateObj.getHours().toString().padStart(2, '0');
+      const minutos = dateObj.getMinutes().toString().padStart(2, '0');
+      
+      return `${horas}:${minutos}`;
+    } catch (error) {
+      console.error('Erro ao formatar hora:', error);
+      return 'Hora inválida';
+    }
+  }
 }
