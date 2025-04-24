@@ -4,13 +4,14 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
+
 @Component({
-  selector: 'app-tela-visualizar',
+  selector: 'app-tela-pagamento',
   imports: [CommonModule, RouterLink, MatButtonModule],
-  templateUrl: './tela-efetuar-manutencao.component.html',
-  styleUrl: './tela-efetuar-manutencao.component.css'
+  templateUrl: './tela-pagamento.component.html',
+  styleUrl: './tela-pagamento.component.css'
 })
-export class TelaEfetuarManutencaoComponent {
+export class TelaPagamentoComponent {
   @Input() solicitacao: any;
   isLoaded = false;
 
@@ -62,20 +63,16 @@ export class TelaEfetuarManutencaoComponent {
     };
   }
 
-  efetuarManutencao() {
-    this.solicitacaoService.atualizarSolicitacao(this.solicitacao.id, 'ARRUMADA')
+  pagarManutencao() {
+    this.solicitacaoService.atualizarSolicitacao(this.solicitacao.id, 'PAGA')
       .subscribe({
         next: () => {
-          this.solicitacao.estado = 'ARRUMADA';
-          this.router.navigate(['/home']);
+          this.solicitacao.estado = 'PAGA';
+          this.router.navigate(['/home-cliente']);
         },
         error: (error) => {
-          console.error('Erro ao atualizar a solicitação:', error);
+          console.error('Erro ao pagar a solicitação:', error);
         }
       });
-  }
-
-  redirecionarManutencao() {
-
   }
 }

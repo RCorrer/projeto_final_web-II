@@ -28,7 +28,7 @@
   
   <button *ngIf="solicitacao.estado === 'ORCADA'" mat-button color="primary" (click)="emitir('orcamento', solicitacao.id)" (click)="abrirModal()">Aprovar/Rejeitar</button>
   <button *ngIf="solicitacao.estado === 'REJEITADA'" mat-button color="primary" (click)="modalResgatarServico()">Resgatar Serviço</button>
-  <button *ngIf="solicitacao.estado === 'ARRUMADA'" mat-button color="primary" (click)="emitir('pagar', solicitacao.id)">Pagar Serviço</button>
+  <button *ngIf="solicitacao.estado === 'ARRUMADA'" mat-button color="primary" [routerLink]="['/pagamento', solicitacao.id]">Pagar Serviço</button>
 </div>
 
 <app-modal-mostar-orcamento 

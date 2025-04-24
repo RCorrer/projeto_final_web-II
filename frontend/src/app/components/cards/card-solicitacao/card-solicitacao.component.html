@@ -53,7 +53,7 @@
 
       <a
         *ngIf="solicitacao?.estado === 'APROVADA'"
-        routerLink="/manutencao"
+        [routerLink]="['/manutencao', solicitacao.id]"
         class="action-button"
       >
         Realizar manutenção

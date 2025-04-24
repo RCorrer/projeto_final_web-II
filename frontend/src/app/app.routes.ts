@@ -11,6 +11,7 @@ import { TelaSolicitarManutencaoComponent } from "./components/tela-solicitar-ma
 import { TelaVisualizarComponent } from "./components/tela-visualizar/tela-visualizar.component";
 import { TelaEfetuarManutencaoComponent } from "./components/tela-efetuar-manutencao/tela-efetuar-manutencao.component";
 import { TelaInicialClienteComponent } from "./pages/tela-inicial-cliente/tela-inicial-cliente.component";
+import { TelaPagamentoComponent } from "./components/tela-pagamento/tela-pagamento.component";
 
 export const routes: Routes = [
   {
@@ -64,8 +65,13 @@ export const routes: Routes = [
   },
 
   {
-    path: "manutencao",
+    path: "manutencao/:id",
     component: TelaEfetuarManutencaoComponent
+  },
+
+  {
+    path: "pagamento/:id",
+    component: TelaPagamentoComponent
   }
 ];
 
