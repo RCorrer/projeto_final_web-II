@@ -1,4 +1,5 @@
 .orcamento-container {
+    width: 100%;
     display: flex;
     flex-direction: column;
     border-radius: 8px;
@@ -29,8 +30,58 @@
     gap: 20px;
 }
 
+.orcamento-input {
+    margin-top: 20px;
+}
+
+.orcamento-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#valor {
+    width: 80%;
+    margin-top: 6px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 .orcamento-left {
     width: 25%;
+}
+
+.botoes {
+    margin-top: 30px;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+#cancelar-button {
+    width: 100px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    border-color: var(--color-rejeitada);
+    color: var(--color-rejeitada);
+}
+
+#orcamento-button {
+    background-color: #60a0f0;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100px;
+}
+
+#orcamento-button:hover {
+    background-color: #4585d5;
 }
 
 .orcamento-right {
@@ -53,35 +104,3 @@
     background-color: #aaa;
 }
 
-.orcamento-input {
-    margin-top: 20px;
-}
-
-.orcamento-input label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.orcamento-input input {
-    width: 40%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.orcamento-button button {
-    background-color: #60a0f0;
-    color: black;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 10px;
-    cursor: pointer;
-}
-
-.orcamento-button button:hover {
-    background-color: #4585d5;
-}

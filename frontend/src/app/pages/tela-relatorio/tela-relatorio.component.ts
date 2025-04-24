@@ -1,113 +1,147 @@
-import { Component, OnInit } from "@angular/core";
-import { materialImports } from "../../material-imports";
-import { NavbarComponent } from "../../components/navbar/navbar.component";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import {
-  MAT_DATE_LOCALE,
-  provideNativeDateAdapter,
-} from "@angular/material/core";
-import { CommonModule } from "@angular/common";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { materialImports } from '../../material-imports';
+import { EquipamentoService } from '../../services/equipamento.service';
 
 @Component({
-  selector: "app-tela-relatorio",
-  imports: [...materialImports, NavbarComponent, CommonModule],
-  templateUrl: "./tela-relatorio.component.html",
-
+  selector: 'app-tela-relatorio',
+  standalone: true,
+  imports: [CommonModule, NavbarComponent, ...materialImports],
+  templateUrl: './tela-relatorio.component.html',
+  styleUrl: './tela-relatorio.component.css',
   providers: [
     provideNativeDateAdapter({
-      parse: {
-        dateInput: "DD/MM/YYYY",
-      },
+      parse: { dateInput: 'DD/MM/YYYY' },
       display: {
-        dateInput: "DD/MM/YYYY",
-        monthYearLabel: "MM YYYY",
-        dateA11yLabel: "DD/MM/YYYY",
-        monthYearA11yLabel: "MM YYYY",
+        dateInput: 'DD/MM/YYYY',
+        monthYearLabel: 'MM YYYY',
+        dateA11yLabel: 'DD de MMMM de YYYY',
+        monthYearA11yLabel: 'MMMM de YYYY'
       },
     }),
-    { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
   ],
-  styleUrl: "./tela-relatorio.component.css",
 })
 export class TelaRelatorioComponent implements OnInit {
   filtroForm!: FormGroup;
-  tipoFiltro: "data" | "categoria" = "data";
-  selectedCategoria: string | null = null;
-  categorias: string[] = ["Informática", "Eletrodoméstico", "Mecânico"];
+  categorias: string[] = [];
+  totalCategoria: number | null = null;
 
-  relatorio: { data: string; receita: number }[] = [];
+  tipoRelatorio: 'porData' | 'porCategoria' = 'porData';
+  dadosOriginais = [
+    { data: '01/04/2025', receita: 2000, categoria: 'Impressora' },
+    { data: '01/04/2025', receita: 2000, categoria: 'Impressora' },
+    { data: '02/04/2025', receita: 1500, categoria: 'Monitor' },
+    { data: '02/04/2025', receita: 1500, categoria: 'Monitor' },
+    { data: '03/04/2025', receita: 1500, categoria: 'Monitor' },
+    { data: '03/04/2025', receita: 2300, categoria: 'Teclado' },
+  ];
+  relatorio: any[] = [];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private equipamentoService: EquipamentoService) {}
 
   ngOnInit(): void {
-    this.filtroForm = this.fb.group({
-      start: [null],
-      end: [null],
-    });
+    this.filtroForm = this.fb.group({ start: [null], end: [null], categoria: [null] });
+    this.filtroForm.valueChanges.subscribe(() => this.atualizarRelatorio());
+    this.carregarCategorias();
+    this.atualizarRelatorio();
 
-    // Mostrar todos os dados inicialmente
-    this.relatorio = this.getTodosOsDados();
-
-    this.filtroForm.valueChanges.subscribe(() => {
-      if (this.tipoFiltro === "data") {
-        this.atualizarRelatorioPorData();
-      }
-    });
   }
 
-  getTodosOsDados() {
-    return [
-      { data: "2025-04-01", receita: 2000 },
-      { data: "2025-04-02", receita: 1800 },
-      { data: "2025-04-03", receita: 2300 },
-      { data: "2025-04-04", receita: 1700 },
-    ];
+  carregarCategorias(): void {
+    this.categorias = this.equipamentoService.getEquipamentos().map(c => c.descricao);
   }
 
-  atualizarRelatorioPorData(): void {
-    const { start, end } = this.filtroForm.value;
+  formatarData(dataStr: string): string {
+    const [dia, mes, ano] = dataStr.split('/');
+    const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
+  
+    return data.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+  
+
+  atualizarRelatorio(): void {
+    const { start, end, categoria } = this.filtroForm.value;
+    let dados = [...this.dadosOriginais];
+  
+    // 🔸 RF020 - Relatório por Categoria (sem filtro de data)
+    if (this.tipoRelatorio === 'porCategoria') {
+      const grupoMap: Record<string, number> = {};
+  
+      dados.forEach(item => {
+        grupoMap[item.categoria] = (grupoMap[item.categoria] || 0) + item.receita;
+      });
+  
+      this.relatorio = Object.entries(grupoMap).map(([categoria, receita]) => ({
+        categoria,
+        receita,
+      }));
+  
+      this.totalCategoria = dados.reduce((acc, item) => acc + item.receita, 0);
+      return;
+    }
+  
+    // 🔸 RF019 - Relatório por Data (com filtros)
     if (start && end) {
-      // Aqui você faria uma chamada ao backend filtrando por data, se necessário
-      const todos = this.getTodosOsDados();
-      this.relatorio = todos.filter((item) => {
-        const itemDate = new Date(item.data);
+      dados = dados.filter(item => {
+        const [dia, mes, ano] = item.data.split('/');
+        const itemDate = new Date(Number(ano), Number(mes) - 1, Number(dia));
         return itemDate >= start && itemDate <= end;
       });
-    } else {
-      this.relatorio = this.getTodosOsDados(); // Mostra tudo se datas não estão preenchidas
     }
+  
+    if (categoria) {
+      dados = dados.filter(item => item.categoria === categoria);
+    }
+  
+    const grupoMap: Record<string, { data: string, itens: any[], total: number }> = {};
+  
+    dados.forEach(item => {
+      const grupo = grupoMap[item.data] || { data: item.data, itens: [], total: 0 };
+      grupo.itens.push(item);
+      grupo.total += item.receita;
+      grupoMap[item.data] = grupo;
+    });
+  
+    this.relatorio = Object.values(grupoMap);
+    this.totalCategoria = null;
+  }
+  
+  
+
+  agruparPor(dados: any[], chave: 'data' | 'categoria') {
+    return Object.entries(
+      dados.reduce((acc, item) => {
+        acc[item[chave]] = (acc[item[chave]] || 0) + item.receita;
+        return acc;
+      }, {} as Record<string, number>)
+    ).map(([key, receita]) => ({ [chave]: key, receita }));
   }
 
-  atualizarRelatorioPorCategoria(): void {
-    if (this.selectedCategoria) {
-      // Simula busca por categoria
-      this.relatorio = [{ data: this.selectedCategoria, receita: 7000 }];
-    } else {
-      // Todas as categorias
-      this.relatorio = [
-        { data: "Informática", receita: 5000 },
-        { data: "Eletrodoméstico", receita: 7000 },
-        { data: "Mecânico", receita: 2500 },
-      ];
-    }
+  agruparPorDataComDetalhes(dados: any[]) {
+    const agrupado: Record<string, { categoria: string; receita: number }[]> = {};
+  
+    dados.forEach(item => {
+      if (!agrupado[item.data]) {
+        agrupado[item.data] = [];
+      }
+      agrupado[item.data].push({ categoria: item.categoria, receita: item.receita });
+    });
+  
+    return Object.entries(agrupado).map(([data, registros]) => {
+      const total = registros.reduce((soma, r) => soma + r.receita, 0);
+      return { data, registros, total };
+    });
   }
-
-  onTipoFiltroChange(): void {
-    this.relatorio = [];
-    if (this.tipoFiltro === "categoria") {
-      this.atualizarRelatorioPorCategoria();
-    } else {
-      this.atualizarRelatorioPorData();
-    }
-  }
-
-  onCategoriaChange(): void {
-    if (this.tipoFiltro === "categoria") {
-      this.atualizarRelatorioPorCategoria();
-    }
-  }
-
+  
   gerarRelatorio(): void {
-    // função reservada para exportar PDF futuramente
+    console.log('Dados agrupados:', this.relatorio);
   }
 }

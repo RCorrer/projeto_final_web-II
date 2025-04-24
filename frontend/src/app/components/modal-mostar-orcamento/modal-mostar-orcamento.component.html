@@ -3,7 +3,6 @@
         <div class="top">
             <a (click)="close()">X</a>
         </div>
-
         <div class="content">
             <h1>Aprovar orçamento</h1>
             
@@ -27,15 +26,53 @@
                     >
                         Aceitar
                 </button>
+
                 <button
                     id="rejeitar"
                     mat-stroked-button
-                    (click)="recusarOrcamento()"
+                    (click)="mostarModalRejeitar()"
                     >
                         Recusar    
                 </button>
             </div>
         </div>
-
     </div>
 </div>
+
+<div class="modal-overlay" *ngIf="mostrarRejeicao" (click)="cancelarRejeicao()">
+    <div class="modal-confirmacao" (click)="$event.stopPropagation()">
+        <h4>Você tem certeza que deseja recusar o orçamento?</h4>
+        <div class="btnsRejeitar">
+            <button 
+                id="btnRejeitar"
+                mat-stroked-button
+                (click)="confirmarRejeicao()"
+                >
+                    Sim
+            </button>
+            <button 
+                id="btnCancelar"
+                mat-button
+                (click)="cancelarRejeicao()"
+                >
+                    Não
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="mostrarAprovacao" (click)="confirmarAprovacao()">
+    <div class="modal-confirmacao" (click)="$event.stopPropagation()">
+      <h4>Serviço Aprovado no Valor R$XXXX,XX</h4>
+      <div class="btnsRejeitar">
+        <button
+          id="btnOk"
+          mat-button
+          (click)="confirmarAprovacao()"
+          routerLink="/home-cliente"
+        >
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>

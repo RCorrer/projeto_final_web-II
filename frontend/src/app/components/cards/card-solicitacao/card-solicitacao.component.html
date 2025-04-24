@@ -1,17 +1,17 @@
-<div class="categoria" [style.background]="backgroundColor" style="max-width: 274px; height: 20px; border-radius: 0.5rem; padding-top: 5px;">
+<div class="categoria" [style.background]="backgroundColor" style="width: 230px; border-radius: 0.5rem; padding-top: 5px;">
   <mat-card appearance="outlined">
     <mat-card-header>
       <div class="header-title">
-        OS-123456
+        OS-{{solicitacao.id.toString().padStart(4, '0') || '0000'}}
       </div>
 
       <div class="icons">
         <div class="icons-items">
-          <p>27/03/2025</p>
+          <p>{{ formatarData(solicitacao.data) }}</p>
           <mat-icon class="mat-18" fontIcon="calendar_month"></mat-icon>
         </div>
         <div class="icons-items">
-          <p>15:30</p>
+          <p>{{ formatarHora(solicitacao.data) }}</p>
           <mat-icon class="mat-18" fontIcon="schedule"></mat-icon>
         </div>
       </div>
@@ -20,70 +20,70 @@
     <mat-card-content>
       <div class="card-content-div">
         <p class="poppins-light card-content-title">Cliente</p>
-        <p class="card-content-p">Fulaninho da Silva</p>
+        <p class="card-content-p">{{ solicitacao.cliente }}</p>
       </div>
       <div class="card-content-div">
         <p class="poppins-light card-content-title">Descrição do equipamento</p>
-        <p class="card-content-p">Lorem ipsum dolor sit amet con.</p>
+        <p class="card-content-p"> {{ solicitacao.equipamento.length > 30 ? (solicitacao.equipamento | slice:0:30) + '...' : solicitacao.equipamento }} </p>
       </div>
     </mat-card-content>
 
     <mat-card-actions align="end">
       <a
-        *ngIf="backgroundColor === 'var(--color-aberto)'"
-        (click)="backgroundColor = 'var(--color-orcada)'"
+        *ngIf="solicitacao?.estado === 'ABERTA'"
         class="action-button"
-        href="/efetuar-orcamento"
+        [routerLink]="['/efetuar-orcamento', solicitacao.id]"
       >
-        Realizar orçamento
+        Realizar orcamento
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-orcada)'"
+        *ngIf="solicitacao?.estado === 'ORCADA'"
         class="action-button-disabled"
       >
         Esperando Aceite
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-rejeitada)'"
+        *ngIf="solicitacao?.estado === 'REJEITADA'"
         class="action-button-disabled"
       >
         Orçamento Rejeitado
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-aprovada)'"
-        routerLink="/realizar-manutencao"
+        *ngIf="solicitacao?.estado === 'APROVADA'"
+        [routerLink]="['/manutencao', solicitacao.id]"
         class="action-button"
       >
         Realizar manutenção
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-redirecionada)'"
-        routerLink="/realizar-manutencao"
+        *ngIf="solicitacao?.estado === 'REDIRECIONADA'"
+        routerLink="/manutencao"
         class="action-button"
       >
         Realizar manutenção
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-arrumada)'"
+        *ngIf="solicitacao?.estado === 'ARRUMADA'"
         class="action-button-disabled"
       >
         Esperando pagamento
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-paga)'"
+        *ngIf="solicitacao?.estado === 'PAGA'"
+        (click)="realizarAcao('FINALIZADA')"
         class="action-button"
       >
         Finalizar Solicitação
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-finalizada)'"
+        *ngIf="solicitacao?.estado === 'FINALIZADA'"
         class="action-button-disabled"
       >
         Finalizada

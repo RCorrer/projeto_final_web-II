@@ -16,17 +16,25 @@ export class ModalMostarOrcamentoComponent {
   @Output() closed = new EventEmitter<void>();
   @Output() alterarEstado = new EventEmitter<{ id: number, novoEstado: string }>();
 
+  mostrarRejeicao = false;
+  mostrarAprovacao = false;
+
   close() {
     this.isOpen = false;
     this.closed.emit();
   }
 
   aceitarOrcamento() {
+    this.close();
+    this.mostrarAprovacao = true;
+  }
+
+  confirmarAprovacao() {
     this.alterarEstado.emit({
       id: this.solicitacao.id,
       novoEstado: 'APROVADA'
     });
-    this.close();
+    this.mostrarAprovacao = false;
   }
 
   recusarOrcamento() {
@@ -35,5 +43,18 @@ export class ModalMostarOrcamentoComponent {
       novoEstado: 'REJEITADA'
     });
     this.close();
+  }
+
+  mostarModalRejeitar(){
+    this.mostrarRejeicao = true;
+  }
+
+  cancelarRejeicao(){
+    this.mostrarRejeicao = false;
+  }
+
+  confirmarRejeicao(){
+    this.mostrarRejeicao = false;
+    this.recusarOrcamento();
   }
 }

@@ -42,3 +42,18 @@ li:hover {
   cursor: pointer;
   transition: .3s;
 }
+
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topo :hover{
+  cursor: pointer;
+}
+
+img{
+  width: 5rem;
+  height: 5rem;
+}

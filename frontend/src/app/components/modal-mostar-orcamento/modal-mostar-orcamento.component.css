@@ -102,3 +102,42 @@
     border-color: var(--color-rejeitada);
     color: var(--color-rejeitada);
 }
+
+.modal-confirmacao{
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    width: 50vh;
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.btnsRejeitar{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+#btnCancelar{
+    background-color: var(--color-rejeitada);
+    color: white;
+    width: 100px;
+}
+
+#btnRejeitar{
+    border-color: var(--color-finalizada);
+    color: var(--color-finalizada);
+    width: 100px;
+}
+
+#btnOk {
+    background-color: var(--color-finalizada);
+    color: white;
+    width: 100px;
+  }

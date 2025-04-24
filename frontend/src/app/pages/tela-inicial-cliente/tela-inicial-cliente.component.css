@@ -3,27 +3,40 @@
     height: auto;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: 100vh;
   }
 
   .content {
+    display: flex;
+    flex-direction: column;
     margin-top: 2rem;
   }
   
-  h2 {
+  .content h2 {
     text-align: left;
     margin-bottom: 20px;
   }
 
-  h3 {
+  .content a {
+    align-self: flex-end;
+  }
+
+  .solicitacoes-container {
+    width: 100%;
+    height: auto;
+  }
+
+  .solicitacoes-container h3 {
     text-align: left;
     margin-top: 50px;
+    margin-bottom: 20px;
   }
   
-  mat-list {
+  .solicitacoes-container mat-list {
     width: 100%;
   }
   
-  mat-list-item {
+  .solicitacoes-container mat-list-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,6 +47,6 @@
     min-height: 150px;
   }
   
-  mat-list-item:hover {
+  .solicitacoes-container mat-list-item:hover {
     background: #a9a9a9;
   }

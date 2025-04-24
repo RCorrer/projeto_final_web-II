@@ -1,0 +1,6 @@
+frontend/node_modules
+frontend/.angular
+backend/target
+.DS_Store
+.git
+.gitignore
