@@ -1,25 +1,28 @@
 <nav>
-  <h3>BipBip</h3>
+  <div class="topo" routerLink="/home">
+    <img src="bipbip.png" alt="Logo BipBip" class="logo">
+    <h3>BipBip</h3>
+  </div>  
   <ul>
     <li>
       <mat-icon class="mat-18">space_dashboard</mat-icon>
-      <a [routerLink]="'/home'" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/home">Dashboard</a>
     </li>
     <li>
       <mat-icon class="mat-18">add_box</mat-icon>
-      <a [routerLink]="'/solicitacoes'" routerLinkActive="active">Solicitações</a>
+      <a routerLink="/home">Solicitações</a>
     </li>
     <li>
       <mat-icon class="mat-18">group</mat-icon>
-      <a [routerLink]="'/funcionarios'" routerLinkActive="active">Funcionários</a>
+      <a routerLink="/funcionarios">Funcionários</a>
     </li>
     <li>
       <mat-icon class="mat-18">devices</mat-icon>
-      <a [routerLink]="'/equipamentos'" routerLinkActive="active">Equipamentos</a>
+      <a routerLink="/equipamentos">Equipamentos</a>
     </li>
     <li>
       <mat-icon class="mat-18">description</mat-icon>
-      <a [routerLink]="'/relatorios'" routerLinkActive="active">Relatórios</a>
+      <a routerLink="/relatorios">Relatórios</a>
     </li>
   </ul>
 </nav>

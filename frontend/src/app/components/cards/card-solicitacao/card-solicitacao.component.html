@@ -2,7 +2,7 @@
   <mat-card appearance="outlined">
     <mat-card-header>
       <div class="header-title">
-        OS-{{ solicitacao.id }}
+        OS-{{solicitacao.id.toString().padStart(4, '0') || '0000'}}
       </div>
 
       <div class="icons">
@@ -30,60 +30,60 @@
 
     <mat-card-actions align="end">
       <a
-        *ngIf="backgroundColor === 'var(--color-aberto)'"
-        (click)="backgroundColor = 'var(--color-orcada)'"
+        *ngIf="solicitacao?.estado === 'ABERTA'"
         class="action-button"
-        href="/efetuar-orcamento"
+        [routerLink]="['/efetuar-orcamento', solicitacao.id]"
       >
-        Realizar orçamento
+        Realizar orcamento
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-orcada)'"
+        *ngIf="solicitacao?.estado === 'ORCADA'"
         class="action-button-disabled"
       >
         Esperando Aceite
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-rejeitada)'"
+        *ngIf="solicitacao?.estado === 'REJEITADA'"
         class="action-button-disabled"
       >
         Orçamento Rejeitado
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-aprovada)'"
-        routerLink="/realizar-manutencao"
+        *ngIf="solicitacao?.estado === 'APROVADA'"
+        routerLink="/manutencao"
         class="action-button"
       >
         Realizar manutenção
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-redirecionada)'"
-        routerLink="/realizar-manutencao"
+        *ngIf="solicitacao?.estado === 'REDIRECIONADA'"
+        routerLink="/manutencao"
         class="action-button"
       >
         Realizar manutenção
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-arrumada)'"
+        *ngIf="solicitacao?.estado === 'ARRUMADA'"
         class="action-button-disabled"
       >
         Esperando pagamento
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-paga)'"
+        *ngIf="solicitacao?.estado === 'PAGA'"
+        (click)="realizarAcao('FINALIZADA')"
         class="action-button"
       >
         Finalizar Solicitação
       </a>
 
       <a
-        *ngIf="backgroundColor === 'var(--color-finalizada)'"
+        *ngIf="solicitacao?.estado === 'FINALIZADA'"
         class="action-button-disabled"
       >
         Finalizada

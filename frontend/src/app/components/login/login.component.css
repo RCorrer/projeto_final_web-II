@@ -39,6 +39,7 @@
     border-radius: 5px;
     width: 100%;
     transition: 0.3s;
+    margin: 10px;
 }
 
 .login button:hover {

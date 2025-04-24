@@ -79,6 +79,12 @@ mat-card-actions mat-icon {
   gap: 6px;
 }
 
+a {
+  text-decoration: none;
+  color: var(--md-sys-color-primary);
+  z-index: 1000;
+}
+
 a:hover {
   color: red;
 }
