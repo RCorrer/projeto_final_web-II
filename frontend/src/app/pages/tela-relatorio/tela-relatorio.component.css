@@ -1,7 +1,6 @@
 .filtros {
   display: flex;
   flex-direction: column;
-  width: 100%;
   background-color: antiquewhite;
 }
 
@@ -9,10 +8,6 @@
   display: flex;
   flex-direction: column;
   max-width: fit-content;
-}
-
-.date-filter {
-  width: 100%;
 }
 
 .grupo-dia {
@@ -35,12 +30,7 @@ li {
   margin-bottom: .75rem;
 }
 
-.relatorio-buttons {
-  margin-top: 20px;
-}
-
 .relatorio-content {
-  max-width: 100%;
   min-height: 500px;
   background-color: rgba(var(--color-surface-rgb), 0.5);
   border-radius: 12px;
