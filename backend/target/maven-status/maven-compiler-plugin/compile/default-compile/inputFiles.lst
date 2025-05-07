@@ -14,6 +14,8 @@
 /app/src/main/java/com/example/web_II/domain/historico/HistoricoAlteracao.java
 /app/src/main/java/com/example/web_II/domain/historico/HistoricoAlteracaoDTO.java
 /app/src/main/java/com/example/web_II/domain/historico/SolicitacaoComHistoricoDTO.java
+/app/src/main/java/com/example/web_II/domain/receita/Receita.java
+/app/src/main/java/com/example/web_II/domain/receita/ReceitaDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AbrirSolicitacaoDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AtribuirFuncionarioDTO.java
@@ -40,6 +42,7 @@
 /app/src/main/java/com/example/web_II/repositories/EnderecoRepository.java
 /app/src/main/java/com/example/web_II/repositories/FuncionarioRepository.java
 /app/src/main/java/com/example/web_II/repositories/HistoricoAlteracaoRepository.java
+/app/src/main/java/com/example/web_II/repositories/ReceitaRepository.java
 /app/src/main/java/com/example/web_II/repositories/SolicitacaoRepository.java
 /app/src/main/java/com/example/web_II/repositories/UsuarioRepository.java
 /app/src/main/java/com/example/web_II/services/AuthService.java

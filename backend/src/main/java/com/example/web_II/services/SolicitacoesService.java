@@ -2,10 +2,12 @@ package com.example.web_II.services;
 
 import com.example.web_II.domain.historico.HistoricoAlteracaoDTO;
 import com.example.web_II.domain.historico.SolicitacaoComHistoricoDTO;
+import com.example.web_II.domain.receita.Receita;
 import com.example.web_II.domain.solicitacoes.*;
 import com.example.web_II.domain.solicitacoes.HistoricoAlteracao;
 import com.example.web_II.repositories.ClienteRepository;
 import com.example.web_II.repositories.HistoricoAlteracaoRepository;
+import com.example.web_II.repositories.ReceitaRepository;
 import com.example.web_II.repositories.SolicitacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,9 @@ public class SolicitacoesService {
 
     @Autowired
     private FuncionarioService funcionarioService;
+
+    @Autowired
+    private ReceitaRepository receitaRepository;
 
 
     public ResponseEntity<String> criarSolicitacao(AbrirSolicitacaoDTO data) {
@@ -240,7 +245,14 @@ public class SolicitacoesService {
     }
 
     public ResponseEntity<String> marcarComoPaga(MudarEstadoDTO data) {
+        // criar receita e salvar ela
+        Optional<Solicitacao> solicitacaoTempOpt = solicitacaoRepository.findById(data.idSolicitacao());
+        Solicitacao solicitacaotemp = solicitacaoTempOpt.get();
+        Receita receitaTemp = new Receita(solicitacaotemp.getOrcamento(),solicitacaotemp.getData_hora(),solicitacaotemp.getId());
+        receitaRepository.save(receitaTemp);
+
         return mudarEstado(data, "7", "PAGA");
+
     }
 
     public ResponseEntity<String> marcarComoFinalizada(MudarEstadoDTO data) {
