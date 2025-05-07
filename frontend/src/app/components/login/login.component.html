@@ -1,34 +1,30 @@
-<div class="login-container">
-     <div class="titulo">
+<div class="tela-login">
+    <div class="info">
+
+    </div>
+
+    <div class="login">
         <h1>
-            Seja bem-vindo<br>
-            novamente!
+            Bem vindo de volta!
         </h1>
-     </div>
 
-     <div class="login-form">
-         <div>
-            <h2>Realize o seu login</h2>
-         </div>
-
-         <form class="login" action=""> 
+        <form class="login-form">
             <mat-form-field appearance="fill">
-                 <input matInput placeholder="Insira seu e-mail" type="email">
+                <label>Digite seu E-mail</label>
+                <input matInput type="text">
             </mat-form-field>
 
             <mat-form-field appearance="fill">
-                 <input matInput color="primary" placeholder="Insira sua senha" type="password">
+                <label>Digite a sua senha</label>
+                <input matInput type="password">
             </mat-form-field>
 
-
-            <button mat-flat-button routerLink="/home">Login - Funcionario</button>
-            <button mat-flat-button routerLink="/home-cliente">Login - Cliente</button>
+            <button mat-flat-button routerLink="/home">Conectar-se</button>
         </form>
-        
-        <div class="cadastro">
-            <p>Não possuí uma conta?
-                <a routerLink="/cadastro">Faça seu cadastro</a>
-            </p>
+
+        <div class="to-cadastro">
+            <p>Não tem uma conta?</p>
+            <a routerLink="/cadastro">Cadastre-se!</a>
         </div>
     </div>
 </div>
