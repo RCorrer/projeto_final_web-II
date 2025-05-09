@@ -1,67 +1,92 @@
 <div class="tela-cadastro">
+    <div class="gradient-bg">
+        <svg xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
+                        result="goo" />
+                    <feBlend in="SourceGraphic" in2="goo" />
+                </filter>
+            </defs>
+        </svg>
+
+        <div class="gradients-container">
+            <div class="g1"></div>
+            <div class="g2"></div>
+            <div class="g3"></div>
+            <div class="g4"></div>
+            <div class="g5"></div>
+            <div class="interactive"></div>
+        </div>
+    </div>
+
     <div class="centro-cadastro">
         <div class="cadastro">
             <h1>
-                Cadastro
+                Cadastre-se!
             </h1>
 
             <form class="cadastro-form">
-                <label>Digite seu CPF</label>
-                <mat-form-field appearance="fill">
-                    <input matInput placeholder="___.___.___-__" type="text">
-                </mat-form-field>
-
-                <label>Nome completo</label>
+                <label>Nome Completo</label>
                 <mat-form-field appearance="fill">
                     <input matInput type="text">
+                </mat-form-field>
+
+                <label>CPF</label>
+                <mat-form-field appearance="fill">
+                    <input matInput type="text" placeholder="000.000.000-00">
                 </mat-form-field>
 
                 <label>E-mail</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="email">
-                </mat-form-field>
-
-                <label>Digite seu telefone</label>
-                <mat-form-field appearance="fill">
-                    <input matInput placeholder="(__) _ ____-____" type="text">
-                </mat-form-field>
-
-                <label>Insira seu CEP</label>
-                <mat-form-field appearance="fill">
-                    <input matInput placeholder="_____-___" type="text">
-                </mat-form-field>
-
-                <label>Rua</label>
-                <mat-form-field appearance="fill">
                     <input matInput type="text">
                 </mat-form-field>
 
-                <label>Número</label>
+                <label>CEP</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text">
+                    <input matInput type="text" placeholder="00000-000">
                 </mat-form-field>
 
-                <label>Bairro</label>
+                <label>Estado</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text">
+                    <input matInput type="text" readonly>
                 </mat-form-field>
 
                 <label>Cidade</label>
                 <mat-form-field appearance="fill">
+                    <input matInput type="text" readonly>
+                </mat-form-field>
+
+                <label>Bairro</label>
+                <mat-form-field appearance="fill">
+                    <input matInput type="text" readonly>
+                </mat-form-field>
+
+                <label>Rua</label>
+                <mat-form-field appearance="fill">
+                    <input matInput type="text" readonly>
+                </mat-form-field>
+
+                <label>Numero</label>
+                <mat-form-field appearance="fill">
                     <input matInput type="text">
                 </mat-form-field>
 
-                <label>Estado</label>
+                <label>Complemento</label>
                 <mat-form-field appearance="fill">
                     <input matInput type="text">
                 </mat-form-field>
             </form>
 
-            <button mat-flat-button routerLink="/">Cadastrar-se</button>
+            <div class="button-container">
+                <button mat-flat-button routerLink="/">Cadastrar-se</button>
+            </div>
         </div>
 
-        <div class="info">
-
+        <div class="logo-container">
+            <img src="bipbip-logo.png" class="logo" (click)="playSound()">
+            <h1>BipBip Consertos</h1>
         </div>
     </div>
 </div>
