@@ -1,8 +1,11 @@
 com/example/web_II/domain/historico/HistoricoAlteracaoDTO.class
+com/example/web_II/domain/receita/RelatorioDTO.class
 com/example/web_II/infra/security/SecurityFilter.class
+com/example/web_II/services/RelatorioService.class
 com/example/web_II/domain/solicitacoes/RedirecionarSolicitacaoDTO.class
 com/example/web_II/domain/usuarios/AuthenticationDTO.class
 com/example/web_II/exceptions/LoginNotFoundException.class
+com/example/web_II/domain/receita/RelatorioCategoriaDTO.class
 com/example/web_II/domain/solicitacoes/MudarEstadoDTO.class
 com/example/web_II/domain/solicitacoes/OrcamentoDTO.class
 com/example/web_II/exceptions/CpfInvalidoException.class
@@ -29,6 +32,7 @@ com/example/web_II/repositories/ClienteRepository.class
 com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.class
 com/example/web_II/domain/usuarios/Usuario.class
 com/example/web_II/domain/funcionarios/Funcionario.class
+com/example/web_II/controllers/RelatoriosController.class
 com/example/web_II/domain/solicitacoes/Solicitacao.class
 com/example/web_II/WebIiApplication.class
 com/example/web_II/services/SolicitacoesService.class
