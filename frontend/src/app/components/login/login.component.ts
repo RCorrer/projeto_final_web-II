@@ -11,6 +11,9 @@ import { RouterLink } from "@angular/router";
   styleUrl: "./login.component.css",
 })
 export class LoginComponent implements AfterViewInit {
+
+  private audio = new Audio('bipbip-sound.mp3');
+
   ngAfterViewInit() {
     const interBubble = document.querySelector(".interactive") as HTMLElement;
     let curX = 0;
@@ -35,5 +38,10 @@ export class LoginComponent implements AfterViewInit {
     });
 
     move();
+  }
+
+  playSound() {
+    this.audio.currentTime = 0;
+    this.audio.play().catch(e => console.error("Audio playback failed:", e));
   }
 }
