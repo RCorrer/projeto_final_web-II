@@ -23,4 +23,6 @@ public class FuncionarioController {
     public void deletarFuncionario(@PathVariable String id) {
         funcionarioService.deletarFuncionario(id);
     }
+
+
 }

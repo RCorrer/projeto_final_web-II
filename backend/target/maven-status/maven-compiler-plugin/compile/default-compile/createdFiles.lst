@@ -1,4 +1,5 @@
 com/example/web_II/domain/historico/HistoricoAlteracaoDTO.class
+com/example/web_II/domain/funcionarios/FuncionarioAtualizacaoDTO.class
 com/example/web_II/domain/receita/RelatorioDTO.class
 com/example/web_II/infra/security/SecurityFilter.class
 com/example/web_II/services/RelatorioService.class

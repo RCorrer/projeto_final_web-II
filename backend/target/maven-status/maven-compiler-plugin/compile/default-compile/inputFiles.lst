@@ -11,6 +11,7 @@
 /app/src/main/java/com/example/web_II/domain/enderecos/Endereco.java
 /app/src/main/java/com/example/web_II/domain/funcionarios/CadastroFuncionarioDTO.java
 /app/src/main/java/com/example/web_II/domain/funcionarios/Funcionario.java
+/app/src/main/java/com/example/web_II/domain/funcionarios/FuncionarioAtualizacaoDTO.java
 /app/src/main/java/com/example/web_II/domain/funcionarios/FuncionarioListagemDTO.java
 /app/src/main/java/com/example/web_II/domain/historico/HistoricoAlteracao.java
 /app/src/main/java/com/example/web_II/domain/historico/HistoricoAlteracaoDTO.java

@@ -1,6 +1,9 @@
 package com.example.web_II.services;
 
+import com.example.web_II.domain.funcionarios.Funcionario;
+import com.example.web_II.domain.funcionarios.FuncionarioAtualizacaoDTO;
 import com.example.web_II.domain.funcionarios.FuncionarioListagemDTO;
+import com.example.web_II.domain.usuarios.Usuario;
 import com.example.web_II.repositories.FuncionarioRepository;
 import com.example.web_II.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +40,26 @@ public class FuncionarioService {
             usuarioRepository.delete(funcionario.getUsuario());
         });
     }
+
+    @Transactional
+    public FuncionarioListagemDTO atualizarFuncionario(FuncionarioAtualizacaoDTO data) {
+
+        Funcionario funcionario = funcionarioRepository.findById(data.id())
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+
+        Usuario usuario = funcionario.getUsuario();
+        if (data.nome() != null) usuario.setNome(data.nome());
+        if (data.email() != null) usuario.setEmail(data.email());
+        if (data.senha() != null) usuario.setSenha(data.senha());
+        if (data.role() != null) usuario.setRole(data.role());
+
+        if (data.nascimento() != null) funcionario.setNascimento(data.nascimento());
+
+        usuarioRepository.save(usuario);
+        funcionarioRepository.save(funcionario);
+
+        return new FuncionarioListagemDTO(funcionario);
+    }
+
+
 }
