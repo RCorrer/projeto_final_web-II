@@ -37,6 +37,7 @@
 /app/src/main/java/com/example/web_II/exceptions/EmailJaCadastradoException.java
 /app/src/main/java/com/example/web_II/exceptions/LoginNotFoundException.java
 /app/src/main/java/com/example/web_II/infra/CorsConfig.java
+/app/src/main/java/com/example/web_II/infra/SwaggerConfig.java
 /app/src/main/java/com/example/web_II/infra/security/SecurityConfigurations.java
 /app/src/main/java/com/example/web_II/infra/security/SecurityFilter.java
 /app/src/main/java/com/example/web_II/infra/security/TokenService.java

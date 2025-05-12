@@ -10,10 +10,10 @@ DELETE FROM Usuarios;
 DELETE FROM Endereco;
 
 INSERT INTO Usuarios (id, nome, email, senha, role) VALUES
-('19a2f583-f820-4cf9-9c6f-285d03d4a594', 'Cliente Um', 'cliente1@email.com', '$2a$10$s2qJfOVXZCcI.6KbyYkS0eY6ZQfJQYb3vABwTwjN7WzL7Lk5m5XbO', 1),  -- senha123
-('1b03ce83-0eee-46c7-939e-454b5caef24c', 'Cliente Dois', 'cliente2@email.com', '$2a$10$s2qJfOVXZCcI.6KbyYkS0eY6ZQfJQYb3vABwTwjN7WzL7Lk5m5XbO', 1),  -- senha123
-('63191186-2ec8-4ecc-912b-04f77b0d3671', 'Funcionário Um', 'funcionario1@email.com', '$2a$10$s2qJfOVXZCcI.6KbyYkS0eY6ZQfJQYb3vABwTwjN7WzL7Lk5m5XbO', 0),  -- senha123
-('b415ddc7-d157-40e8-a2bb-336d65e1ac19', 'Funcionário Dois', 'funcionario2@email.com', '$2a$10$s2qJfOVXZCcI.6KbyYkS0eY6ZQfJQYb3vABwTwjN7WzL7Lk5m5XbO', 0);  -- senha123
+('19a2f583-f820-4cf9-9c6f-285d03d4a594', 'Cliente Um', 'cliente1@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 1),  -- senha123
+('1b03ce83-0eee-46c7-939e-454b5caef24c', 'Cliente Dois', 'cliente2@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 1),  -- senha123
+('63191186-2ec8-4ecc-912b-04f77b0d3671', 'Funcionário Um', 'funcionario1@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 0),  -- senha123
+('b415ddc7-d157-40e8-a2bb-336d65e1ac19', 'Funcionário Dois', 'funcionario2@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 0);  -- senha123
 
 INSERT INTO Funcionarios (id, nascimento, fk_usuario) VALUES
 ('d2451fda-b7e6-4a44-b5be-fe7493e9a9e0', '1990-01-15', '63191186-2ec8-4ecc-912b-04f77b0d3671'),

@@ -51,7 +51,7 @@ public class SecurityConfigurations {
                         ).permitAll()
 
                         // Rotas de teste (ajuste conforme sua necessidade)
-                        .requestMatchers("/categoria/**").permitAll()
+                        .requestMatchers("/categoria/**").hasRole("FUNCIONARIO")
                         .requestMatchers("/solicitacao/**").permitAll()
                         .requestMatchers("/funcionarios").permitAll()
 
