@@ -26,7 +26,7 @@ Com todos os Requeriments instalados e siga os seguintes passo:
   3. Use o docker-compose para criar os contâiners e inicializar eles
      (*Este processo pode demorar de acordo com a sua rede e computador*)
      ```
-     docker-compose up -d build
+     docker-compose up -d --build
      ```
   4. Para testar se funcionou digite:
     ```docker ps``` no terminal, caso apareça os 3 contâiners, a criação teve sucesso.

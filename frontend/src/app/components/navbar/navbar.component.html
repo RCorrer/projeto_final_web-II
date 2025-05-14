@@ -1,8 +1,28 @@
 <nav>
-  <h3>BipBip</h3>
+  <div class="topo" routerLink="/home">
+    <img src="bipbip.png" alt="Logo BipBip" class="logo">
+    <h3>BipBip</h3>
+  </div>  
   <ul>
     <li>
-      <a href="/home">Solicitações</a>
+      <mat-icon class="mat-18">space_dashboard</mat-icon>
+      <a routerLink="/home">Dashboard</a>
+    </li>
+    <li>
+      <mat-icon class="mat-18">add_box</mat-icon>
+      <a routerLink="/home">Solicitações</a>
+    </li>
+    <li>
+      <mat-icon class="mat-18">group</mat-icon>
+      <a routerLink="/funcionarios">Funcionários</a>
+    </li>
+    <li>
+      <mat-icon class="mat-18">devices</mat-icon>
+      <a routerLink="/equipamentos">Equipamentos</a>
+    </li>
+    <li>
+      <mat-icon class="mat-18">description</mat-icon>
+      <a routerLink="/relatorios">Relatórios</a>
     </li>
   </ul>
 </nav>
