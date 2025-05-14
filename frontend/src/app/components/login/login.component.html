@@ -31,18 +31,20 @@
             Bem vindo de volta!
         </h1>
 
-        <form class="login-form">
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <mat-form-field appearance="fill">
                 <label>Digite seu E-mail</label>
-                <input matInput type="text">
+                <input matInput type="email" formControlName="login" required >
             </mat-form-field>
 
             <mat-form-field appearance="fill">
                 <label>Digite a sua senha</label>
-                <input matInput type="password">
+                <input matInput type="password" formControlName="password" required >
             </mat-form-field>
 
-            <button mat-flat-button routerLink="/home">Conectar-se</button>
+            <button mat-flat-button type="submit">
+                Conectar-se
+            </button>
         </form>
 
         <div class="to-cadastro">
