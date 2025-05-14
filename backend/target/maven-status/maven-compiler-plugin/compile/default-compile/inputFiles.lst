@@ -32,8 +32,6 @@
 /app/src/main/java/com/example/web_II/domain/usuarios/LoginResponseDTO.java
 /app/src/main/java/com/example/web_II/domain/usuarios/Usuario.java
 /app/src/main/java/com/example/web_II/domain/usuarios/UsuarioRole.java
-/app/src/main/java/com/example/web_II/exceptions/ApiError.java
-/app/src/main/java/com/example/web_II/exceptions/ApplicationResourceAdvice.java
 /app/src/main/java/com/example/web_II/exceptions/CpfInvalidoException.java
 /app/src/main/java/com/example/web_II/exceptions/CpfJaCadastradoException.java
 /app/src/main/java/com/example/web_II/exceptions/EmailInvalidoException.java
