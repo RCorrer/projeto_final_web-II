@@ -9,6 +9,7 @@ import com.example.web_II.domain.usuarios.AuthenticationDTO;
 import com.example.web_II.domain.usuarios.LoginResponseDTO;
 import com.example.web_II.domain.usuarios.Usuario;
 import com.example.web_II.domain.usuarios.UsuarioRole;
+import com.example.web_II.exceptions.EmailJaCadastradoException;
 import com.example.web_II.exceptions.LoginNotFoundException;
 import com.example.web_II.infra.security.TokenService;
 import com.example.web_II.repositories.ClienteRepository;
@@ -73,7 +74,7 @@ public class AuthService {
 
     public ResponseEntity registerFuncionario(CadastroFuncionarioDTO data) {
         if (usuarioRepository.findUserDetailsByEmail(data.login()) != null)
-            return ResponseEntity.badRequest().build();
+            throw new EmailJaCadastradoException();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         Usuario novoUsuario = new Usuario(data.name(), data.login(), encryptedPassword, UsuarioRole.FUNCIONARIO);

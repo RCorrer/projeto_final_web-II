@@ -40,6 +40,7 @@
 /app/src/main/java/com/example/web_II/repositories/SolicitacaoRepository.java
 /app/src/main/java/com/example/web_II/exceptions/LoginNotFoundException.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AtribuirFuncionarioDTO.java
+/app/src/main/java/com/example/web_II/exceptions/RestExceptionHandler.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/MudarEstadoDTO.java
 /app/src/main/java/com/example/web_II/domain/categoria/Categoria.java
 /app/src/main/java/com/example/web_II/domain/receita/ReceitaDTO.java
@@ -54,8 +55,6 @@
 /app/src/main/java/com/example/web_II/exceptions/EmailInvalidoException.java
 /app/src/main/java/com/example/web_II/domain/historico/HistoricoAlteracao.java
 /app/src/main/java/com/example/web_II/domain/cliente/CadastroClienteDTO.java
-/app/src/main/java/com/example/web_II/exceptions/ApplicationResourceAplication.java
 /app/src/main/java/com/example/web_II/infra/security/SecurityFilter.java
 /app/src/main/java/com/example/web_II/services/FuncionarioService.java
-/app/src/main/java/com/example/web_II/exceptions/ApiError.java
 /app/src/main/java/com/example/web_II/infra/CorsConfig.java

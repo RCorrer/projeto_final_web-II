@@ -1,5 +1,4 @@
 com/example/web_II/domain/historico/HistoricoAlteracaoDTO.class
-com/example/web_II/exceptions/ApplicationResourceAplication.class
 com/example/web_II/domain/receita/RelatorioDTO.class
 com/example/web_II/domain/funcionarios/FuncionarioAtualizacaoDTO.class
 com/example/web_II/infra/security/SecurityFilter.class
@@ -46,6 +45,7 @@ com/example/web_II/services/FuncionarioService.class
 com/example/web_II/repositories/CategoriaRepository.class
 com/example/web_II/repositories/EnderecoRepository.class
 com/example/web_II/domain/funcionarios/CadastroFuncionarioDTO.class
+com/example/web_II/exceptions/RestExceptionHandler.class
 com/example/web_II/domain/categoria/CategoriaDTO.class
 com/example/web_II/domain/cliente/Cliente.class
 com/example/web_II/repositories/ReceitaRepository.class
@@ -53,7 +53,6 @@ com/example/web_II/exceptions/EmailJaCadastradoException.class
 com/example/web_II/services/AuthorizationService.class
 com/example/web_II/domain/enderecos/Endereco.class
 com/example/web_II/domain/usuarios/UsuarioRole.class
-com/example/web_II/exceptions/ApiError.class
 com/example/web_II/services/AuthService.class
 com/example/web_II/services/EmailService.class
 com/example/web_II/controllers/SolicitacoesController.class
