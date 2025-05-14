@@ -54,4 +54,17 @@ public class CategoriaService {
         }
     }
 
+    public ResponseEntity<String> editarCategoria(String descricao, CategoriaDTO data) {
+        if (categoriaRepository.existsByDescricao(descricao)) {
+            String antigoNome = descricao;
+            Optional<Categoria> categoriaTemp = categoriaRepository.findByDescricao(descricao);
+            Categoria categoria = categoriaTemp.get();
+            categoria.setDescricao(data.descricao());
+            categoriaRepository.save(categoria);
+            return ResponseEntity.ok("Categoria Editada com sucesso!! \n Antigo nome: " + antigoNome + "\n Nome novo: " +data.descricao() + "\n");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria" + descricao + "não existe!!");
+        }
+    }
+
 }
