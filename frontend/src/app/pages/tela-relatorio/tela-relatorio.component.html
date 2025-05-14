@@ -1,0 +1,103 @@
+<div class="layout-container">
+  <app-navbar class="sidenav"></app-navbar>
+
+  <main class="content">
+    <section class="container">
+      <header>
+        <h1 class="title">Relatórios</h1>
+        <p class="subtitle">Gerencie os relatórios da sua empresa</p>
+      </header>
+
+      <div class="relatorio-content">
+        <div class="info-text">
+          <mat-icon class="info-icon" aria-hidden="true">info</mat-icon>
+          <p>
+            Visualize todos os relatórios ou utilize filtros por data ou
+            categoria.
+          </p>
+        </div>
+
+        <div class="filtros">
+          <form [formGroup]="filtroForm" class="filtro">
+            <!-- Filtro por período -->
+            <div class="date-filter-container">
+              <mat-form-field appearance="outline" class="date-filter">
+                <mat-label>Selecione o período</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input
+                    matStartDate
+                    formControlName="start"
+                    placeholder="Data inicial"
+                  />
+                  <input
+                    matEndDate
+                    formControlName="end"
+                    placeholder="Data final"
+                  />
+                </mat-date-range-input>
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+              </mat-form-field>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </div>
+
+            <!-- Filtro por categoria -->
+            <form [formGroup]="filtroForm" class="form-filtros">
+              <mat-form-field appearance="outline" class="campo">
+                <mat-label>Categoria</mat-label>
+                <mat-select formControlName="categoria">
+                  <mat-option [value]="null">Todas</mat-option>
+                  <mat-option
+                    *ngFor="let categoria of categorias"
+                    [value]="categoria"
+                  >
+                    {{ categoria }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Campos para data podem estar aqui também -->
+            </form>
+          </form>
+        </div>
+
+        <!-- Exibição dos dados -->
+        <div class="relatorio-lista" *ngIf="tipoRelatorio === 'porData'">
+          <div *ngFor="let grupo of relatorio" class="grupo-dia">
+            <h2>{{ formatarData(grupo.data) }}</h2>
+
+            <ul>
+              <li *ngFor="let item of grupo.registros">
+                <span>{{ item.categoria }}:</span>
+                <span>R${{ item.receita }}</span>
+              </li>
+            </ul>
+            <div class="total-dia">
+              <span>Total arrecadado: R${{ grupo.total | number: '1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mostrar total geral da categoria se houver filtro aplicado -->
+<!-- RF020: Relatório por Categoria -->
+<div *ngIf="tipoRelatorio === 'porCategoria'">
+  <ul>
+    <li *ngFor="let item of relatorio">
+      {{ item.categoria }} - R$ {{ item.receita | number: '1.2-2' }}
+    </li>
+  </ul>
+  <h4>Total arrecadado: R$ {{ totalCategoria | number: '1.2-2' }}</h4>
+</div>
+
+        <div class="relatorio-buttons">
+          <div class="tipo-relatorio-botoes">
+            <button mat-button (click)="tipoRelatorio = 'porData'; atualizarRelatorio()">Receita por Dia</button>
+            <button mat-button (click)="tipoRelatorio = 'porCategoria'; atualizarRelatorio()">Receita por Categoria</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

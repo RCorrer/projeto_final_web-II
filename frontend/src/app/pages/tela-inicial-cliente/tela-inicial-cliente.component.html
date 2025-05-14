@@ -1,0 +1,23 @@
+<div class="layout-container">
+  <app-navbar class="sidenav"></app-navbar>
+    <div class="content">
+      <h2>Olá, Maria Joaquina!</h2>
+
+      <a routerLink="/abrir-solicitacao">Abrir solicitação</a>
+
+      <section class="solicitacoes-container">
+        <h3>Minhas Solicitações</h3>
+        <mat-list-item *ngFor="let solicitacao of solicitacoes">
+          <app-card-solicitacao-cliente
+            [solicitacao]="solicitacao"
+            (visualizar)="visualizarSolicitacao($event)"
+            (mostrarOrcamento)="mostrarOrcamento($event)"
+            (resgatarServico)="resgatarServico($event)"
+            (pagarServico)="pagarServico($event)"
+            (alterarEstado)="alterarEstadoSolicitacao($event)">
+          </app-card-solicitacao-cliente>
+        </mat-list-item>
+      </section>
+    </div>
+</div>
+  

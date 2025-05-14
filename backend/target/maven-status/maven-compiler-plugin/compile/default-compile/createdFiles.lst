@@ -32,6 +32,7 @@ com/example/web_II/domain/solicitacoes/SolicitacoesResponseDTO.class
 com/example/web_II/repositories/ClienteRepository.class
 com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.class
 com/example/web_II/domain/usuarios/Usuario.class
+com/example/web_II/exceptions/ApplicationResourceAdvice.class
 com/example/web_II/domain/funcionarios/Funcionario.class
 com/example/web_II/controllers/RelatoriosController.class
 com/example/web_II/domain/solicitacoes/Solicitacao.class
@@ -52,6 +53,7 @@ com/example/web_II/exceptions/EmailJaCadastradoException.class
 com/example/web_II/services/AuthorizationService.class
 com/example/web_II/domain/enderecos/Endereco.class
 com/example/web_II/domain/usuarios/UsuarioRole.class
+com/example/web_II/exceptions/ApiError.class
 com/example/web_II/services/AuthService.class
 com/example/web_II/services/EmailService.class
 com/example/web_II/controllers/SolicitacoesController.class

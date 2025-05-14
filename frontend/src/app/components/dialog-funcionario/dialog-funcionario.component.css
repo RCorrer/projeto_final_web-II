@@ -1,0 +1,16 @@
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-inline: 1rem;
+    width: 100%;
+}
+
+mat-form-field {
+    width: 300px;
+}
+
+.dialog-container {
+    overflow: hidden;
+}
