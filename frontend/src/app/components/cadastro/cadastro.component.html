@@ -27,7 +27,7 @@
                 Cadastre-se!
             </h1>
 
-            <form class="cadastro-form">
+            <form class="cadastro-form" [formGroup]="cadastroForm">
                 <label>Nome Completo</label>
                 <mat-form-field appearance="fill">
                     <input matInput type="text">
@@ -45,27 +45,27 @@
 
                 <label>CEP</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" placeholder="00000-000">
+                    <input matInput type="text" placeholder="00000-000" formControlName="cep" (input)="formatarCEP($event)" maxlength="9">
                 </mat-form-field>
 
                 <label>Estado</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly>
+                    <input matInput type="text" readonly formControlName="estado">
                 </mat-form-field>
 
                 <label>Cidade</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly>
+                    <input matInput type="text" readonly formControlName="cidade">
                 </mat-form-field>
 
                 <label>Bairro</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly>
+                    <input matInput type="text" readonly formControlName="bairro">
                 </mat-form-field>
 
                 <label>Rua</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly>
+                    <input matInput type="text" readonly formControlName="rua">
                 </mat-form-field>
 
                 <label>Numero</label>
@@ -78,10 +78,11 @@
                     <input matInput type="text">
                 </mat-form-field>
             </form>
+                
+                <div class="button-container">
+                    <button mat-flat-button>Cadastrar-se</button>
+                </div>
 
-            <div class="button-container">
-                <button mat-flat-button routerLink="/">Cadastrar-se</button>
-            </div>
         </div>
 
         <div class="logo-container">
