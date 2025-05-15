@@ -3,6 +3,7 @@ package com.example.web_II.services;
 
 import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.categoria.CategoriaDTO;
+import com.example.web_II.exceptions.CategoriaJaExisteException;
 import com.example.web_II.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class CategoriaService {
 
     public ResponseEntity<String> addCategoryResponse(CategoriaDTO data){
         if (categoriaRepository.existsByDescricao(data.descricao())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("A categoria "+ data.descricao() + " já existe!!");
+            throw new CategoriaJaExisteException();
         }
         Categoria novaCategoria = new Categoria(data.descricao());
         this.categoriaRepository.save(novaCategoria);
@@ -39,7 +40,6 @@ public class CategoriaService {
         for (Categoria categoria : categorias){
             descricoes.add(categoria.getDescricao());
         }
-
         return ResponseEntity.ok(descricoes);
     }
 
