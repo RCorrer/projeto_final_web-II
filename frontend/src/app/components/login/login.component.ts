@@ -7,6 +7,7 @@ import { RouterLink, Router } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { CommonModule } from '@angular/common'; 
+import { AuthService } from "../../services/auth.service";
 
 interface LoginResponse {
   token: string;
@@ -29,7 +30,7 @@ export class LoginComponent implements AfterViewInit {
   loginForm: FormGroup;
   private readonly url = "http://localhost:8080/login";
 
-  constructor(private fb: FormBuilder, private http:HttpClient, private router: Router) {
+  constructor(private fb: FormBuilder, private http:HttpClient, private router: Router, private authService: AuthService) {
     this.loginForm = this.fb.group ({
       login: ["", [Validators.required]],
       password: ["", [Validators.required]]
@@ -72,6 +73,14 @@ export class LoginComponent implements AfterViewInit {
       this.http.post<LoginResponse>(this.url, this.loginForm.value).subscribe({
         next: (data: LoginResponse) => {
           console.log("Login successful", data);
+
+          this.authService.login({
+            token: data.token,
+            nome: data.nome,
+            id: data.id,
+            role: data.role
+          });
+
           if (data.role === "FUNCIONARIO") {
             this.router.navigate(["/home"]);
           } else if (data.role === "CLIENTE") {
