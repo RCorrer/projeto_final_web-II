@@ -35,7 +35,7 @@ public class Solicitacao {
     private LocalDateTime data_hora;
 
     @OneToMany(mappedBy = "fkSolicitacao", fetch = FetchType.LAZY)
-    private List<com.example.web_II.domain.solicitacoes.HistoricoAlteracao> historicoAlteracoes = new ArrayList<>();
+    private List<com.example.web_II.domain.historico.HistoricoAlteracao> historicoAlteracoes = new ArrayList<>();
 
     public Solicitacao(String cliente,String descEquipamento,String descricaoCategoria, String descricaoDefeito, String idSituacao){
         this.fkCliente = cliente;
