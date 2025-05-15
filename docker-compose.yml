@@ -1,16 +1,15 @@
+version: '3.8'
+
 services:
   frontend:
     image: node:20-alpine
     working_dir: /home/app
     ports:
       - "80:4200"
-    command: sh -c "npm install -g @angular/cli@19.2.4 && npm install --legacy-peer-deps && ng serve --host 0.0.0.0 --poll=2000 --port 4200 --disable-host-check"
+    command: sh -c "npm install -g @angular/cli@19.2.4 && npm install --legacy-peer-deps && ng serve --host 0.0.0.0 --poll=2000 --port 4200 --disable-host-check" 
     volumes:
       - ./frontend:/home/app
       - /home/app/node_modules
-      - /home/app/.angular
-    environment:
-      NODE_ENV: development
 
   backend:
     image: maven:3.8.4-openjdk-17-slim
@@ -25,8 +24,7 @@ services:
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
     volumes:
-      - ./backend/src:/app/src
-      - ./backend/pom.xml:/app/pom.xml
+      - ./backend:/app
       - ~/.m2:/root/.m2
     command: mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=true"
 
@@ -38,8 +36,3 @@ services:
       POSTGRES_PASSWORD: admin
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:

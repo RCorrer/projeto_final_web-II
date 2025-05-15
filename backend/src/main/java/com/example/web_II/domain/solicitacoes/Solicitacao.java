@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table (name = "SolicitacaoManutencao")
 @Entity
@@ -31,6 +33,9 @@ public class Solicitacao {
     private String fk_funcionario;
     private float orcamento;
     private LocalDateTime data_hora;
+
+    @OneToMany(mappedBy = "fkSolicitacao", fetch = FetchType.LAZY)
+    private List<com.example.web_II.domain.historico.HistoricoAlteracao> historicoAlteracoes = new ArrayList<>();
 
     public Solicitacao(String cliente,String descEquipamento,String descricaoCategoria, String descricaoDefeito, String idSituacao){
         this.fkCliente = cliente;
