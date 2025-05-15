@@ -1,4 +1,4 @@
-package com.example.web_II.domain.solicitacoes;
+package com.example.web_II.domain.historico;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

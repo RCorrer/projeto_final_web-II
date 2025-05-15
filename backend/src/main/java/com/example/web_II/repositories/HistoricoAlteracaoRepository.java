@@ -1,6 +1,6 @@
 package com.example.web_II.repositories;
 
-import com.example.web_II.domain.solicitacoes.HistoricoAlteracao;
+import com.example.web_II.domain.historico.HistoricoAlteracao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

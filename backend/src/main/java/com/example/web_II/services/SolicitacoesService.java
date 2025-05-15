@@ -4,7 +4,7 @@ import com.example.web_II.domain.historico.HistoricoAlteracaoDTO;
 import com.example.web_II.domain.historico.SolicitacaoComHistoricoDTO;
 import com.example.web_II.domain.receita.Receita;
 import com.example.web_II.domain.solicitacoes.*;
-import com.example.web_II.domain.solicitacoes.HistoricoAlteracao;
+import com.example.web_II.domain.historico.HistoricoAlteracao;
 import com.example.web_II.repositories.ClienteRepository;
 import com.example.web_II.repositories.HistoricoAlteracaoRepository;
 import com.example.web_II.repositories.ReceitaRepository;

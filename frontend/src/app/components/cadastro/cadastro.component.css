@@ -6,51 +6,202 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    width: 100%;
+    background-image: linear-gradient(-130deg, #e0e0e0, #a4b1ff);
+    overflow-y: auto;
     padding: 20px;
-    background-image: linear-gradient(130deg, #e0e0e0, #a4b1ff);
+}
+
+.gradient-bg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.gradient-bg svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+}
+
+.gradients-container {
+    filter: url(#goo) blur(40px);
+    width: 100%;
+    height: 100%;
+}
+
+.g1 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(47, 72, 224, 0.8) 0, rgba(18, 113, 255, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 40%;
+    height: 40%;
+    top: calc(50% - 40%);
+    left: 50%;
+    transform-origin: center center;
+    animation: moveVertical 30s ease infinite;
+    opacity: 1;
+}
+
+.g2 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(115, 47, 224, 0.8) 0, rgba(221, 74, 255, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 40%;
+    height: 40%;
+    top: calc(50% - 40%);
+    left: 50%;
+    transform-origin: calc(50% - 400px);
+    animation: moveInCircle 20s reverse infinite;
+    opacity: 1;
+}
+
+.g3 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(235, 234, 234, 0.8) 0, rgba(100, 220, 255, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 40%;
+    height: 40%;
+    top: calc(50% - 40% + 200px);
+    left: calc(50% - 500px);
+    transform-origin: calc(50% + 400px);
+    animation: moveInCircle 40s linear infinite;
+    opacity: 1;
+}
+
+.g4 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(128, 128, 255, 0.8) 0, rgba(200, 50, 50, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 40%;
+    height: 40%;
+    top: calc(50% - 40%);
+    left: 50%;
+    transform-origin: calc(50% - 200px);
+    animation: moveHorizontal 40s ease infinite;
+    opacity: 0.7;
+}
+
+.g5 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(19, 142, 255, 0.8) 0, rgba(180, 180, 50, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 80%;
+    height: 80%;
+    top: calc(50% - 80%);
+    left: 50%;
+    transform-origin: calc(50% - 800px) calc(50% + 200px);
+    animation: moveInCircle 20s ease infinite;
+    opacity: 1;
+}
+
+.interactive {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(140, 100, 255, 0.8) 0, rgba(140, 100, 255, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 100%;
+    height: 100%;
+    top: -50%;
+    left: -50%;
+    opacity: 0.7;
+}
+
+@keyframes moveInCircle {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes moveVertical {
+    0% {
+        transform: translateY(-50%);
+    }
+
+    50% {
+        transform: translateY(50%);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes moveHorizontal {
+    0% {
+        transform: translateX(-50%) translateY(-10%);
+    }
+
+    50% {
+        transform: translateX(50%) translateY(10%);
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(-10%);
+    }
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    padding: 20px;
+}
+
+.logo-container h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 36px;
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
 }
 
 .centro-cadastro {
-    background-color: #7384f1;
+    background-color: rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: row;
-    height: 75vh;
-    width: 140vh;
-    max-width: 90%;
+    height: 80vh;
+    width: 90%;
+    max-width: 1400px;
     border-radius: 30px;
-    box-shadow: 0px 0px 22px #ccc;
+    box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    position: relative;
 }
 
 .cadastro {
-    background-color: white;
-    border-radius: 26px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 26px 0 0 26px;
     display: flex;
     flex-direction: column;
-    justify-items: center;
-    justify-content: flex-start;
     width: 50%;
-    padding: 20px;
-    box-shadow: 6px 6px 12px rgb(172, 172, 172);
+    padding: 30px;
     overflow: hidden;
-    margin-left: auto;
 }
 
 .cadastro h1 {
     align-self: center;
     margin-bottom: 20px;
     font-family: 'Poppins', sans-serif;
-}
-
-.cadastro button {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-    align-self: center;
-    margin-top: 20px;
-    height: 100px;
-    width: 100%;
-    border-radius: 4px;
-    background-color: #2F48E0;
+    font-weight: bold;
+    font-size: 32px;
+    color: #2F48E0;
 }
 
 .cadastro-form {
@@ -66,6 +217,38 @@
     margin-top: 10px;
     margin-left: 10px;
     margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.cadastro-form mat-form-field {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.cadastro-form input {
+    width: 100%;
+}
+
+.button-container {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.button-container button {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    height: 50px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: #2F48E0;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+    background-color: #1a36c7;
 }
 
 .cadastro-form::-webkit-scrollbar {

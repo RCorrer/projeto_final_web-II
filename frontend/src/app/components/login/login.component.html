@@ -3,8 +3,9 @@
         <svg xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <filter id="goo">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="10"result="blur" />
-                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
+                        result="goo" />
                     <feBlend in="SourceGraphic" in2="goo" />
                 </filter>
             </defs>
@@ -20,7 +21,7 @@
         </div>
     </div>
 
-    <div class="logo-container" >
+    <div class="logo-container">
         <img src="bipbip-logo.png" class="logo" (click)="playSound()">
         <h1>BipBip Consertos</h1>
     </div>
@@ -30,18 +31,20 @@
             Bem vindo de volta!
         </h1>
 
-        <form class="login-form">
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <mat-form-field appearance="fill">
                 <label>Digite seu E-mail</label>
-                <input matInput type="text">
+                <input matInput type="email" formControlName="login" required >
             </mat-form-field>
 
             <mat-form-field appearance="fill">
                 <label>Digite a sua senha</label>
-                <input matInput type="password">
+                <input matInput type="password" formControlName="password" required >
             </mat-form-field>
 
-            <button mat-flat-button routerLink="/home">Conectar-se</button>
+            <button mat-flat-button type="submit">
+                Conectar-se
+            </button>
         </form>
 
         <div class="to-cadastro">
