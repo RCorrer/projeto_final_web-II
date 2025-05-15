@@ -1,13 +1,10 @@
 package com.example.web_II.repositories;
 
 import com.example.web_II.domain.receita.Receita;
-import com.example.web_II.domain.receita.ReceitaDTO;
 import com.example.web_II.domain.receita.RelatorioCategoriaDTO;
-import com.example.web_II.domain.receita.RelatorioDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
