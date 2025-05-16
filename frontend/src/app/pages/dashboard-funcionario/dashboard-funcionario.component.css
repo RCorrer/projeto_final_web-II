@@ -38,3 +38,19 @@
 .filtro-container {
   min-width: 200px;
 }
+
+.filtros {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-filter-container {
+  display: flex;
+  flex-direction: column;
+  max-width: fit-content;
+}
+
+.filtro-form {
+  display: flex;
+  gap: 1rem;
+}

@@ -7,6 +7,9 @@ import { CommonModule } from "@angular/common";
 import { MatFormField } from "@angular/material/form-field";
 import { MatSelect } from "@angular/material/select";
 import { SolicitacaoService } from "../../services/solicitacao.service";
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @Component({
@@ -17,23 +20,44 @@ import { SolicitacaoService } from "../../services/solicitacao.service";
     CardSolicitacaoComponent,
     NavbarComponent,
     MatFormField,
-    MatSelect
+    MatSelect,
+    MatNativeDateModule,
   ],
+  providers: [
+  { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
+],
   templateUrl: "./dashboard-funcionario.component.html",
   styleUrl: "./dashboard-funcionario.component.css"
 })
 export class DashboardFuncionarioComponent implements OnInit{
   solicitacoes: Solicitacao[] = [];
   filtroStatus: string = 'ABERTA';
+  filtroForm!: FormGroup;
 
-    constructor(private solicitacaoService: SolicitacaoService) {}
+    constructor(private solicitacaoService: SolicitacaoService, private fb: FormBuilder) {}
 
-  get solicitacoesFiltradas(): Solicitacao[] {
-    if (!this.filtroStatus) return this.solicitacoes;
-    return this.solicitacoes.filter (s => s.estado === this.filtroStatus);
+get solicitacoesFiltradas(): Solicitacao[] {
+    const { start, end } = this.filtroForm?.value || {};
+
+    return this.solicitacoes.filter(s => {
+      const statusOk = !this.filtroStatus || s.estado === this.filtroStatus;
+
+      let dataOk = true;
+      if (start && end) {
+        const dataSolicitacao = new Date(s.data);
+        dataOk = dataSolicitacao >= start && dataSolicitacao <= end;
+      }
+
+      return statusOk && dataOk;
+    });
   }
 
   ngOnInit(): void {
+    this.filtroForm = this.fb.group({
+      start: [null],
+      end: [null],
+    });
+
       this.solicitacoes = [
         { id: 101, data: '2025-04-05', hora: '14:30', cliente: 'Maria Joaquina', equipamento: 'Notebook Dell', categoria: '', defeito: '', estado: 'ABERTA' },
         { id: 102, data: '2025-04-02', hora: '15:15', cliente: 'Maria Joaquina', equipamento: 'Impressora Xerox', categoria: '', defeito: '', estado: 'ORÇADA' },

@@ -29,6 +29,33 @@
               <mat-option value="FINALIZADA">Finalizada</mat-option>
             </mat-select>
           </mat-form-field>
+         
+          <div class="filtros">
+            <form [formGroup]="filtroForm" class="filtro-form">
+              <div class="date-filter-container">
+                <mat-form-field appearance="outline" class="date-filter">
+                  <mat-label>Selecione o período</mat-label>
+                  <mat-date-range-input [rangePicker]="picker">
+                    <input
+                      matStartDate
+                      formControlName="start"
+                      placeholder="Data inicial"
+                    />
+                    <input
+                      matEndDate
+                      formControlName="end"
+                      placeholder="Data final"
+                    />
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                </mat-form-field>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </div>
+            </form>
+          </div>
 
         </div>
 
