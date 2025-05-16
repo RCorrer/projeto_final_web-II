@@ -8,7 +8,7 @@ import { MatFormField } from "@angular/material/form-field";
 import { MatSelect } from "@angular/material/select";
 import { SolicitacaoService } from "../../services/solicitacao.service";
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
@@ -24,8 +24,18 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     MatNativeDateModule,
   ],
   providers: [
-  { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
-],
+    // Define o formato de datas que será usado pelo DatePicker (pt-BR)
+    provideNativeDateAdapter({
+      parse: { dateInput: "DD/MM/YYYY" },
+      display: {
+        dateInput: "DD/MM/YYYY",
+        monthYearLabel: "MM YYYY",
+        dateA11yLabel: "DD de MMMM de YYYY",
+        monthYearA11yLabel: "MMMM de YYYY",
+      },
+    }),
+    { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
+  ],
   templateUrl: "./dashboard-funcionario.component.html",
   styleUrl: "./dashboard-funcionario.component.css"
 })
