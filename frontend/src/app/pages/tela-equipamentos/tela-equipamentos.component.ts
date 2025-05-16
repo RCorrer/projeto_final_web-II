@@ -17,9 +17,8 @@ import { DialogEquipamentoComponent } from "../../components/dialog-equipamento/
     ...materialImports,
     NavbarComponent,
     CardEquipamentoComponent,
-    CommonModule,
-    DialogConfirmComponent
-  ],
+    CommonModule
+],
   templateUrl: "./tela-equipamentos.component.html",
   styleUrl: "./tela-equipamentos.component.css",
 })
