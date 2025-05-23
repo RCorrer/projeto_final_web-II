@@ -10,6 +10,7 @@ import { SolicitacaoService } from "../../services/solicitacao.service";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ActivatedRoute } from "@angular/router";
 
 
 @Component({
@@ -44,7 +45,7 @@ export class DashboardFuncionarioComponent implements OnInit{
   filtroStatus: string = 'ABERTA';
   filtroForm!: FormGroup;
 
-    constructor(private solicitacaoService: SolicitacaoService, private fb: FormBuilder) {}
+    constructor(private solicitacaoService: SolicitacaoService, private fb: FormBuilder, private route: ActivatedRoute) {}
 
 get solicitacoesFiltradas(): Solicitacao[] {
     const { start, end } = this.filtroForm?.value || {};
@@ -66,6 +67,11 @@ get solicitacoesFiltradas(): Solicitacao[] {
     this.filtroForm = this.fb.group({
       start: [null],
       end: [null],
+    });
+
+    this.route.queryParams.subscribe(params => {
+      const estadoParam = params["estado"] as string;
+      this.filtroStatus = estadoParam || "";
     });
 
       this.solicitacoes = [

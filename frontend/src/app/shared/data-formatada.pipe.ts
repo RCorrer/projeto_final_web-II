@@ -39,3 +39,27 @@ export class DataFormatadaPipe implements PipeTransform {
     return `${dia}/${mes}/${ano}`;
   }
 }
+
+/* formatação de data antiga, do "card-solicitacao"
+
+  formatarData(data: string): string {
+    if (!data) return 'Data inválida';
+    
+    try {
+      const dateObj = new Date(data);
+      
+      if (isNaN(dateObj.getTime())) {
+        return 'Data inválida';
+      }
+      
+      const dia = dateObj.getDate().toString().padStart(2, '0');
+      const mes = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+      const ano = dateObj.getFullYear();
+      
+      return `${dia}/${mes}/${ano}`;
+    } catch (error) {
+      console.error('Erro ao formatar data:', error);
+      return 'Data inválida';
+    }
+  }
+*/
