@@ -3,6 +3,7 @@ package com.example.web_II.services;
 
 import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.categoria.CategoriaDTO;
+import com.example.web_II.exceptions.CategoriaInexistenteException;
 import com.example.web_II.exceptions.CategoriaJaExisteException;
 import com.example.web_II.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class CategoriaService {
             categoriaRepository.delete(categoria.get());
             return ResponseEntity.ok("Categoria " + categoria.get().getDescricao() + " removida com sucesso!");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria " + descricao + " não existe no sistema");
+            throw new CategoriaInexistenteException();
         }
     }
 
@@ -63,7 +64,7 @@ public class CategoriaService {
             categoriaRepository.save(categoria);
             return ResponseEntity.ok("Categoria Editada com sucesso!! \n Antigo nome: " + antigoNome + "\n Nome novo: " +data.descricao() + "\n");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria" + descricao + "não existe!!");
+            throw new CategoriaInexistenteException();
         }
     }
 
