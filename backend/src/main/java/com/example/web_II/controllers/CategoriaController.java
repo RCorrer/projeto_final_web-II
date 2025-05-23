@@ -31,10 +31,10 @@ public class CategoriaController {
         return categoriaService.addCategoryResponse(data);
     }
 
-    //Melhorar posteriormente
     @GetMapping("/categoria/listar")
-    public ResponseEntity<List<String>> listaCategoria(){
-        return categoriaService.listCategoryResponse();
+    public ResponseEntity<List<Categoria>> listarCategorias() {
+        List<Categoria> categorias = categoriaService.buscarTodas();
+        return ResponseEntity.ok(categorias);
     }
 
     @DeleteMapping("/categoria/excluir/{descricao}")

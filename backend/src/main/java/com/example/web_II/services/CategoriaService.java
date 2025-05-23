@@ -32,15 +32,17 @@ public class CategoriaService {
         return ResponseEntity.ok("Categoria " + nomeCategoria + " adicionada!!");
     }
 
-    public ResponseEntity<List<String>> listCategoryResponse (){
+    public ResponseEntity<List<String>> listCategoryResponse() {
         List<Categoria> categorias = categoriaRepository.findAll();
-        List<String> descricoes = new ArrayList<>();
-
-        for (Categoria categoria : categorias){
-            descricoes.add(categoria.getDescricao());
-        }
+        List<String> descricoes = categorias.stream()
+                .map(Categoria::getDescricao)
+                .toList();
 
         return ResponseEntity.ok(descricoes);
+    }
+
+    public List<Categoria> buscarTodas() {
+        return categoriaRepository.findAll();
     }
 
     public ResponseEntity<String> deleteCategoryResponse(String descricao){
