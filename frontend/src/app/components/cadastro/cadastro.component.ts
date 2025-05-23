@@ -87,6 +87,31 @@ export class CadastroComponent implements AfterViewInit {
     this.audio.play().catch((e) => console.error("Audio playback failed:", e));
   }
 
+  formatarCPF(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    
+    if (value.length > 3 && value.length <= 6) {
+      value = value.substring(0, 3) + '.' + value.substring(3);
+    } else if (value.length > 6) {
+      value = value.substring(0, 3) + '.' + value.substring(3, 6) + '.' + value.substring(6, 9) + '-' + value.substring(9);
+    }
+
+    this.cadastroForm.get('cpf')?.setValue(value, { emitEvent: false });
+    input.value = value;
+  }
+
+  formatarTelefone(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+
+    if (value.length > 2 && value.length <= 11) {
+      value = '(' + value.substring(0, 1) + ')' + ' ' + value.substring(2, 6) + '-' + value.substring(6);
+    } else if (value.length === 10) {
+      value = '(' + value.substring(0, 2) + ')' + ' ' + value.substring(2, 6) + '-' + value.substring(6);
+    }
+  }
+
   formatarCEP(event: Event) {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, '');
