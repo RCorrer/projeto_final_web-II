@@ -1,98 +1,67 @@
 <div class="tela-cadastro">
-    <div class="gradient-bg">
-        <svg xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <filter id="goo">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
-                        result="goo" />
-                    <feBlend in="SourceGraphic" in2="goo" />
-                </filter>
-            </defs>
-        </svg>
-
-        <div class="gradients-container">
-            <div class="g1"></div>
-            <div class="g2"></div>
-            <div class="g3"></div>
-            <div class="g4"></div>
-            <div class="g5"></div>
-            <div class="interactive"></div>
-        </div>
-    </div>
-
     <div class="centro-cadastro">
         <div class="cadastro">
             <h1>
-                Cadastre-se!
+                Cadastro
             </h1>
 
-            <form class="cadastro-form" [formGroup]="cadastroForm">
-                <label>Nome Completo</label>
+            <form class="cadastro-form">
+                <label>Digite seu CPF</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" formControlName="nome" required>
+                    <input matInput placeholder="___.___.___-__" type="text">
                 </mat-form-field>
 
-                <label>CPF</label>
+                <label>Nome completo</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" placeholder="000.000.000-00" formControlName="cpf" (input)="formatarCPF($event)" maxlength="14" required>
+                    <input matInput type="text">
                 </mat-form-field>
 
                 <label>E-mail</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" formControlName="login" required>
+                    <input matInput type="email">
                 </mat-form-field>
 
-                <label>Telefone</label>
+                <label>Digite seu telefone</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" maxlength="15" placeholder="(00) 00000-0000" formControlName="telefone" (input)="formatarTelefone($event)" required>
+                    <input matInput placeholder="(__) _ ____-____" type="text">
                 </mat-form-field>
 
-                <label>CEP</label>
+                <label>Insira seu CEP</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" placeholder="00000-000" formControlName="cep" (input)="formatarCEP($event)" maxlength="9" required>
-                </mat-form-field>
-
-                <label>Estado</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="uf" required>
-                </mat-form-field>
-
-                <label>Cidade</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="localidade" required>
-                </mat-form-field>
-
-                <label>Bairro</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="bairro" required>
+                    <input matInput placeholder="_____-___" type="text">
                 </mat-form-field>
 
                 <label>Rua</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="logradouro" required>
+                    <input matInput type="text">
                 </mat-form-field>
 
-                <label>Numero</label>
+                <label>Número</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" formControlName="numero" required>
+                    <input matInput type="text">
                 </mat-form-field>
 
-                <label>Complemento</label>
+                <label>Bairro</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" formControlName="complemento">
+                    <input matInput type="text">
+                </mat-form-field>
+
+                <label>Cidade</label>
+                <mat-form-field appearance="fill">
+                    <input matInput type="text">
+                </mat-form-field>
+
+                <label>Estado</label>
+                <mat-form-field appearance="fill">
+                    <input matInput type="text">
                 </mat-form-field>
             </form>
-                
-                <div class="button-container">
-                    <button mat-flat-button >Cadastrar-se</button>
-                </div>
 
+            <button mat-flat-button routerLink="/">Cadastrar-se</button>
         </div>
 
-        <div class="logo-container">
-            <img src="bipbip-logo.png" class="logo" (click)="playSound()">
-            <h1>BipBip Consertos</h1>
+        <div class="info">
+
         </div>
     </div>
 </div>

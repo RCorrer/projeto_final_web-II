@@ -1,0 +1,13 @@
+input {
+    margin: 1rem;
+    border-radius: .25rem;
+    padding-inline: 1rem;
+    border-color: var(--color-surface-alt);
+    width: 100%;
+}
+
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+}
