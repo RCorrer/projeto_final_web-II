@@ -1,5 +1,5 @@
-import { Categoria } from './../../models/categoria.model';
-import { environment } from '../../../environments/environment';
+import { Categoria } from "./../../models/categoria.model";
+import { environment } from "../../../environments/environment";
 import { Injectable } from "@angular/core";
 import {
   BehaviorSubject,
@@ -73,28 +73,53 @@ export class CategoriaService {
     console.log("CategoriaService: listarCategorias - Enviando GET para:", url);
     return this.http.get<Categoria[]>(url).pipe(
       retry(2),
-      tap(data => {
-        console.log("CategoriaService: listarCategorias - Dados brutos recebidos:", data);
+      tap((data) => {
+        console.log(
+          "CategoriaService: listarCategorias - Dados brutos recebidos:",
+          data
+        );
         if (!Array.isArray(data)) {
-            console.warn("CategoriaService: listarCategorias - Resposta da API não é um array:", data);
+          console.warn(
+            "CategoriaService: listarCategorias - Resposta da API não é um array:",
+            data
+          );
         } else if (data.length === 0) {
-            console.warn("CategoriaService: listarCategorias - Nenhuma categoria retornada pela API.");
+          console.warn(
+            "CategoriaService: listarCategorias - Nenhuma categoria retornada pela API."
+          );
         } else {
-            console.log(`CategoriaService: listarCategorias - ${data.length} categorias recebidas.`);
+          console.log(
+            `CategoriaService: listarCategorias - ${data.length} categorias recebidas.`
+          );
         }
       }),
       catchError(this.handleError<Categoria[]>("listarCategorias", [])) // Retorna array vazio em caso de erro
     );
   }
 
-  atualizarCategoria(descricaoAntiga: string, novaDescricao: string): Observable<string> {
+  atualizarCategoria(
+    descricaoAntiga: string,
+    novaDescricao: string
+  ): Observable<string> {
     // ID? Descrição antiga?
     const url = `${this.baseUrl}/edita/${encodeURIComponent(descricaoAntiga)}`;
     const payload = { descricao: novaDescricao };
-    console.log("CategoriaService: atualizarCategoria - Enviando PUT para:", url, "Payload:", payload);
+    console.log(
+      "CategoriaService: atualizarCategoria - Enviando PUT para:",
+      url,
+      "Payload:",
+      payload
+    );
     return this.http.put(url, payload, { responseType: "text" }).pipe(
-      tap(response => console.log("CategoriaService: atualizarCategoria - Resposta:", response)),
-      catchError(this.handleError<string>(`atualizarCategoria ${descricaoAntiga}`))
+      tap((response) =>
+        console.log(
+          "CategoriaService: atualizarCategoria - Resposta:",
+          response
+        )
+      ),
+      catchError(
+        this.handleError<string>(`atualizarCategoria ${descricaoAntiga}`)
+      )
     );
   }
 }

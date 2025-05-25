@@ -51,7 +51,7 @@ export const routes: Routes = [
   },
   
   {
-    path: "equipamentos",
+    path: "categorias",
     component: TelaCategoriasComponent,
     canActivate: [funcionarioGuard],
   },

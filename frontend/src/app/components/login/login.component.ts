@@ -7,7 +7,7 @@ import { RouterLink, Router } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { CommonModule } from '@angular/common'; 
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../../services/auth/auth.service";
 
 interface LoginResponse {
   token: string;
