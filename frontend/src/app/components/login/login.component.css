@@ -1,64 +1,252 @@
-.login-container{
+.tela-login {
     top: 0;
     left: 0;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    flex-direction: row;
+    min-height: 100vh;
+    width: 100%;
+    background-image: linear-gradient(130deg, #e0e0e0, #a4b1ff);
+    justify-content: flex-end;
 }
 
-.titulo {
-    margin-bottom: 50px;
-    text-align: center;
+.gradient-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.gradient-bg svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+}
+
+.gradients-container {
+    filter: url(#goo) blur(40px);
+    width: 100%;
+    height: 100%;
+}
+
+.g1 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(47, 72, 224, 0.8) 0, rgba(18, 113, 255, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 40%;
+    height: 40%;
+    top: calc(50% - 40%);
+    left: calc(50% - 40%);
+    transform-origin: center center;
+    animation: moveVertical 30s ease infinite;
+    opacity: 1;
+}
+
+.g2 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(115, 47, 224, 0.8) 0, rgba(221, 74, 255, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 40%;
+    height: 40%;
+    top: calc(50% - 40%);
+    left: calc(50% - 40%);
+    transform-origin: calc(50% - 400px);
+    animation: moveInCircle 20s reverse infinite;
+    opacity: 1;
+}
+
+.g3 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(235, 234, 234, 0.8) 0, rgba(100, 220, 255, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 40%;
+    height: 40%;
+    top: calc(50% - 40% + 200px);
+    left: calc(50% - 40% - 500px);
+    transform-origin: calc(50% + 400px);
+    animation: moveInCircle 40s linear infinite;
+    opacity: 1;
+}
+
+.g4 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(128, 128, 255, 0.8) 0, rgba(200, 50, 50, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 40%;
+    height: 40%;
+    top: calc(50% - 40%);
+    left: calc(50% - 40%);
+    transform-origin: calc(50% - 200px);
+    animation: moveHorizontal 40s ease infinite;
+    opacity: 0.7;
+}
+
+.g5 {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(19, 142, 255, 0.8) 0, rgba(180, 180, 50, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 80%;
+    height: 80%;
+    top: calc(50% - 80%);
+    left: calc(50% - 80%);
+    transform-origin: calc(50% - 800px) calc(50% + 200px);
+    animation: moveInCircle 20s ease infinite;
+    opacity: 1;
+}
+
+.interactive {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(140, 100, 255, 0.8) 0, rgba(140, 100, 255, 0) 50%) no-repeat;
+    mix-blend-mode: hard-light;
+    width: 100%;
+    height: 100%;
+    top: -50%;
+    left: -50%;
+    opacity: 0.7;
+}
+
+@keyframes moveInCircle {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes moveVertical {
+    0% {
+        transform: translateY(-50%);
+    }
+
+    50% {
+        transform: translateY(50%);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes moveHorizontal {
+    0% {
+        transform: translateX(-50%) translateY(-10%);
+    }
+
+    50% {
+        transform: translateX(50%) translateY(10%);
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(-10%);
+    }
+}
+
+.logo-container {
+    margin-top: 10.5%;
+    display: flex;
+    flex-direction: column;
+    width: 56%;
+    height: 100vh;
+    align-items: center;
+    justify-items: center;
+    z-index: 999;
+}
+
+.logo-container h1 {
+    margin-top: -7.5%;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 50px;
+    color: var(--color-primary);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+.login {
+    background-color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    width: 44%;
+    padding: 20px;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.login h1 {
+    align-self: center;
+    margin-top: 20%;
+    margin-bottom: 7%;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 40px;
 }
 
 .login-form {
+    height: auto;
+    width: 80%;
     display: flex;
-    text-align: center;
-    flex-direction: column;
+    align-self: center;
     justify-content: center;
-    width: 100;
-    margin-bottom: 25px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    padding: 25px;
-}
-
-.login-form form {
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 18px;
+    overflow-x: hidden;
+    padding-right: 10px;
 }
 
-.login button{
-    background-color: #2F48E0;
-    color: white;
-    border-radius: 5px;
-    width: 100%;
-    transition: 0.3s;
-    margin: 10px;
-}
-
-.login button:hover {
-    background-color: #0c243a;
-}
-
-a {
-    color: #138EFF;
-    text-decoration: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-a:hover {
-    color: #1b5994;
-    text-decoration: underline;
-}
-
-.cadastro {
+.login-form label {
     font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
+    align-self: flex-start;
+}
+
+.login-form mat-form-field {
+    align-self: center;
+    width: 80%;
+}
+
+.login-form input {
+    width: 100%;
+}
+
+.login-form button {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    align-self: center;
+    margin-top: 50px;
+    height: 60px;
+    width: 80%;
+    border-radius: 8px;
+    background-color: #2F48E0;
+    transition: background-color 0.3s ease;
+}
+
+.login-form button:hover {
+    background-color: var(--color-secondary);
+    transition: background-color 0.3s ease;
+}
+
+.to-cadastro {
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    align-items: flex-start;
+    width: 60%;
+    transition: color 0.3s ease;
+}
+
+.to-cadastro a:hover {
+    transition: color 0.3s ease;
+    color: var(--color-secondary);
 }

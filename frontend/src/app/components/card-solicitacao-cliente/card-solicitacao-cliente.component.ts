@@ -4,11 +4,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { ModalMostarOrcamentoComponent } from '../modal-mostar-orcamento/modal-mostar-orcamento.component';
 import { SolicitacaoService } from '../../services/solicitacao.service';
+import { DataFormatadaPipe } from '../../shared/data-formatada.pipe';
+import { HoraFormatadaPipe } from "../../shared/hora-formatada.pipe";
 
 @Component({
   selector: 'app-card-solicitacao-cliente',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ModalMostarOrcamentoComponent, RouterModule],
+  imports: [CommonModule, MatButtonModule, ModalMostarOrcamentoComponent, RouterModule, DataFormatadaPipe, HoraFormatadaPipe],
   templateUrl: './card-solicitacao-cliente.component.html',
   styleUrl: './card-solicitacao-cliente.component.css'
 })

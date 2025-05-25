@@ -26,6 +26,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -87,7 +90,9 @@ public class AuthService {
         if (usuarioRepository.findUserDetailsByEmail(data.login()) != null)
             return ResponseEntity.badRequest().build();
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(Cliente.gerarSenha());
+        // Gera senha aleatória
+        String senha = Cliente.gerarSenha();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(senha);
         Usuario novoUsuario = new Usuario(data.name(), data.login(), encryptedPassword, UsuarioRole.CLIENTE);
 
         Endereco novoEndereco = new Endereco(
@@ -100,6 +105,12 @@ public class AuthService {
         enderecoRepository.save(novoEndereco);
         usuarioRepository.save(novoUsuario);
         clienteRepository.save(novoCliente);
+
+        try {
+            emailService.sendPasswordEmail(data.login(), data.name(), senha);
+        } catch (Exception e) {
+            System.err.println("Erro ao enviar e-mail: " + e.getMessage());
+        }
 
         return ResponseEntity.ok("Usuário cadastrado com sucesso");
     }

@@ -1,19 +1,14 @@
 package com.example.web_II.controllers;
 
-import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.categoria.CategoriaDTO;
 import com.example.web_II.repositories.CategoriaRepository;
 import com.example.web_II.services.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class CategoriaController {
@@ -31,10 +26,10 @@ public class CategoriaController {
         return categoriaService.addCategoryResponse(data);
     }
 
-    //Melhorar posteriormente
     @GetMapping("/categoria/listar")
-    public ResponseEntity<List<String>> listaCategoria(){
-        return categoriaService.listCategoryResponse();
+    public ResponseEntity<List<Categoria>> listarCategorias() {
+        List<Categoria> categorias = categoriaService.buscarTodas();
+        return ResponseEntity.ok(categorias);
     }
 
     @DeleteMapping("/categoria/excluir/{descricao}")
@@ -42,7 +37,10 @@ public class CategoriaController {
         return categoriaService.deleteCategoryResponse(descricao);
     }
 
-    //ENDPOINT DE BUSCAR PRECISA SER FEITO
+    @PutMapping("/categoria/edita/{descricao}")
+    public ResponseEntity<String> editarCategoria(@PathVariable String descricao ,@RequestBody CategoriaDTO data){
+        return categoriaService.editarCategoria(descricao,data);
+    }
 
 
 
