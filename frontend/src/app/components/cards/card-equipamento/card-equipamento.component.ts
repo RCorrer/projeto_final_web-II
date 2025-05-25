@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { materialImports } from "../../../material-imports";
 import { MatDialog } from "@angular/material/dialog";
 import { CardBaseComponent, MenuItem } from "../card-base/card-base.component";
-import { Equipamento } from "../../../models/equipamento.model";
+import { Categoria } from "../../../models/categoria.model";
 
 @Component({
   selector: "app-card-equipamento",
@@ -12,8 +12,8 @@ import { Equipamento } from "../../../models/equipamento.model";
   templateUrl: "./card-equipamento.component.html",
   styleUrl: "./card-equipamento.component.css",
 })
-export class CardEquipamentoComponent extends CardBaseComponent<Equipamento> {
-  @Input() equipamento!: Equipamento;
+export class CardEquipamentoComponent extends CardBaseComponent<Categoria> {
+  @Input() equipamento!: Categoria;
 
   override getMenuItems(): MenuItem[] {
     return [

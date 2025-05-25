@@ -8,7 +8,7 @@ import { CardCategoriaComponent } from "../../components/cards/card-categoria/ca
 import { materialImports } from "../../material-imports";
 import { Categoria } from "../../models/categoria.model";
 import { CategoriaService } from "../../services/categoria/categoria.service";
-import { DialogCategoriaComponent } from "../../components/dialog-equipamento/dialog-categoria.component";
+import { DialogCategoriaComponent } from "../../components/dialog-categoria/dialog-categoria.component";
 import { catchError, Observable, of, tap } from "rxjs";
 
 @Component({

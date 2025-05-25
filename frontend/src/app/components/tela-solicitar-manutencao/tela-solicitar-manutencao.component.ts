@@ -6,7 +6,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
-import { SolicitacaoService } from '../../services/solicitacao.service';
+import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
 
 @Component({
   selector: 'app-tela-solicitar-manutencao',

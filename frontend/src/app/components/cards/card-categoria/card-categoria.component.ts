@@ -4,7 +4,7 @@ import { materialImports } from "../../../material-imports";
 import { MatDialog } from "@angular/material/dialog";
 import { CardBaseComponent, MenuItem } from "../card-base/card-base.component";
 import { Categoria } from "../../../models/categoria.model";
-import { DialogCategoriaComponent } from "../../dialog-equipamento/dialog-categoria.component";
+import { DialogCategoriaComponent } from "../../dialog-categoria/dialog-categoria.component";
 
 @Component({
   selector: "app-card-categoria",

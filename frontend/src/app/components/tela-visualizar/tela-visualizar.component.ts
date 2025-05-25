@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SolicitacaoService } from '../../services/solicitacao.service';
+import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 

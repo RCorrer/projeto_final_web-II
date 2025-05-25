@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
-import { Solicitacao } from '../models/Solicitacao.model';
+import { Solicitacao } from '../../models/Solicitacao.model';
 
 @Injectable({
   providedIn: 'root'
