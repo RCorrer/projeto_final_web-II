@@ -1,0 +1,33 @@
+<div class="dialog-container">
+    <form #form="ngForm">
+      <h2 mat-dialog-title>{{ data.titulo }}</h2>
+    
+      <mat-dialog-content class="dialog-content">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Descrição</mat-label>
+          <input
+            matInput
+            name="descricao"
+            [(ngModel)]="data.descricao"
+            #descricaoInput="ngModel"
+            required
+          />
+          <mat-error *ngIf="descricaoInput.invalid && descricaoInput.touched">
+            A descrição é obrigatória.
+          </mat-error>
+        </mat-form-field>
+      </mat-dialog-content>
+  
+      <mat-dialog-actions align="end">
+        <button mat-button (click)="dialogRef.close()">Cancelar</button>
+        <button
+          mat-button
+          color="primary"
+          [disabled]="form.invalid"
+          [mat-dialog-close]="data"
+        >
+          Salvar
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>  

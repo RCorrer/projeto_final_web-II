@@ -1,0 +1,77 @@
+<div class="layout-container">
+  <app-navbar class="sidenav"></app-navbar>
+
+  <main class="content">
+    <section class="container">
+      <header class="header">
+        <h1 class="title">Categorias</h1>
+        <p class="subtitle">
+          Gerencie as categorias de equipamentos para as solicitações de
+          manutenção.
+        </p>
+        <button
+          mat-raised-button
+          (click)="abrirDialog()"
+          color="primary"
+          aria-label="Adicionar nova categoria"
+          class="btn-add-equipamento"
+          matTooltip="Adicionar nova categoria"
+        >
+          <mat-icon>category</mat-icon> Adicionar Categoria
+        </button>
+      </header>
+
+      <div class="equipamentos-content">
+        <div class="info-text">
+          <mat-icon class="info-icon" aria-hidden="true">info</mat-icon>
+          <p>Visualize todas as categorias de equipamentos cadastradas.</p>
+        </div>
+
+        <ng-container
+          *ngIf="categorias$ | async as categorias; else loadingOrError"
+        >
+          <ng-container *ngIf="categorias.length > 0; else vazio">
+            <div class="cards-container">
+              <app-card-categoria
+                *ngFor="let categoria of categorias"
+                [categoria]="categoria"
+                (editar)="abrirDialog(categoria)"
+                (excluir)="excluirCategoria(categoria)"
+              >
+              </app-card-categoria>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #loadingOrError>
+          <div class="feedback-state" style="text-align: center; padding: 20px;">
+            <ng-container *ngIf="!errorOccurred; else errorState">
+              <mat-spinner diameter="50"></mat-spinner>
+              <p>Carregando categorias...</p>
+            </ng-container>
+            <ng-template #errorState>
+              <mat-icon color="warn">error_outline</mat-icon>
+              <p>Ocorreu um erro ao carregar as categorias. Tente novamente mais tarde.</p>
+            </ng-template>
+          </div>
+        </ng-template>
+
+        <ng-template #vazio>
+          <div class="sem-equipamentos">
+            <div>
+              <mat-icon class="sem-equipamentos-icon" aria-hidden="true">
+                cloud_off
+              </mat-icon>
+              <h3>Nenhuma categoria cadastrada</h3>
+              <p>Comece adicionando sua primeira categoria de equipamento.</p>
+            </div>
+
+            <button mat-stroked-button (click)="abrirDialog()">
+              Adicionar Categoria
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </section>
+  </main>
+</div>
