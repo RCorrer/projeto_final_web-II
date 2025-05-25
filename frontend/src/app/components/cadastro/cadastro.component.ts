@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-import { RouterLink } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { CommonModule } from '@angular/common';
@@ -26,7 +25,7 @@ interface dadosCEP {
 
 @Component({
   selector: "app-cadastro",
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
   templateUrl: "./cadastro.component.html",
   styleUrl: "./cadastro.component.css",
 })
@@ -86,6 +85,31 @@ export class CadastroComponent implements AfterViewInit {
   playSound() {
     this.audio.currentTime = 0;
     this.audio.play().catch((e) => console.error("Audio playback failed:", e));
+  }
+
+  formatarCPF(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    
+    if (value.length > 3 && value.length <= 6) {
+      value = value.substring(0, 3) + '.' + value.substring(3);
+    } else if (value.length > 6) {
+      value = value.substring(0, 3) + '.' + value.substring(3, 6) + '.' + value.substring(6, 9) + '-' + value.substring(9);
+    }
+
+    this.cadastroForm.get('cpf')?.setValue(value, { emitEvent: false });
+    input.value = value;
+  }
+
+  formatarTelefone(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+
+    if (value.length > 2 && value.length <= 11) {
+      value = '(' + value.substring(0, 1) + ')' + ' ' + value.substring(2, 6) + '-' + value.substring(6);
+    } else if (value.length === 10) {
+      value = '(' + value.substring(0, 2) + ')' + ' ' + value.substring(2, 6) + '-' + value.substring(6);
+    }
   }
 
   formatarCEP(event: Event) {

@@ -1,17 +1,11 @@
 package com.example.web_II.services;
 
-import com.example.web_II.domain.receita.Receita;
-import com.example.web_II.domain.receita.ReceitaDTO;
 import com.example.web_II.domain.receita.RelatorioCategoriaDTO;
 import com.example.web_II.domain.receita.RelatorioDTO;
 import com.example.web_II.repositories.ReceitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.JobKOctets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

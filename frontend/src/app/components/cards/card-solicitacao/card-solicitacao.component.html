@@ -7,11 +7,11 @@
 
       <div class="icons">
         <div class="icons-items">
-          <p>{{ formatarData(solicitacao.data) }}</p>
+          <p>{{ solicitacao.data | dataFormatada }}</p>
           <mat-icon class="mat-18" fontIcon="calendar_month"></mat-icon>
         </div>
         <div class="icons-items">
-          <p>{{ formatarHora(solicitacao.data) }}</p>
+          <p>{{ solicitacao.hora | horaFormatada }}</p>
           <mat-icon class="mat-18" fontIcon="schedule"></mat-icon>
         </div>
       </div>

@@ -30,57 +30,62 @@
             <form class="cadastro-form" [formGroup]="cadastroForm">
                 <label>Nome Completo</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text">
+                    <input matInput type="text" formControlName="nome" required>
                 </mat-form-field>
 
                 <label>CPF</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" placeholder="000.000.000-00">
+                    <input matInput type="text" placeholder="000.000.000-00" formControlName="cpf" (input)="formatarCPF($event)" maxlength="14" required>
                 </mat-form-field>
 
                 <label>E-mail</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text">
+                    <input matInput type="text" formControlName="login" required>
+                </mat-form-field>
+
+                <label>Telefone</label>
+                <mat-form-field appearance="fill">
+                    <input matInput type="text" maxlength="15" placeholder="(00) 00000-0000" formControlName="telefone" (input)="formatarTelefone($event)" required>
                 </mat-form-field>
 
                 <label>CEP</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" placeholder="00000-000" formControlName="cep" (input)="formatarCEP($event)" maxlength="9">
+                    <input matInput type="text" placeholder="00000-000" formControlName="cep" (input)="formatarCEP($event)" maxlength="9" required>
                 </mat-form-field>
 
                 <label>Estado</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="estado">
+                    <input matInput type="text" readonly formControlName="uf" required>
                 </mat-form-field>
 
                 <label>Cidade</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="cidade">
+                    <input matInput type="text" readonly formControlName="localidade" required>
                 </mat-form-field>
 
                 <label>Bairro</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="bairro">
+                    <input matInput type="text" readonly formControlName="bairro" required>
                 </mat-form-field>
 
                 <label>Rua</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="rua">
+                    <input matInput type="text" readonly formControlName="logradouro" required>
                 </mat-form-field>
 
                 <label>Numero</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text">
+                    <input matInput type="text" formControlName="numero" required>
                 </mat-form-field>
 
                 <label>Complemento</label>
                 <mat-form-field appearance="fill">
-                    <input matInput type="text">
+                    <input matInput type="text" formControlName="complemento">
                 </mat-form-field>
             </form>
                 
                 <div class="button-container">
-                    <button mat-flat-button>Cadastrar-se</button>
+                    <button mat-flat-button >Cadastrar-se</button>
                 </div>
 
         </div>
