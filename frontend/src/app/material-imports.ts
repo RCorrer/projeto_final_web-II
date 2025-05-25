@@ -13,7 +13,6 @@ import { MatOptionModule } from "@angular/material/core";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDialogModule } from "@angular/material/dialog";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 export const materialImports = [
   MatCardModule,
@@ -32,5 +31,4 @@ export const materialImports = [
   MatInputModule,
   MatSelectModule,
   MatDialogModule,
-  MatProgressSpinnerModule
 ];

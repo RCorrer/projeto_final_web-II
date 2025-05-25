@@ -2,14 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { materialImports } from '../../../material-imports';
 import { CommonModule } from '@angular/common';
 import { Solicitacao } from '../../../models/Solicitacao.model';
-import { DataFormatadaPipe } from '../../../shared/data-formatada.pipe';
+import { DataBrasileiraPipe } from '../../../shared/data-brasileira.pipe';
 import { SolicitacaoService } from '../../../services/solicitacao.service';
 import { RouterLink, RouterModule } from '@angular/router';
-import { HoraFormatadaPipe } from "../../../shared/hora-formatada.pipe";
 
 @Component({
   selector: 'app-card-solicitacao',
-  imports: [...materialImports, CommonModule, DataFormatadaPipe, RouterLink, RouterModule, HoraFormatadaPipe],
+  imports: [...materialImports, CommonModule, DataBrasileiraPipe, RouterLink, RouterModule],
   templateUrl: './card-solicitacao.component.html',
   styleUrl: './card-solicitacao.component.css'
 })
@@ -20,6 +19,7 @@ export class CardSolicitacaoComponent {
   backgroundColor: string = 'var(--color-aberto)';
 
   ngOnInit(): void {
+
     this.solicitacaoService.solicitacoes$.subscribe(solicitacoes => {
       const solicitacaoAtualizada = solicitacoes.find(s => s.id === this.solicitacao?.id);
       if (solicitacaoAtualizada) {

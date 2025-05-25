@@ -37,7 +37,8 @@ public class SecurityConfigurations {
                         // Rotas públicas
                         .requestMatchers(HttpMethod.POST,
                                 "/login",
-                                "/cadastro/cliente"
+                                "/cadastro/cliente",
+                                "/cadastro/funcionario"
                         ).permitAll()
 
                         // Documentação Swagger
@@ -49,14 +50,11 @@ public class SecurityConfigurations {
                                 "/webjars/**"
                         ).permitAll()
 
-                        // Rotas protegidas
-                        .requestMatchers("/categoria/**").hasRole("FUNCIONARIO")
-                        .requestMatchers("/funcionarios").hasRole("FUNCIONARIO")
-                        .requestMatchers("/cadastro/funcionario").hasRole("FUNCIONARIO")
-
-                        //separar rota de solicitação por endpoints
-                        //o que é de funcionario/cliente ou ambos
-                        .requestMatchers("/solicitacao/**").permitAll()
+                        // Rotas de teste (ajuste conforme sua necessidade)
+                        .requestMatchers("/solicitacao/criar").permitAll()
+                        .requestMatchers("/solicitacao/buscar/{id}").permitAll()
+                        .requestMatchers("/solicitacao/buscarCliente/{cliente}").permitAll()
+                        .requestMatchers("/categoria/**").permitAll()
 
                         // Todas as outras rotas requerem autenticação
                         .anyRequest().authenticated()

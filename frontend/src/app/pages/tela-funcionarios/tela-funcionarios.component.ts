@@ -16,8 +16,9 @@ import { DialogConfirmComponent } from "../../components/dialog/dialog.component
     ...materialImports,
     NavbarComponent,
     CardFuncionarioComponent,
-    CommonModule
-],
+    CommonModule,
+    DialogFuncionarioComponent,
+  ],
   templateUrl: "./tela-funcionarios.component.html",
   styleUrl: "./tela-funcionarios.component.css",
 })
