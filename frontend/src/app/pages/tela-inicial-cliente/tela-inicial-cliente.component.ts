@@ -5,7 +5,7 @@ import { MatListModule } from "@angular/material/list";
 import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
 import { RouterLink } from "@angular/router";
 import { NavbarComponent } from "../../components/navbar/navbar.component";
-import { CardSolicitacaoClienteComponent } from "../../components/card-solicitacao-cliente/card-solicitacao-cliente.component";
+import { CardSolicitacaoClienteComponent } from "../../components/cards/card-solicitacao-cliente/card-solicitacao-cliente.component";
 import { Solicitacao } from "../../models/Solicitacao.model";
 
 @Component({
@@ -17,7 +17,7 @@ import { Solicitacao } from "../../models/Solicitacao.model";
     MatListModule,
     NavbarComponent,
     RouterLink,
-    // CardSolicitacaoClienteComponent,
+    CardSolicitacaoClienteComponent,
   ],
   templateUrl: "./tela-inicial-cliente.component.html",
   styleUrl: "./tela-inicial-cliente.component.css",
