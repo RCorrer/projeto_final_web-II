@@ -1,16 +1,16 @@
 import { Routes } from "@angular/router";
 import { OrcamentoFuncionarioComponent } from "./pages/orcamento-funcionario/orcamento-funcionario.component";
 import { DashboardFuncionarioComponent } from "./pages/dashboard-funcionario/dashboard-funcionario.component";
-import { LoginComponent } from "./components/login/login.component";
-import { CadastroComponent } from './components/cadastro/cadastro.component';
+import { LoginComponent } from "./pages/login/login.component";
+import { CadastroComponent } from './pages/cadastro/cadastro.component';
 
 import { TelaFuncionariosComponent } from "./pages/tela-funcionarios/tela-funcionarios.component";
 import { TelaRelatorioComponent } from "./pages/tela-relatorio/tela-relatorio.component";
-import { TelaSolicitarManutencaoComponent } from "./components/tela-solicitar-manutencao/tela-solicitar-manutencao.component";
-import { TelaVisualizarComponent } from "./components/tela-visualizar/tela-visualizar.component";
-import { TelaEfetuarManutencaoComponent } from "./components/tela-efetuar-manutencao/tela-efetuar-manutencao.component";
+import { TelaSolicitarManutencaoComponent } from "./pages/tela-solicitar-manutencao/tela-solicitar-manutencao.component";
+import { TelaVisualizarComponent } from "./pages/tela-visualizar/tela-visualizar.component";
+import { TelaEfetuarManutencaoComponent } from "./pages/tela-efetuar-manutencao/tela-efetuar-manutencao.component";
 import { TelaInicialClienteComponent } from "./pages/tela-inicial-cliente/tela-inicial-cliente.component";
-import { TelaPagamentoComponent } from "./components/tela-pagamento/tela-pagamento.component";
+import { TelaPagamentoComponent } from "./pages/tela-pagamento/tela-pagamento.component";
 import { funcionarioGuard } from "./guard/funcionario.guard";
 import { clienteGuard } from "./guard/cliente.guard";
 import { TelaCategoriasComponent } from "./pages/tela-categorias/tela-categorias.component";

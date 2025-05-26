@@ -2,10 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
-import { ModalMostarOrcamentoComponent } from '../modal-mostar-orcamento/modal-mostar-orcamento.component';
-import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
-import { DataFormatadaPipe } from '../../shared/data-formatada.pipe';
-import { HoraFormatadaPipe } from "../../shared/hora-formatada.pipe";
+import { ModalMostarOrcamentoComponent } from '../../../modals/modal-mostar-orcamento/modal-mostar-orcamento.component';
+import { SolicitacaoService } from '../../../services/solicitacao/solicitacao.service';
+import { DataFormatadaPipe } from '../../../shared/data-formatada.pipe';
+import { HoraFormatadaPipe } from "../../../shared/hora-formatada.pipe";
 
 @Component({
   selector: 'app-card-solicitacao-cliente',
