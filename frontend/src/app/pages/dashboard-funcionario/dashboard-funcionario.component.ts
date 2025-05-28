@@ -10,6 +10,7 @@ import { SolicitacaoService } from "../../services/solicitacao/solicitacao.servi
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ActivatedRoute } from "@angular/router";
 
 
 @Component({
@@ -44,7 +45,7 @@ export class DashboardFuncionarioComponent implements OnInit{
   filtroStatus: string = 'ABERTA';
   filtroForm!: FormGroup;
 
-    constructor(private solicitacaoService: SolicitacaoService, private fb: FormBuilder) {}
+    constructor(private solicitacaoService: SolicitacaoService, private fb: FormBuilder, private route: ActivatedRoute) {}
 
 get solicitacoesFiltradas(): Solicitacao[] {
     const { start, end } = this.filtroForm?.value || {};
@@ -67,6 +68,21 @@ get solicitacoesFiltradas(): Solicitacao[] {
       start: [null],
       end: [null],
     });
+
+    this.route.queryParams.subscribe(params => {
+      
+      if (!params['start'] && !params['end']) {
+        this.filtroForm.patchValue({
+          start: null,
+          end: null
+        });
+      }
+
+      if (params["estado"] !== undefined) {
+        this.filtroStatus = params["estado"];
+      } else {
+        this.filtroStatus = 'ABERTA'; 
+  }});
 
       this.solicitacoes = [
         { id: 101, data: '2025-04-05', hora: '14:30', cliente: 'Maria Joaquina', equipamento: 'Notebook Dell', categoria: '', defeito: '', estado: 'ABERTA' },

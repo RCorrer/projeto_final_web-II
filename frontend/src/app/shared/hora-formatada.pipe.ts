@@ -17,3 +17,26 @@ export class HoraFormatadaPipe implements PipeTransform {
     return 'Hora inválida';
   }
 }
+  
+/* formatação de hora antiga, do "card-solicitacao"
+
+    formatarHora(data: string): string {
+    if (!data) return 'Hora inválida';
+    
+    try {
+      const dateObj = new Date(data);
+      
+      if (isNaN(dateObj.getTime())) {
+        return 'Hora inválida';
+      }
+      
+      const horas = dateObj.getHours().toString().padStart(2, '0');
+      const minutos = dateObj.getMinutes().toString().padStart(2, '0');
+      
+      return `${horas}:${minutos}`;
+    } catch (error) {
+      console.error('Erro ao formatar hora:', error);
+      return 'Hora inválida';
+    }
+  }
+*/

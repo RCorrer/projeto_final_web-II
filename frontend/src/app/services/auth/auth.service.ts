@@ -35,12 +35,22 @@ export class AuthService {
     localStorage.setItem('userName', this.userName);
   }
 
+  // isCliente(): boolean {
+  //   return this.userRole === 'CLIENTE';
+  // }
+
+  // isFuncionario(): boolean {
+  //   return this.userRole === 'FUNCIONARIO';
+  // }
+
+  // O codigo acima nao funcionou com o navbar com roles.
+  // O codigo abaixo verifica as roles direto no localStorage, garante persistencia quando recarrega a pagina.
   isCliente(): boolean {
-    return this.userRole === 'CLIENTE';
+  return localStorage.getItem('userRole') === 'CLIENTE';
   }
 
   isFuncionario(): boolean {
-    return this.userRole === 'FUNCIONARIO';
+    return localStorage.getItem('userRole') === 'FUNCIONARIO';
   }
 
   getToken():string | null {
