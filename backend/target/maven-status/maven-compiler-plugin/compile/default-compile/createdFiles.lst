@@ -1,6 +1,6 @@
 com/example/web_II/domain/historico/HistoricoAlteracaoDTO.class
-com/example/web_II/domain/receita/RelatorioDTO.class
 com/example/web_II/domain/funcionarios/FuncionarioAtualizacaoDTO.class
+com/example/web_II/domain/receita/RelatorioDTO.class
 com/example/web_II/infra/security/SecurityFilter.class
 com/example/web_II/services/RelatorioService.class
 com/example/web_II/domain/solicitacoes/RedirecionarSolicitacaoDTO.class
@@ -11,9 +11,9 @@ com/example/web_II/domain/solicitacoes/MudarEstadoDTO.class
 com/example/web_II/domain/solicitacoes/OrcamentoDTO.class
 com/example/web_II/exceptions/CpfInvalidoException.class
 com/example/web_II/domain/solicitacoes/AtribuirFuncionarioDTO.class
-com/example/web_II/services/CategoriaService.class
 com/example/web_II/domain/receita/ReceitaDTO.class
 com/example/web_II/exceptions/CategoriaJaExisteException.class
+com/example/web_II/services/CategoriaService.class
 com/example/web_II/controllers/AuthenticationController.class
 com/example/web_II/infra/CorsConfig.class
 com/example/web_II/exceptions/CpfJaCadastradoException.class
@@ -30,8 +30,8 @@ com/example/web_II/repositories/SolicitacaoRepository.class
 com/example/web_II/repositories/HistoricoAlteracaoRepository.class
 com/example/web_II/repositories/UsuarioRepository.class
 com/example/web_II/domain/solicitacoes/SolicitacoesResponseDTO.class
-com/example/web_II/repositories/ClienteRepository.class
 com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.class
+com/example/web_II/repositories/ClienteRepository.class
 com/example/web_II/domain/usuarios/Usuario.class
 com/example/web_II/domain/funcionarios/Funcionario.class
 com/example/web_II/controllers/RelatoriosController.class
@@ -58,5 +58,5 @@ com/example/web_II/domain/usuarios/UsuarioRole.class
 com/example/web_II/services/AuthService.class
 com/example/web_II/services/EmailService.class
 com/example/web_II/controllers/SolicitacoesController.class
-com/example/web_II/repositories/FuncionarioRepository.class
 com/example/web_II/domain/solicitacoes/AbrirSolicitacaoDTO.class
+com/example/web_II/repositories/FuncionarioRepository.class

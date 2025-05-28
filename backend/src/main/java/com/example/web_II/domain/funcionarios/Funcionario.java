@@ -23,7 +23,7 @@ public class Funcionario {
     private LocalDate nascimento;
 
     @OneToOne
-    @JoinColumn(name = "fk_usuario", nullable = false)
+    @JoinColumn(name = "fk_usuario", referencedColumnName = "id", nullable = false)
     private Usuario usuario;
 
     public Funcionario(LocalDate nascimento, Usuario novoUsuario) {

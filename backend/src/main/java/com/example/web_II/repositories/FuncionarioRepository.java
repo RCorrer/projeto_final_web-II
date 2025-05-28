@@ -13,4 +13,6 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, String
 
     @Transactional
     void deleteById(String id);
+
+    Funcionario findByUsuarioId(String id);
 }

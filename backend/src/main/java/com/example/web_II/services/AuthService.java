@@ -60,13 +60,28 @@ public class AuthService {
 
             var token = tokenService.generateToken((Usuario) auth.getPrincipal());
 
-            return new LoginResponseDTO(
-                    token,
-                    userDetails.getNome(),
-                    userDetails.getId(),
-                    userDetails.getRole().toString(),
-                    "Login efetuado com sucesso"
-            );
+            if (userDetails.getRole().toString().equals("CLIENTE")) {
+                Cliente cliente = clienteRepository.findByUsuarioId(userDetails.getId());
+
+                return new LoginResponseDTO(
+                        token,
+                        userDetails.getNome(),
+                        cliente.getId(),
+                        userDetails.getId(),
+                        userDetails.getRole().toString(),
+                        "Login efetuado com sucesso"
+                );
+            } else {
+                Funcionario funcionario = funcionarioRepository.findByUsuarioId(userDetails.getId());
+                return new LoginResponseDTO(
+                        token,
+                        userDetails.getNome(),
+                        funcionario.getId(),
+                        userDetails.getId(),
+                        userDetails.getRole().toString(),
+                        "Login efetuado com sucesso"
+                );
+            }
         } catch (BadCredentialsException ex) {
             throw new BadCredentialsException("Senha inválida");
         }
