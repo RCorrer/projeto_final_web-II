@@ -50,10 +50,14 @@ public class SecurityConfigurations {
                                 "/webjars/**"
                         ).permitAll()
 
-                        // Rotas protegidas
+                        // Rotas protegidas (Funcionarios)
                         .requestMatchers("/categoria/**").hasRole("FUNCIONARIO")
                         .requestMatchers("/funcionarios").hasRole("FUNCIONARIO")
                         .requestMatchers("/cadastro/funcionario").hasRole("FUNCIONARIO")
+
+                        // Rotas protegidas (Clientes)
+
+
 
                         //separar rota de solicitação por endpoints
                         //o que é de funcionario/cliente ou ambos
