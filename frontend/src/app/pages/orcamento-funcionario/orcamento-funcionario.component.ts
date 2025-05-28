@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
-import { SolicitacaoService } from '../../services/solicitacao.service';
+import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
 import { Observable, of } from 'rxjs';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 

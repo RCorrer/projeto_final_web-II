@@ -6,7 +6,7 @@ import { Solicitacao } from "../../models/Solicitacao.model";
 import { CommonModule } from "@angular/common";
 import { MatFormField } from "@angular/material/form-field";
 import { MatSelect } from "@angular/material/select";
-import { SolicitacaoService } from "../../services/solicitacao.service";
+import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';

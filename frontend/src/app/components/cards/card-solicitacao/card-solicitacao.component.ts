@@ -3,7 +3,7 @@ import { materialImports } from '../../../material-imports';
 import { CommonModule } from '@angular/common';
 import { Solicitacao } from '../../../models/Solicitacao.model';
 import { DataFormatadaPipe } from '../../../shared/data-formatada.pipe';
-import { SolicitacaoService } from '../../../services/solicitacao.service';
+import { SolicitacaoService } from '../../../services/solicitacao/solicitacao.service';
 import { RouterLink, RouterModule } from '@angular/router';
 import { HoraFormatadaPipe } from "../../../shared/hora-formatada.pipe";
 

@@ -1,5 +1,6 @@
 package com.example.web_II.controllers;
 
+import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.categoria.CategoriaDTO;
 import com.example.web_II.repositories.CategoriaRepository;
 import com.example.web_II.services.CategoriaService;
@@ -26,10 +27,10 @@ public class CategoriaController {
         return categoriaService.addCategoryResponse(data);
     }
 
-    //Melhorar posteriormente
     @GetMapping("/categoria/listar")
-    public ResponseEntity<List<String>> listaCategoria(){
-        return categoriaService.listCategoryResponse();
+    public ResponseEntity<List<Categoria>> listarCategorias() {
+        List<Categoria> categorias = categoriaService.buscarTodas();
+        return ResponseEntity.ok(categorias);
     }
 
     @DeleteMapping("/categoria/excluir/{descricao}")
