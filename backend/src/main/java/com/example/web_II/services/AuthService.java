@@ -97,8 +97,8 @@ public class AuthService {
         Usuario novoUsuario = new Usuario(data.name(), data.login(), encryptedPassword, UsuarioRole.CLIENTE);
 
         Endereco novoEndereco = new Endereco(
-                data.cep(), data.logradouro(), data.complemento(), data.unidade(),
-                data.bairro(), data.localidade(), data.uf(), data.estado(), data.regiao(), data.numero()
+                data.cep(), data.logradouro(), data.complemento(),
+                data.bairro(), data.localidade(), data.uf(), data.numero()
         );
 
         Cliente novoCliente = new Cliente(data.cpf(), data.telefone(), novoEndereco, novoUsuario);

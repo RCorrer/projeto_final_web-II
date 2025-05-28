@@ -20,27 +20,19 @@ public class Endereco {
     private String cep;
     private String logradouro;
     private String complemento;
-    private String unidade;
     private String bairro;
     private String localidade;
     private String uf;
-    private String estado;
-    private String regiao;
     private String numero;
 
     public Endereco(String cep, String logradouro, String complemento,
-                     String unidade, String bairro, String localidade,
-                     String uf, String estado, String regiao, String numero){
-
+                    String bairro, String localidade, String uf, String numero) {
         this.cep = cep;
         this.logradouro = logradouro;
         this.complemento = complemento;
-        this.unidade = unidade;
         this.bairro = bairro;
         this.localidade = localidade;
         this.uf = uf;
-        this.estado = estado;
-        this.regiao = regiao;
         this.numero = numero;
     }
 }
