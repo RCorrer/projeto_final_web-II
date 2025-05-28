@@ -70,9 +70,19 @@ get solicitacoesFiltradas(): Solicitacao[] {
     });
 
     this.route.queryParams.subscribe(params => {
-      const estadoParam = params["estado"] as string;
-      this.filtroStatus = estadoParam || "";
-    });
+      
+      if (!params['start'] && !params['end']) {
+        this.filtroForm.patchValue({
+          start: null,
+          end: null
+        });
+      }
+
+      if (params["estado"] !== undefined) {
+        this.filtroStatus = params["estado"];
+      } else {
+        this.filtroStatus = 'ABERTA'; 
+  }});
 
       this.solicitacoes = [
         { id: 101, data: '2025-04-05', hora: '14:30', cliente: 'Maria Joaquina', equipamento: 'Notebook Dell', categoria: '', defeito: '', estado: 'ABERTA' },
