@@ -1,0 +1,3 @@
+ALTER TABLE Endereco DROP COLUMN unidade;
+ALTER TABLE Endereco DROP COLUMN estado;
+ALTER TABLE Endereco DROP COLUMN regiao;

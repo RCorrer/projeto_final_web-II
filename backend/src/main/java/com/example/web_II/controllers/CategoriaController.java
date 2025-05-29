@@ -6,10 +6,14 @@ import com.example.web_II.repositories.CategoriaRepository;
 import com.example.web_II.services.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class CategoriaController {
@@ -22,23 +26,23 @@ public class CategoriaController {
 
 
 
-    @PostMapping("/categoria/adicionar")
+    @PostMapping("/categoria")
     public ResponseEntity<String> addCategoria(@RequestBody @Valid CategoriaDTO data){
         return categoriaService.addCategoryResponse(data);
     }
 
-    @GetMapping("/categoria/listar")
-    public ResponseEntity<List<Categoria>> listarCategorias() {
-        List<Categoria> categorias = categoriaService.buscarTodas();
-        return ResponseEntity.ok(categorias);
+    //Melhorar posteriormente
+    @GetMapping("/categoria")
+    public ResponseEntity<List<String>> listaCategoria(){
+        return categoriaService.listCategoryResponse();
     }
 
-    @DeleteMapping("/categoria/excluir/{descricao}")
+    @DeleteMapping("/categoria/{descricao}")
     public ResponseEntity<String> removeCategoria(@PathVariable String descricao){
         return categoriaService.deleteCategoryResponse(descricao);
     }
 
-    @PutMapping("/categoria/edita/{descricao}")
+    @PutMapping("/categoria/{descricao}")
     public ResponseEntity<String> editarCategoria(@PathVariable String descricao ,@RequestBody CategoriaDTO data){
         return categoriaService.editarCategoria(descricao,data);
     }
