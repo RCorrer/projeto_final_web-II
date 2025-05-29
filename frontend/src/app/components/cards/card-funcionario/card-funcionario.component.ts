@@ -4,7 +4,6 @@ import { CommonModule } from "@angular/common";
 import { CardBaseComponent, MenuItem } from "../card-base/card-base.component";
 import { Funcionario } from "../../../models/funcionario.model";
 import { MatDialog } from "@angular/material/dialog";
-import { DadosEquipamentoComponent } from "../../dados-equipamento/dados-equipamento.component";
 
 @Component({
   selector: "app-card-funcionario",
@@ -16,11 +15,6 @@ import { DadosEquipamentoComponent } from "../../dados-equipamento/dados-equipam
 export class CardFuncionarioComponent extends CardBaseComponent<Funcionario> {
   private dialog = inject(MatDialog);
 
-  abrirDialog() {
-    this.dialog.open(DadosEquipamentoComponent, {
-      width: "600px",
-    });
-  }
   @Input() funcionario!: Funcionario;
   override getMenuItems(): MenuItem[] {
     return [

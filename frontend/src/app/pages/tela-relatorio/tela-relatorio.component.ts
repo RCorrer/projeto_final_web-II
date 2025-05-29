@@ -1,10 +1,10 @@
+import { CategoriaService } from './../../services/categoria/categoria.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { materialImports } from '../../material-imports';
-import { EquipamentoService } from '../../services/equipamento.service';
 
 @Component({
   selector: 'app-tela-relatorio',
@@ -41,7 +41,7 @@ export class TelaRelatorioComponent implements OnInit {
   ];
   relatorio: any[] = [];
 
-  constructor(private fb: FormBuilder, private equipamentoService: EquipamentoService) {}
+  constructor(private fb: FormBuilder, private categoriaService: CategoriaService) {}
 
   ngOnInit(): void {
     this.filtroForm = this.fb.group({ start: [null], end: [null], categoria: [null] });
@@ -52,7 +52,7 @@ export class TelaRelatorioComponent implements OnInit {
   }
 
   carregarCategorias(): void {
-    this.categorias = this.equipamentoService.getEquipamentos().map(c => c.descricao);
+    // this.categorias = this.categoriaService.getCategorias().map(c => c.descricao);
   }
 
   formatarData(dataStr: string): string {

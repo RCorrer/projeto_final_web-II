@@ -4,25 +4,39 @@
     <h3>BipBip</h3>
   </div>  
   <ul>
-    <li>
-      <mat-icon class="mat-18">space_dashboard</mat-icon>
-      <a routerLink="/home">Dashboard</a>
-    </li>
-    <li>
+    <li *ngIf="authService.isCliente()">
       <mat-icon class="mat-18">add_box</mat-icon>
-      <a routerLink="/home">Solicitações</a>
+      <a routerLink="/home-cliente">Minhas Solicitações</a>
     </li>
-    <li>
+    <li *ngIf="authService.isCliente()">
+      <mat-icon class="mat-18">add_circle</mat-icon>
+      <a routerLink="/abrir-solicitacao">Nova Solicitação</a>
+    </li>
+
+    <li *ngIf="authService.isFuncionario()">
+      <mat-icon class="mat-18">hourglass_empty</mat-icon>
+      <a [routerLink]="['/home']" [queryParams]="{ estado: 'ABERTA' }">Solicitações Abertas</a>
+    </li>
+    <li *ngIf="authService.isFuncionario()">
+      <mat-icon class="mat-18">list</mat-icon>
+      <a [routerLink]="['/home']" [queryParams]="{ estado: '' }">Todas as Solicitações</a>
+    </li>
+    <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">group</mat-icon>
       <a routerLink="/funcionarios">Funcionários</a>
     </li>
-    <li>
+    <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">devices</mat-icon>
-      <a routerLink="/equipamentos">Equipamentos</a>
+      <a routerLink="/categorias">Equipamentos</a>
     </li>
-    <li>
+    <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">description</mat-icon>
       <a routerLink="/relatorios">Relatórios</a>
+    </li>
+
+    <li>
+      <mat-icon class="mat-18">logout</mat-icon>
+      <a (click)="logout()">Sair</a>
     </li>
   </ul>
 </nav>

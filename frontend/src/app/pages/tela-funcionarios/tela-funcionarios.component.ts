@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog"; // ajuste o caminho conforme necessário
 import { Funcionario } from "../../models/funcionario.model";
-import { FuncionarioService } from "../../services/funcionario.service";
+import { FuncionarioService } from "../../services/funcionario/funcionario.service";
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { materialImports } from "../../material-imports";
 import { CardFuncionarioComponent } from "../../components/cards/card-funcionario/card-funcionario.component";
@@ -16,9 +16,8 @@ import { DialogConfirmComponent } from "../../components/dialog/dialog.component
     ...materialImports,
     NavbarComponent,
     CardFuncionarioComponent,
-    CommonModule,
-    DialogFuncionarioComponent,
-  ],
+    CommonModule
+],
   templateUrl: "./tela-funcionarios.component.html",
   styleUrl: "./tela-funcionarios.component.css",
 })
