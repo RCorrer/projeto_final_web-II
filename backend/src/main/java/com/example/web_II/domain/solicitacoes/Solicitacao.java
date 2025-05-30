@@ -17,7 +17,14 @@ import java.util.List;
 @Getter
 @Setter
 
-
+//teste de correção
+//de erro ao vir solicitações
+    // com orçamento null
+    //pois a variavel float n aceita null
+    // mas Float aceita
+    //me da nota Razer
+    //n sei oq mudar
+    //
 public class Solicitacao {
 
     @Id
@@ -31,7 +38,7 @@ public class Solicitacao {
     private String descricao_defeito;
     private String fk_estado;
     private String fk_funcionario;
-    private float orcamento;
+    private Float orcamento;
     private LocalDateTime data_hora;
 
     @OneToMany(mappedBy = "fkSolicitacao", fetch = FetchType.LAZY)
