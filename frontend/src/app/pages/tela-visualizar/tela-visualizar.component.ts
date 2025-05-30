@@ -14,6 +14,7 @@ interface Etapa {
   templateUrl: './tela-visualizar.component.html',
   styleUrl: './tela-visualizar.component.css'
 })
+
 export class TelaVisualizarComponent {
   @Input() solicitacao: any;
   isLoaded = false;
@@ -25,19 +26,32 @@ export class TelaVisualizarComponent {
   constructor (private solicitacaoService: SolicitacaoService,private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const id = +params['id'];
-      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(id);
+        this.route.params.subscribe(params => {
+      const idDaRota: string = params['id']; // 1. MANTENHA O ID COMO STRING
 
-      this.solicitacao = this.mergeWithDefault(solicitacaoExistente || { id });
+      if (!idDaRota) {
+        console.error("TelaVisualizarComponent: ID da solicitação não encontrado na rota!");
+        this.isLoaded = true; 
+        return;
+      }
 
-      this.solicitacao.idFormatado = 'OS-' + this.solicitacao.id.toString().padStart(6, '0');
+      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoByIdAtual(idDaRota);
+
+      if (solicitacaoExistente) {
+        this.solicitacao = this.mergeWithDefault(solicitacaoExistente);
+      } else {
+          console.warn(`TelaVisualizarComponent: Solicitação com ID ${idDaRota} não encontrada nos dados locais. Verifique se precisa buscar do backend. Usando dados default.`);
+        this.solicitacao = this.mergeWithDefault({ id: idDaRota, estado: 'DESCONHECIDO' });
+      }
+      
+      // O idFormatado agora usa o ID string
+      this.solicitacao.idFormatado = 'OS-' + (this.solicitacao.id ? String(this.solicitacao.id).padStart(6, '0') : 'N/A');
 
       this.atualizarEtapas();
 
       setTimeout(() => {
         this.isLoaded = true;
-      }, 100);
+      }, 100); // Pequeno delay para simular carregamento e permitir renderização inicial
     });
   }
 
