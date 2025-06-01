@@ -17,14 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 
-//teste de correção
-//de erro ao vir solicitações
-    // com orçamento null
-    //pois a variavel float n aceita null
-    // mas Float aceita
-    //me da nota Razer
-    //n sei oq mudar
-    //
 public class Solicitacao {
 
     @Id
