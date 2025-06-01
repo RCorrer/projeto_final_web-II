@@ -12,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FuncionarioService {
@@ -22,9 +24,10 @@ public class FuncionarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    public Page<FuncionarioListagemDTO> listarTodosFuncionarios(Pageable pageable) {
-        return funcionarioRepository.findAll(pageable)
-                .map(FuncionarioListagemDTO::new);
+    public List<FuncionarioListagemDTO> listarTodosFuncionarios() {
+        return funcionarioRepository.findAll().stream()
+                .map(FuncionarioListagemDTO::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
