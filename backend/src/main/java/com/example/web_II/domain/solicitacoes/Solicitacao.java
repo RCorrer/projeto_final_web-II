@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 
-
 public class Solicitacao {
 
     @Id
@@ -31,7 +30,7 @@ public class Solicitacao {
     private String descricao_defeito;
     private String fk_estado;
     private String fk_funcionario;
-    private float orcamento;
+    private Float orcamento;
     private LocalDateTime data_hora;
 
     @OneToMany(mappedBy = "fkSolicitacao", fetch = FetchType.LAZY)
