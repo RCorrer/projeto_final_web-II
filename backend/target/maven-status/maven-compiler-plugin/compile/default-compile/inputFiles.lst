@@ -28,6 +28,7 @@
 /app/src/main/java/com/example/web_II/controllers/RelatoriosController.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/SolicitacoesResponseDTO.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AbrirSolicitacaoDTO.java
+/app/src/main/java/com/example/web_II/domain/solicitacoes/SolicitacaoFuncionarioDTO.java
 /app/src/main/java/com/example/web_II/infra/SwaggerConfig.java
 /app/src/main/java/com/example/web_II/WebIiApplication.java
 /app/src/main/java/com/example/web_II/controllers/SolicitacoesController.java
