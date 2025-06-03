@@ -329,4 +329,12 @@ public class SolicitacoesService {
 
         return ResponseEntity.ok(response);
     }
+
+    public ResponseEntity<List<SolicitacaoFuncionarioDTO>> getSolicitacoesAbertasOuAlocadasAoFuncionario(String funcionarioId) {
+        List<Solicitacao> solicitacoes = solicitacaoRepository.findSolicitacoesAbertasOuAlocadasAoFuncionario(funcionarioId);
+        List<SolicitacaoFuncionarioDTO> dtos = solicitacoes.stream()
+                .map(SolicitacaoFuncionarioDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
 }
