@@ -7,7 +7,9 @@ export interface Solicitacao {
     defeito: string;
     estado: string;
     cliente?: string;
+    idCliente?: string;
     redirecionadoPara?: string | null;
+    orcamento?: number;
     fk_funcionario?: string | null;
-    data_hora?: string;
+    data_hora?: string;    
 }
