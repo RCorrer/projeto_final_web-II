@@ -35,7 +35,7 @@ export class TelaVisualizarComponent {
         return;
       }
 
-      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoByIdAtual(idDaRota);
+      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(idDaRota);
 
       if (solicitacaoExistente) {
         this.solicitacao = this.mergeWithDefault(solicitacaoExistente);

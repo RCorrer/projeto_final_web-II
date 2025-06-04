@@ -30,7 +30,7 @@
 
     <mat-card-actions align="end">
       <a
-        *ngIf="solicitacao?.estado === 'ABERTA'"
+        *ngIf="solicitacao?.estado === '1'"
         class="action-button"
         [routerLink]="['/efetuar-orcamento', solicitacao.id]"
       >
@@ -38,21 +38,21 @@
       </a>
 
       <a
-        *ngIf="solicitacao?.estado === 'ORCADA'"
+        *ngIf="solicitacao?.estado === '2'"
         class="action-button-disabled"
       >
         Esperando Aceite
       </a>
 
       <a
-        *ngIf="solicitacao?.estado === 'REJEITADA'"
+        *ngIf="solicitacao?.estado === '4'"
         class="action-button-disabled"
       >
         Orçamento Rejeitado
       </a>
 
       <a
-        *ngIf="solicitacao?.estado === 'APROVADA'"
+        *ngIf="solicitacao?.estado === '3'"
         [routerLink]="['/manutencao', solicitacao.id]"
         class="action-button"
       >
@@ -60,7 +60,7 @@
       </a>
 
       <a
-        *ngIf="solicitacao?.estado === 'REDIRECIONADA'"
+        *ngIf="solicitacao?.estado === '5'"
         routerLink="/manutencao"
         class="action-button"
       >
@@ -68,14 +68,14 @@
       </a>
 
       <a
-        *ngIf="solicitacao?.estado === 'ARRUMADA'"
+        *ngIf="solicitacao?.estado === '6'"
         class="action-button-disabled"
       >
         Esperando pagamento
       </a>
 
       <a
-        *ngIf="solicitacao?.estado === 'PAGA'"
+        *ngIf="solicitacao?.estado === '7'"
         (click)="realizarAcao('FINALIZADA')"
         class="action-button"
       >
@@ -83,7 +83,7 @@
       </a>
 
       <a
-        *ngIf="solicitacao?.estado === 'FINALIZADA'"
+        *ngIf="solicitacao?.estado === '8'"
         class="action-button-disabled"
       >
         Finalizada

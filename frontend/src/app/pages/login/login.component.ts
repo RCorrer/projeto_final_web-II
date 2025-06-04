@@ -80,7 +80,8 @@ export class LoginComponent implements AfterViewInit {
             nome: data.nome,
             id: data.id,
             role: data.role,
-            idRole: data.idRole
+            idRole: data.idRole,
+            mensagem: data.mensagem
           });
 
           if (data.role === "FUNCIONARIO") {
