@@ -9,65 +9,73 @@
       </header>
 
       <div class="solicitacoes-content">
-        <div class="info-text">
-          <mat-icon class="info-icon" aria-hidden="true">info</mat-icon>
-          <p>Visualize todas as solicitações.</p>
-        </div>
-
-        <div class="filtro-container">
-          <mat-form-field appearance="outline" floatLabel="auto">
-            <mat-label>Status</mat-label>
-            <mat-select [(value)]="filtroStatus">
-              <mat-option value="">Todos</mat-option>
-              <mat-option value="ABERTA">Aberta</mat-option>
-              <mat-option value="ORÇADA">Orçada</mat-option>
-              <mat-option value="REJEITADA">Rejeitada</mat-option>
-              <mat-option value="APROVADA">Aprovada</mat-option>
-              <mat-option value="REDIRECIONADA">Redirecionada</mat-option>
-              <mat-option value="ARRUMADA">Arrumada</mat-option>
-              <mat-option value="PAGA">Paga</mat-option>
-              <mat-option value="FINALIZADA">Finalizada</mat-option>
-            </mat-select>
-          </mat-form-field>
-         
-          <div class="filtros">
-            <form [formGroup]="filtroForm" class="filtro-form">
-              <div class="date-filter-container">
-                <mat-form-field appearance="outline" class="date-filter">
-                  <mat-label>Selecione o período</mat-label>
-                  <mat-date-range-input [rangePicker]="picker">
-                    <input
-                      matStartDate
-                      formControlName="start"
-                      placeholder="Data inicial"
-                    />
-                    <input
-                      matEndDate
-                      formControlName="end"
-                      placeholder="Data final"
-                    />
-                  </mat-date-range-input>
-                  <mat-datepicker-toggle
-                    matIconSuffix
-                    [for]="picker"
-                  ></mat-datepicker-toggle>
-                </mat-form-field>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-              </div>
-            </form>
+        <div class="info-text-e-filtros">
+          <div class="info-text">
+            <mat-icon class="info-icon" aria-hidden="true">info</mat-icon>
+            <p>Visualize todas as solicitações.</p>
           </div>
 
+          <div class="filtros-container">
+            <mat-form-field appearance="outline" floatLabel="auto" class="filtro-item">
+              <mat-label>Status</mat-label>
+              <mat-select [(ngModel)]="filtroStatus" (selectionChange)="onFiltroStatusChange()">
+                <mat-option value="">Todas Recebidas</mat-option> 
+                <mat-option value="1">Aberta</mat-option>
+                <mat-option value="2">Orçada</mat-option>
+                <mat-option value="4">Rejeitada</mat-option> 
+                <mat-option value="3">Aprovada</mat-option> 
+                <mat-option value="5">Redirecionada</mat-option>
+                <mat-option value="6">Arrumada</mat-option>
+                <mat-option value="7">Paga</mat-option>
+                <mat-option value="8">Finalizada</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <form [formGroup]="filtroForm" class="filtro-data-form">
+              <mat-form-field appearance="outline" floatLabel="auto" class="filtro-item">
+                <mat-label>Filtrar Data Por</mat-label>
+                <mat-select formControlName="tipoFiltroData">
+                  <mat-option value="TODAS">Todas as Datas</mat-option>
+                  <mat-option value="HOJE">Hoje</mat-option>
+                  <mat-option value="PERIODO">Período</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <ng-container *ngIf="filtroForm.get('tipoFiltroData')?.value === 'PERIODO'">
+                <mat-form-field appearance="outline" floatLabel="auto" class="filtro-item">
+                  <mat-label>Data Inicial</mat-label>
+                  <input matInput [matDatepicker]="pickerStart" formControlName="start" placeholder="dd/mm/aaaa">
+                  <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerStart></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" floatLabel="auto" class="filtro-item">
+                  <mat-label>Data Final</mat-label>
+                  <input matInput [matDatepicker]="pickerEnd" formControlName="end" placeholder="dd/mm/aaaa">
+                  <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerEnd></mat-datepicker>
+                </mat-form-field>
+              </ng-container>
+            </form>
+          </div>
         </div>
 
-        <div class="cards-container">
+        <div *ngIf="isLoading" class="loading-indicator">
+          <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+          <p>Carregando solicitações...</p>
+        </div>
+
+        <div class="cards-container" *ngIf="!isLoading && solicitacoesFiltradas.length > 0">
           <app-card-solicitacao
             *ngFor="let solicitacao of solicitacoesFiltradas"
             [solicitacao]="solicitacao">
-          </app-card-solicitacao>
+            </app-card-solicitacao>
+        </div>
 
+        <div *ngIf="!isLoading && solicitacoesFiltradas.length === 0" class="sem-solicitacoes-mensagem">
+          <p>Nenhuma solicitação encontrada para os filtros aplicados.</p>
         </div>
       </div>
-
     </section>
   </main>
 </div>
