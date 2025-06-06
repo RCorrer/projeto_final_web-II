@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { Funcionario } from "../../models/funcionario.model";
-import { tap } from "rxjs/operators";
+import { tap, catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -50,17 +50,33 @@ export class FuncionarioService {
     };
 
     return this.http
-      .post(`${this.apiUrl}/cadastro/funcionario`, payload, { responseType: "text" })
+      .post(`${this.apiUrl}/cadastro/funcionario`, payload, {
+        responseType: "text",
+      })
       .pipe(tap(() => this.carregarFuncionarios()));
   }
 
   removerFuncionario(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+    console.log("ID recebido no service:", id, "Tipo:", typeof id);
+
+    if (!id || id === 0) {
+      console.error("ID inválido para exclusão");
+      return throwError(() => new Error("ID inválido"));
+    }
+
+    return this.http.delete(`${this.apiUrl}/funcionarios/${id}`).pipe(
       tap(() => {
+        console.log("Lista antes da exclusão:", this.funcionariosSource.value);
         const funcionariosAtualizados = this.funcionariosSource.value.filter(
           (e) => e.id !== id
         );
+        console.log("Lista após exclusão:", funcionariosAtualizados);
         this.funcionariosSource.next(funcionariosAtualizados);
+      }),
+      catchError((error) => {
+        console.error("Erro completo:", error);
+        this.carregarFuncionarios();
+        return throwError(() => error);
       })
     );
   }

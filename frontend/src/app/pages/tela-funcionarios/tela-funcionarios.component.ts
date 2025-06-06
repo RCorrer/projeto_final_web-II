@@ -39,7 +39,7 @@ export class TelaFuncionariosComponent implements OnInit {
         titulo: funcionarioEditando ? "Editar Funcionário" : "Novo Funcionário",
         nome: funcionarioEditando?.usuario?.nome || "",
         email: funcionarioEditando?.usuario?.email || "",
-        senha: "", // Não preencher senha para edição por segurança
+        senha: "",
         dataNascimento: funcionarioEditando?.dataNascimento || "2000-01-01",
       },
     });
@@ -73,16 +73,26 @@ export class TelaFuncionariosComponent implements OnInit {
   }
 
   excluirFuncionario(funcionario: Funcionario) {
+    console.log("Funcionário recebido para exclusão:", funcionario); // Verifique o objeto completo
+
+    if (!funcionario?.id) {
+      console.error("Funcionário sem ID válido", funcionario);
+      return;
+    }
+
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
         titulo: "Confirmação",
-        mensagem: "Deseja realmente excluir o funcionario?",
+        mensagem: `Deseja realmente excluir ${funcionario.usuario.nome}?`,
       },
     });
 
     dialogRef.afterClosed().subscribe((confirmado) => {
       if (confirmado) {
-        this.funcionarioService.removerFuncionario(funcionario.id).subscribe();
+        this.funcionarioService.removerFuncionario(funcionario.id).subscribe({
+          next: () => console.log(`Funcionário ${funcionario.id} excluído`),
+          error: (err) => console.error("Erro:", err),
+        });
       }
     });
   }
