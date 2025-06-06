@@ -1,76 +1,100 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
-import { Funcionario } from '../../models/funcionario.model';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, Observable } from "rxjs";
+import { Funcionario } from "../../models/funcionario.model";
+import { tap } from "rxjs/operators";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-
 export class FuncionarioService {
   private funcionariosSource = new BehaviorSubject<Funcionario[]>([]);
   funcionarios$ = this.funcionariosSource.asObservable();
+  private apiUrl = "http://localhost:8080";
 
-  constructor() {}
-
-  adicionarFuncionario(funcionario: Omit<Funcionario, 'id'>) {
-    const funcionariosAtuais = this.funcionariosSource.value;
-    const novaFuncionario: Funcionario = {
-      ...funcionario,
-      id: funcionariosAtuais.length + 1,
-    };
-
-    this.funcionariosSource.next([...funcionariosAtuais, novaFuncionario]);
+  constructor(private http: HttpClient) {
+    this.carregarFuncionarios();
   }
 
-    removerFuncionario(id: number) {
-      const funcionariosAtualizados = this.funcionariosSource.value.filter(e => e.id !== id);
-      this.funcionariosSource.next(funcionariosAtualizados);
-    }
-  
-    getFuncionario(): Funcionario[] {
-      return this.funcionariosSource.value;
-    }
+  private carregarFuncionarios() {
+    this.http.get<any>(`${this.apiUrl}/funcionarios`).subscribe({
+      next: (response) => {
+        const funcionarios = response.content.map((item: any) =>
+          this.mapToFuncionario(item)
+        );
+        this.funcionariosSource.next(funcionarios);
+      },
+      error: (err) => console.error("Erro ao carregar funcionários", err),
+    });
+  }
 
-    atualizarFuncionario(
-      id: number,
-      dadosAtualizados: {
-        nome: string;
-        email: string;
-        senha: string;
-        dataNascimento: string;
-      }
-    ): Observable<any> {
-      const funcionariosAtuais = [...this.funcionariosSource.value];
-      const index = funcionariosAtuais.findIndex(f => f.id === id);
-    
-      if (index !== -1) {
-        const funcionario = funcionariosAtuais[index];
-    
-        funcionariosAtuais[index] = {
-          ...funcionario,
-          senha: dadosAtualizados.senha,
-          dataNascimento: dadosAtualizados.dataNascimento,
-          usuario: {
-            ...funcionario.usuario,
-            nome: dadosAtualizados.nome,
-            email: dadosAtualizados.email,
-          },
-        };
-    
-        this.funcionariosSource.next(funcionariosAtuais);
-        return of({ success: true });
-      }
-    
-      return throwError(() => new Error('Funcionário não encontrado'));
+  private mapToFuncionario(item: any): Funcionario {
+    return {
+      id: item.id || 0,
+      dataNascimento: item.nascimento || item.dataNascimento || "",
+      senha: "",
+      usuario: {
+        id: (item.id || 0).toString(),
+        nome: item.nome || item.usuario?.nome || "",
+        email: item.email || item.usuario?.email || "",
+      },
+    };
+  }
+
+  adicionarFuncionario(funcionario: Omit<Funcionario, "id">): Observable<any> {
+    const payload = {
+      name: funcionario.usuario.nome,
+      login: funcionario.usuario.email,
+      password: funcionario.senha,
+      dataNascimento: funcionario.dataNascimento,
+    };
+
+    return this.http
+      .post(`${this.apiUrl}/cadastro/funcionario`, payload, { responseType: "text" })
+      .pipe(tap(() => this.carregarFuncionarios()));
+  }
+
+  removerFuncionario(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      tap(() => {
+        const funcionariosAtualizados = this.funcionariosSource.value.filter(
+          (e) => e.id !== id
+        );
+        this.funcionariosSource.next(funcionariosAtualizados);
+      })
+    );
+  }
+
+  getFuncionario(): Funcionario[] {
+    return this.funcionariosSource.value;
+  }
+
+  atualizarFuncionario(
+    id: number,
+    dadosAtualizados: {
+      nome: string;
+      email: string;
+      senha: string;
+      dataNascimento: string;
     }
-    
-  
+  ): Observable<any> {
+    const payload = {
+      name: dadosAtualizados.nome,
+      login: dadosAtualizados.email,
+      password: dadosAtualizados.senha,
+      dataNascimento: dadosAtualizados.dataNascimento,
+    };
+
+    return this.http
+      .put(`${this.apiUrl}/${id}`, payload)
+      .pipe(tap(() => this.carregarFuncionarios()));
+  }
 
   getFuncionarios() {
     return this.funcionariosSource.value;
   }
 
   getFuncionarioById(id: number): any {
-    return this.funcionariosSource.value.find(s => s.id === id);
+    return this.funcionariosSource.value.find((s) => s.id === id);
   }
 }
