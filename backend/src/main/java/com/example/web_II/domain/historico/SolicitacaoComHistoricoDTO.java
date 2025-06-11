@@ -8,7 +8,7 @@ import java.util.List;
 
 public record SolicitacaoComHistoricoDTO(
         String id,
-//        String cliente,
+        Integer numeroOs,  // Novo campo
         String descricaoEquipamento,
         String categoriaEquipamento,
         String descricaoDefeito,

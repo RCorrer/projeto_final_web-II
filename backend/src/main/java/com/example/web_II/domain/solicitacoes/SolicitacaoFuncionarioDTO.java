@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 public class SolicitacaoFuncionarioDTO {
     private String id;
+    private Integer numeroOs;  // Novo campo
     private String descricaoEquipamento;
     private String categoriaEquipamento;
     private String descricaoDefeito;
@@ -20,9 +21,9 @@ public class SolicitacaoFuncionarioDTO {
     private Float orcamento;
     private String nomeCliente;
 
-
     public SolicitacaoFuncionarioDTO(Solicitacao solicitacao, Cliente cliente) {
         this.id = solicitacao.getId();
+        this.numeroOs = solicitacao.getNumeroOs();  // Novo campo
         this.descricaoEquipamento = solicitacao.getDescricao_equipamento();
         this.categoriaEquipamento = solicitacao.getFk_categoria_equipamento();
         this.descricaoDefeito = solicitacao.getDescricao_defeito();

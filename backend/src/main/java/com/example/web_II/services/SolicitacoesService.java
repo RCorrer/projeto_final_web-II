@@ -333,7 +333,7 @@ public class SolicitacoesService {
 
         SolicitacaoComHistoricoDTO response = new SolicitacaoComHistoricoDTO(
                 solicitacao.getId(),
-//                solicitacao.getFkCliente(),
+                solicitacao.getNumeroOs(),
                 solicitacao.getDescricao_equipamento(),
                 solicitacao.getFk_categoria_equipamento(),
                 solicitacao.getDescricao_defeito(),
