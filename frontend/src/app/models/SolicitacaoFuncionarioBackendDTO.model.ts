@@ -1,5 +1,6 @@
 export interface SolicitacaoFuncionarioBackendDTO {
   id: string;
+  numeroOs: number;
   descricaoEquipamento: string;
   categoriaEquipamento: string;
   descricaoDefeito: string;

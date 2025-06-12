@@ -41,6 +41,11 @@ export class CardSolicitacaoComponent implements OnInit, OnChanges {
     }
   }
 
+  public formatarNumeroOS(numero: number | undefined | null): string {
+    if (!numero) {return '0000';}
+    return numero.toString().padStart(4, '0');
+  }
+
   getColor(estadoId: string): string {
     switch (estadoId) {
       case '1':

@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { tap, catchError, map } from 'rxjs/operators';
 import { Solicitacao } from '../../models/Solicitacao.model';
 import { SolicitacaoFuncionarioBackendDTO } from '../../models/SolicitacaoFuncionarioBackendDTO.model';
+import { SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,21 @@ export class SolicitacaoService {
   solicitacoesFuncionario$ = this.solicitacoesFuncionarioSource.asObservable();
 
   constructor(private http: HttpClient) {}
+
+  // endpoint solicitacao
+  fetchDetalhesSolicitacao(solicitacaoId: string): Observable<SolicitacaoComHistoricoDTO | null> {
+    if (!solicitacaoId) {
+      console.error('SolicitacaoService: solicitacaoId não foi fornecido.');
+      return of(null);
+    }
+    console.log(`SolicitacaoService: Buscando detalhes para solicitação ID: ${solicitacaoId}`);
+    return this.http.get<SolicitacaoComHistoricoDTO>(`${this.apiUrl}/solicitacao/detalhes/${solicitacaoId}`)
+      .pipe(
+        // O DTO do backend já parece bem completo, talvez não precise de muita formatação
+        // Mas se precisar, você pode usar um 'map' aqui para adaptar ao seu modelo do frontend.
+        catchError(this.handleError<SolicitacaoComHistoricoDTO | null>('fetchDetalhesSolicitacao', null))
+      );
+  }
 
   // endpoint cliente
   fetchSolicitacoesPorClienteId(clienteId: string): Observable<Solicitacao[]> {
@@ -87,6 +103,7 @@ export class SolicitacaoService {
 
       const solicitacaoFront: Solicitacao = {
         id: String(sBackend.id),
+        numeroOs: sBackend.numeroOs,
         data: dataFormatada,
         hora: horaFormatada,
         equipamento: sBackend.descricaoEquipamento || sBackend.descricao_equipamento || 'N/A',
@@ -96,7 +113,7 @@ export class SolicitacaoService {
         orcamento: sBackend.orcamento !== undefined ? parseFloat(sBackend.orcamento) : undefined,
         idCliente: String(sBackend.idCliente || sBackend.fkCliente || ''),
         fk_funcionario: sBackend.fk_funcionario ? String(sBackend.fk_funcionario) : null,
-        // cliente (nome) precisaria ser buscado ou vir no DTO se necessário para exibição direta
+        cliente: sBackend.nomeCliente,
         redirecionadoPara: sBackend.redirecionadoPara || null,
       };
       return solicitacaoFront;
