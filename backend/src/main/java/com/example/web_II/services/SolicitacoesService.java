@@ -1,5 +1,7 @@
 package com.example.web_II.services;
 
+import com.example.web_II.domain.cliente.Cliente;
+import com.example.web_II.domain.cliente.EnviarClienteDTO;
 import com.example.web_II.domain.historico.HistoricoAlteracaoDTO;
 import com.example.web_II.domain.historico.SolicitacaoComHistoricoDTO;
 import com.example.web_II.domain.receita.Receita;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -298,10 +301,24 @@ public class SolicitacoesService {
         Solicitacao solicitacao = solicitacaoOpt.get();
 
         String funcionarioNome = "Não atribuído";
+        Cliente clienteTemp = clienteRepository.findById(solicitacao.getFkCliente()).get();
+        EnviarClienteDTO DTOtemp = new EnviarClienteDTO(
+                                                            clienteTemp.getUsuario().getUsername(),
+                                                            clienteTemp.getCpf(),
+                                                            clienteTemp.getUsuario().getEmail(),
+                                                            clienteTemp.getTelefone(),
+                                                            clienteTemp.getEndereco().getCep(),
+                                                            clienteTemp.getEndereco().getLogradouro(),
+                                                            clienteTemp.getEndereco().getComplemento(),
+                                                            clienteTemp.getEndereco().getLocalidade(),
+                                                            clienteTemp.getEndereco().getUf()
+        );
         if (solicitacao.getFk_funcionario() != null) {
             funcionarioNome = funcionarioService.getNomeFuncionarioById(solicitacao.getFk_funcionario())
                     .orElse("Funcionário não encontrado");
         }
+
+
 
         List<HistoricoAlteracaoDTO> historicoDTOs = solicitacao.getHistoricoAlteracoes().stream()
                 .map(historico -> {
@@ -316,12 +333,13 @@ public class SolicitacoesService {
 
         SolicitacaoComHistoricoDTO response = new SolicitacaoComHistoricoDTO(
                 solicitacao.getId(),
-                solicitacao.getFkCliente(),
+                solicitacao.getNumeroOs(),
                 solicitacao.getDescricao_equipamento(),
                 solicitacao.getFk_categoria_equipamento(),
                 solicitacao.getDescricao_defeito(),
                 solicitacao.getFk_estado(),
                 funcionarioNome,
+                DTOtemp,
                 solicitacao.getOrcamento(),
                 solicitacao.getData_hora(),
                 historicoDTOs
@@ -332,9 +350,14 @@ public class SolicitacoesService {
 
     public ResponseEntity<List<SolicitacaoFuncionarioDTO>> getSolicitacoesAbertasOuAlocadasAoFuncionario(String funcionarioId) {
         List<Solicitacao> solicitacoes = solicitacaoRepository.findSolicitacoesAbertasOuAlocadasAoFuncionario(funcionarioId);
-        List<SolicitacaoFuncionarioDTO> dtos = solicitacoes.stream()
-                .map(SolicitacaoFuncionarioDTO::new)
-                .collect(Collectors.toList());
+        List<SolicitacaoFuncionarioDTO> dtos = new ArrayList<>();
+
+
+        for (Solicitacao sol : solicitacoes){
+            Cliente clienteTemp = clienteRepository.findById(sol.getFkCliente()).get();
+            dtos.add(new SolicitacaoFuncionarioDTO(sol,clienteTemp));
+        }
+
         return ResponseEntity.ok(dtos);
     }
 }

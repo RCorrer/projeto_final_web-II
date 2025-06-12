@@ -55,6 +55,7 @@ com/example/web_II/repositories/ReceitaRepository.class
 com/example/web_II/exceptions/EmailJaCadastradoException.class
 com/example/web_II/services/AuthorizationService.class
 com/example/web_II/domain/enderecos/Endereco.class
+com/example/web_II/domain/cliente/EnviarClienteDTO.class
 com/example/web_II/domain/usuarios/UsuarioRole.class
 com/example/web_II/services/AuthService.class
 com/example/web_II/services/EmailService.class
