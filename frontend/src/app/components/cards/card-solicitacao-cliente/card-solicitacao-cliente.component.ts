@@ -6,6 +6,7 @@ import { ModalMostarOrcamentoComponent } from '../../../modals/modal-mostar-orca
 import { SolicitacaoService } from '../../../services/solicitacao/solicitacao.service';
 import { DataFormatadaPipe } from '../../../shared/data-formatada.pipe';
 import { HoraFormatadaPipe } from "../../../shared/hora-formatada.pipe";
+import { Solicitacao } from '../../../models/Solicitacao.model';
 
 @Component({
   selector: 'app-card-solicitacao-cliente',
@@ -16,7 +17,7 @@ import { HoraFormatadaPipe } from "../../../shared/hora-formatada.pipe";
 })
 
 export class CardSolicitacaoClienteComponent {
-  @Input() solicitacao: any;
+  @Input() solicitacao!: Solicitacao;
 
   @Output() visualizar = new EventEmitter<string>();
   @Output() mostrarOrcamento = new EventEmitter<string>();
@@ -27,15 +28,6 @@ export class CardSolicitacaoClienteComponent {
   modalAberto = false;
   mostrarResgate = false;
   mostrarAprovacao = false;
-
-  emitir(evento: string, id: string) {
-    switch (evento) {
-      case 'visualizar': this.visualizar.emit(id); break;
-      case 'orcamento': this.mostrarOrcamento.emit(id); break;
-      case 'resgatar': this.resgatarServico.emit(id); break;
-      case 'pagar': this.pagarServico.emit(id); break;
-    }
-  }
 
   constructor(private solicitacaoService: SolicitacaoService) {}
 
@@ -57,27 +49,36 @@ export class CardSolicitacaoClienteComponent {
 
   confirmarResgate() {
     this.mostrarResgate = false;
-    this.mostrarAprovacao = true;
+    this.alterarEstado.emit({
+      id: this.solicitacao.id,
+      novoEstado: '3'
+    });
   }
 
   confirmarAprovacao() {
-    this.alterarEstado.emit({
-      id: this.solicitacao.id,
-      novoEstado: 'APROVADA'
-    });
     this.mostrarAprovacao = false;
   }
 
   onAlterarEstado(evento: { id: string, novoEstado: string }) {
     this.alterarEstado.emit(evento);
     this.fecharModal();
+    if(evento.novoEstado === '3') { 
+      this.mostrarAprovacao = true;
+    }
   }
 
-  getEstadoDisplay(estado: string) {
-    const map: {[key: string]: string} = {
-      'ORCADA': 'ORÇADA'
+  getEstadoDisplay(estadoId: string): string {
+    const mapaDeEstados: { [key: string]: string } = {
+      '1': 'ABERTA',
+      '2': 'ORÇADA',
+      '3': 'APROVADA',
+      '4': 'REJEITADA',
+      '5': 'REDIRECIONADA',
+      '6': 'ARRUMADA',
+      '7': 'PAGA',
+      '8': 'FINALIZADA',
+      '9': 'ENTREGADA'
     };
-
-    return map[estado] || estado;
+    return mapaDeEstados[estadoId] || estadoId;
   }
 }

@@ -11,7 +11,7 @@
     
     <p>
       <strong>Estado:</strong>
-      <span class="status {{ solicitacao.estado | lowercase }}">
+      <span class="status {{ getEstadoDisplay(solicitacao.estado) | lowercase }}">
         {{ getEstadoDisplay(solicitacao.estado) }}
       </span>
     </p>
@@ -21,14 +21,14 @@
   <button
     mat-button
     color="primary"
-    [routerLink]="['/visualizar', solicitacao?.id]"
+    [routerLink]="['/visualizar', solicitacao.id]"
   >
     Visualizar
   </button>
   
-  <button *ngIf="solicitacao.estado === 'ORCADA'" mat-button color="primary" (click)="emitir('orcamento', solicitacao.id)" (click)="abrirModal()">Aprovar/Rejeitar</button>
-  <button *ngIf="solicitacao.estado === 'REJEITADA'" mat-button color="primary" (click)="modalResgatarServico()">Resgatar Serviço</button>
-  <button *ngIf="solicitacao.estado === 'ARRUMADA'" mat-button color="primary" [routerLink]="['/pagamento', solicitacao.id]">Pagar Serviço</button>
+  <button *ngIf="solicitacao.estado === '2'" mat-button color="primary" (click)="abrirModal()" (click)="abrirModal()">Aprovar/Rejeitar</button>
+  <button *ngIf="solicitacao.estado === '4'" mat-button color="primary" (click)="modalResgatarServico()">Resgatar Serviço</button>
+  <button *ngIf="solicitacao.estado === '6'" mat-button color="primary" [routerLink]="['/pagamento', solicitacao.id]">Pagar Serviço</button>
 </div>
 
 <app-modal-mostar-orcamento 
@@ -37,42 +37,3 @@
   (closed)="fecharModal()"
   (alterarEstado)="onAlterarEstado($event)">
 </app-modal-mostar-orcamento>
-
-<div class="modal-overlay" *ngIf="mostrarAprovacao" (click)="confirmarAprovacao()">
-  <div class="modal-confirmacao" (click)="$event.stopPropagation()">
-    <h4>Serviço Aprovado no Valor R$XXXX,XX</h4>
-    <div class="btnsRejeitar">
-      <button
-        id="btnOk"
-        mat-button
-        (click)="confirmarAprovacao()"
-        routerLink="/home-cliente"
-      >
-        Ok
-      </button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" *ngIf="mostrarResgate" (click)="cancelarResgate()">
-  <div class="modal-confirmacao" (click)="$event.stopPropagation()">
-    <h4>Você tem certeza que deseja resgatar o serviço?</h4>
-    <div class="btnsRejeitar">
-      <button
-        id="btnCancelar"
-        mat-stroked-button
-        (click)="cancelarResgate()"
-      >
-        Não
-      </button>
-      <button
-        id="btnRejeitar"
-        mat-button
-        (click)="confirmarResgate()"
-        routerLink="/home-cliente"
-      >
-        Sim
-      </button>
-    </div>
-  </div>
-</div>
