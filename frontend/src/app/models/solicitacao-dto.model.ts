@@ -1,14 +1,3 @@
-// Interface para o DTO de Endereço, parte do EnviarClienteDTO
-export interface EnderecoDTO {
-  cep: string;
-  logradouro: string;
-  complemento: string;
-  numero: string;
-  bairro: string;
-  cidade: string;
-  uf: string;
-}
-
 // Interface para o DTO de Cliente, parte do SolicitacaoComHistoricoDTO
 export interface EnviarClienteDTO {
   id: string;
@@ -16,7 +5,13 @@ export interface EnviarClienteDTO {
   cpf: string;
   email: string;
   telefone: string;
-  endereco: EnderecoDTO;
+  cep: string;
+  logradouro: string;
+  complemento: string;
+  numero: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
 }
 
 // Interface para cada item do histórico

@@ -106,35 +106,4 @@ export class TelaVisualizarComponent {
       return 'incompleto';
     }
   }
-
-  private mergeWithDefault(solicitacao: any): any {
-    const cliente = typeof solicitacao.cliente === 'string' 
-      ? { nome: solicitacao.cliente }
-      : solicitacao.cliente || {};
-  
-    const endereco = cliente.endereco || {};
-    
-    return {
-      id: solicitacao.id || 0,
-      idFormatado: 'OS-' + (solicitacao.id || 0).toString().padStart(6, '0'),
-      equipamento: solicitacao.equipamento || 'Teclado DELL KB216 USB',
-      categoria: solicitacao.categoria || 'Periférico',
-      problema: solicitacao.defeito || solicitacao.problema || 'N/A',
-      cliente: {
-        nome: cliente.nome || 'Joana Joaquina',
-        cpf: cliente.cpf || '000.000.000-00',
-        email: cliente.email || 'joana@gmail.com',
-        telefone: cliente.telefone || '(00) 00000-0000',
-        endereco: {
-          cep: endereco.cep || '00000-000',
-          logradouro: endereco.logradouro || 'Rua dos bobos',
-          complemento: endereco.complemento || 'N/A',
-          cidade: endereco.cidade || 'Bobolópolis',
-          estado: endereco.estado || 'Bobolândia'
-        }
-      },
-      estado: solicitacao.estado === 'ORCADA' ? 'ORÇADA' : solicitacao.estado || 'ABERTA',
-      dataHora: solicitacao.dataHora || new Date().toISOString()
-    };
-  }
 }
