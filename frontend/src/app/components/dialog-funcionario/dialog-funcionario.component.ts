@@ -22,10 +22,11 @@ export class DialogFuncionarioComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       titulo: string;
+      id?: string;
       nome: string;
       email: string;
-      senha: string;
       dataNascimento: string;
+      senha?: string;
     }
   ) {
     console.log("Dados do DialogFuncionarioComponent:", data);

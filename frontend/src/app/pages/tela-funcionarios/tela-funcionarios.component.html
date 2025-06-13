@@ -35,7 +35,7 @@
             *ngFor="let funcionario of funcionarios"
             [funcionario]="funcionario"
             (editar)="abrirDialog(funcionario)"
-            (excluir)="excluirFuncionario(funcionario)"
+            (excluir)="excluirFuncionario($event)"
           ></app-card-funcionario>
         </ng-container>
 

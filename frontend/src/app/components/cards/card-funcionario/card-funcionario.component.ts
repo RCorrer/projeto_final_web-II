@@ -15,19 +15,27 @@ import { MatDialog } from "@angular/material/dialog";
 export class CardFuncionarioComponent extends CardBaseComponent<Funcionario> {
   private dialog = inject(MatDialog);
 
-  @Input() funcionario!: Funcionario;
-  
+  @Input() set funcionario(value: Funcionario) {
+    this.data = value;
+  }
+
+  get funcionario(): Funcionario {
+    return this.data;
+  }
+
   override getMenuItems(): MenuItem[] {
     return [
       {
         icon: "edit",
         label: "Editar",
-        action: () => this.editar.emit(this.funcionario)
+        action: () => this.editar.emit(this.data),
+        color: "primary",
       },
       {
         icon: "delete",
         label: "Excluir",
-        action: () => this.excluir.emit(this.funcionario)
+        action: () => this.excluir.emit(this.data),
+        color: "warn",
       },
     ];
   }

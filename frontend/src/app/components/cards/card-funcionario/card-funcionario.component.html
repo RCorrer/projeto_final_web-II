@@ -2,8 +2,8 @@
   <div class="card-content">
     <mat-icon class="mat-18">person</mat-icon>
     <div class="card-funcionario-info">
-      <h3>{{ funcionario.usuario.nome }}</h3>
-      <p>{{ funcionario.usuario.email }}</p>
+      <h3>{{ data.nome }}</h3>
+      <p>{{ data.email }}</p>
     </div>
   </div>
 
@@ -12,13 +12,9 @@
   </button>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="editar.emit(funcionario)">
-      <mat-icon>edit</mat-icon>
-      <span>Editar</span>
-    </button>
-    <button mat-menu-item (click)="excluir.emit(funcionario)">
-      <mat-icon>delete</mat-icon>
-      <span>Excluir</span>
+    <button mat-menu-item *ngFor="let item of getMenuItems()" (click)="item.action()" [attr.color]="item.color">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span>{{ item.label }}</span>
     </button>
   </mat-menu>
 </div>
