@@ -63,7 +63,7 @@
       mat-button
       color="primary"
       [disabled]="form.invalid"
-      [mat-dialog-close]="data"
+      (click)="salvar()"
     >
       Salvar
     </button>
