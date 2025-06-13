@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
 import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-tela-solicitar-manutencao',
@@ -21,15 +22,18 @@ export class TelaSolicitarManutencaoComponent {
 
   mostrarRejeicao = false;
 
-  constructor(private solicitacaoService: SolicitacaoService, private router: Router) {}
+  constructor(private solicitacaoService: SolicitacaoService, private router: Router, private authService: AuthService) {}
 
   abrirSolicitacao() {
-    if (this.equipamento && this.categoria && this.defeito) {
+    const nomeClienteLogado = this.authService.getUserName();
+    const idClienteLogado = this.authService.getUserId();
+
+    if (this.equipamento && this.categoria && this.defeito && nomeClienteLogado) {
       this.solicitacaoService.adicionarSolicitacao({
         equipamento: this.equipamento,
         categoria: this.categoria,
         defeito: this.defeito,
-        cliente: 'Maria Joaquina',
+        cliente: nomeClienteLogado,
       });
 
       this.router.navigate(['/home-cliente']);

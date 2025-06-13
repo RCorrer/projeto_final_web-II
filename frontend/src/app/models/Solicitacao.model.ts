@@ -1,5 +1,5 @@
 export interface Solicitacao {
-    id: number;
+    id: string;
     data: string;
     hora: string;
     equipamento: string;
@@ -7,5 +7,9 @@ export interface Solicitacao {
     defeito: string;
     estado: string;
     cliente?: string;
+    idCliente?: string;
     redirecionadoPara?: string | null;
+    orcamento?: number;
+    fk_funcionario?: string | null;
+    data_hora?: string;    
 }

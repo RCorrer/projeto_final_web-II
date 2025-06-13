@@ -19,13 +19,23 @@ export class TelaPagamentoComponent {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      const id = +params['id'];
-      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(id);
+      const idDaRota: string = params['id'];
 
-      this.solicitacao = this.mergeWithDefault(solicitacaoExistente || { id });
+      if (!idDaRota) {
+        console.error("tela-pagamento: ID da solicitação não encontrado na rota.");
+        this.isLoaded = true; 
+        return;
+      }
 
-      this.solicitacao.idFormatado = 'OS-' + this.solicitacao.id.toString().padStart(6, '0');
+      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(idDaRota);
 
+      if (solicitacaoExistente) {
+        this.solicitacao = this.mergeWithDefault(solicitacaoExistente);
+      } else {
+        console.warn(`tela-pagamento: solicitação com ID ${idDaRota} não encontrada.`);
+        this.solicitacao = this.mergeWithDefault({ id: idDaRota, estado: 'DESCONHECIDO' });
+      }
+      
       setTimeout(() => {
         this.isLoaded = true;
       }, 100);

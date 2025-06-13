@@ -15,6 +15,7 @@ interface LoginResponse {
   id: string;
   role: 'FUNCIONARIO' | 'CLIENTE';
   mensagem: string;
+  idRole: string;
 }
 
 @Component({
@@ -78,7 +79,9 @@ export class LoginComponent implements AfterViewInit {
             token: data.token,
             nome: data.nome,
             id: data.id,
-            role: data.role
+            role: data.role,
+            idRole: data.idRole,
+            mensagem: data.mensagem
           });
 
           if (data.role === "FUNCIONARIO") {

@@ -18,17 +18,17 @@ import { HoraFormatadaPipe } from "../../../shared/hora-formatada.pipe";
 export class CardSolicitacaoClienteComponent {
   @Input() solicitacao: any;
 
-  @Output() visualizar = new EventEmitter<number>();
-  @Output() mostrarOrcamento = new EventEmitter<number>();
-  @Output() resgatarServico = new EventEmitter<number>();
-  @Output() pagarServico = new EventEmitter<number>();
-  @Output() alterarEstado = new EventEmitter<{ id: number, novoEstado: string }>();
+  @Output() visualizar = new EventEmitter<string>();
+  @Output() mostrarOrcamento = new EventEmitter<string>();
+  @Output() resgatarServico = new EventEmitter<string>();
+  @Output() pagarServico = new EventEmitter<string>();
+  @Output() alterarEstado = new EventEmitter<{ id: string, novoEstado: string }>();
 
   modalAberto = false;
   mostrarResgate = false;
   mostrarAprovacao = false;
 
-  emitir(evento: string, id: number) {
+  emitir(evento: string, id: string) {
     switch (evento) {
       case 'visualizar': this.visualizar.emit(id); break;
       case 'orcamento': this.mostrarOrcamento.emit(id); break;
@@ -68,7 +68,7 @@ export class CardSolicitacaoClienteComponent {
     this.mostrarAprovacao = false;
   }
 
-  onAlterarEstado(evento: { id: number, novoEstado: string }) {
+  onAlterarEstado(evento: { id: string, novoEstado: string }) {
     this.alterarEstado.emit(evento);
     this.fecharModal();
   }

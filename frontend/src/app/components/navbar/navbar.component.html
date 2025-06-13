@@ -15,7 +15,7 @@
 
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">hourglass_empty</mat-icon>
-      <a [routerLink]="['/home']" [queryParams]="{ estado: 'ABERTA' }">Solicitações Abertas</a>
+      <a [routerLink]="['/home']" [queryParams]="{ estado: '1' }">Solicitações Abertas</a>
     </li>
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">list</mat-icon>
