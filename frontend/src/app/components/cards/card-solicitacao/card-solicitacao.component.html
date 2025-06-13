@@ -2,7 +2,7 @@
   <mat-card appearance="outlined">
     <mat-card-header>
       <div class="header-title">
-        OS-{{solicitacao.id.toString().padStart(4, '0') || '0000'}}
+        OS-{{ formatarNumeroOS(solicitacao.numeroOs) }}
       </div>
 
       <div class="icons">

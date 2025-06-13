@@ -1,5 +1,6 @@
 export interface Solicitacao {
     id: string;
+    numeroOs?: number;
     data: string;
     hora: string;
     equipamento: string;

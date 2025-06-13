@@ -8,6 +8,8 @@ import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
 import { Observable, of } from 'rxjs';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: "app-orcamento-funcionario",
@@ -18,35 +20,55 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 })
 
 export class OrcamentoFuncionarioComponent implements OnInit{
-  @Input() solicitacao: any;
+  solicitacao!: SolicitacaoComHistoricoDTO;
   isLoaded = false;
   
   valorOrcamento: string = '';
 
-  constructor(public currencyPipe: CurrencyPipe, private solicitacaoService: SolicitacaoService, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    public currencyPipe: CurrencyPipe, 
+    private solicitacaoService: SolicitacaoService, 
+    private router: Router, 
+    private route: ActivatedRoute,
+    private authService: AuthService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const idDaRota: string = params['id']; 
 
       if (!idDaRota) {
-        console.error("orcamente-funcionario: ID da solicitação não encontrado na rota!");
+        console.error("orcamento-funcionario: ID da solicitação não encontrado na rota!");
         this.isLoaded = true;
         return;
       }
+      
+      this.isLoaded = false; // Inicia o carregamento
+      this.solicitacaoService.fetchDetalhesSolicitacao(idDaRota).subscribe({
+        next: (dados) => {
+          if (dados) {
+            this.solicitacao = dados;
+            
+            this.solicitacao.idFormatado = 'OS-' + String(this.solicitacao.numeroOs).padStart(4, '0');
+            
+            // Se já houver um orçamento, preenche o campo de input com o valor formatado
+            if (this.solicitacao.orcamento && this.solicitacao.orcamento > 0) {
+              this.valorOrcamento = this.currencyPipe.transform(this.solicitacao.orcamento, "BRL", "symbol", "1.2-2") || "";
+            }
 
-      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(idDaRota);
-
-      if (solicitacaoExistente) {
-        this.solicitacao = this.mergeWithDefault(solicitacaoExistente);
-      } else {
-        console.warn(`orcamente-funcionario: Solicitação com ID ${idDaRota} não encontrada.`);
-        this.solicitacao = this.mergeWithDefault({ id: idDaRota, estado: 'DESCONHECIDO' });
-      }
-
-      setTimeout(() => {
-        this.isLoaded = true;
-      }, 100);
+          } else {
+            console.error(`orcamento-funcionario: Solicitação com ID ${idDaRota} não foi encontrada no backend.`);
+            // Adicionar lógica para lidar com solicitação não encontrada, como redirecionar
+            // this.router.navigate(['/pagina-nao-encontrada']);
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao buscar detalhes da solicitação:', err);
+          this.isLoaded = true;
+        },
+        complete: () => {
+          this.isLoaded = true; // Finaliza o carregamento após sucesso
+        }
+      });
     });
   }
 
@@ -89,34 +111,4 @@ export class OrcamentoFuncionarioComponent implements OnInit{
     return of({ success: true});
   }
 
-  private mergeWithDefault(solicitacao: any): any {
-    const cliente = typeof solicitacao.cliente === 'string' 
-      ? { nome: solicitacao.cliente }
-      : solicitacao.cliente || {};
-  
-    const endereco = cliente.endereco || {};
-    
-    return {
-      id: solicitacao.id || 0,
-      idFormatado: 'OS-' + (solicitacao.id || 0).toString().padStart(6, '0'),
-      equipamento: solicitacao.equipamento || 'Teclado DELL KB216 USB',
-      categoria: solicitacao.categoria || 'Periférico',
-      problema: solicitacao.defeito || solicitacao.problema || 'N/A',
-      cliente: {
-        nome: cliente.nome || 'Joana Joaquina',
-        cpf: cliente.cpf || '000.000.000-00',
-        email: cliente.email || 'joana@gmail.com',
-        telefone: cliente.telefone || '(00) 00000-0000',
-        endereco: {
-          cep: endereco.cep || '00000-000',
-          logradouro: endereco.logradouro || 'Rua dos bobos',
-          complemento: endereco.complemento || 'N/A',
-          cidade: endereco.cidade || 'Bobolópolis',
-          estado: endereco.estado || 'Bobolândia'
-        }
-      },
-      estado: solicitacao.estado || 'ABERTA',
-      dataHora: solicitacao.dataHora || new Date().toISOString()
-    };
-  }
 }

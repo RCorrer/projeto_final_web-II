@@ -26,8 +26,8 @@ export class TelaVisualizarComponent {
   constructor (private solicitacaoService: SolicitacaoService,private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-        this.route.params.subscribe(params => {
-      const idDaRota: string = params['id']; // 1. MANTENHA O ID COMO STRING
+    this.route.params.subscribe(params => {
+      const idDaRota: string = params['id'];
 
       if (!idDaRota) {
         console.error("TelaVisualizarComponent: ID da solicitação não encontrado na rota!");
@@ -35,23 +35,28 @@ export class TelaVisualizarComponent {
         return;
       }
 
-      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(idDaRota);
+      this.isLoaded = false;
+      this.solicitacaoService.fetchDetalhesSolicitacao(idDaRota).subscribe({
+        next: (dados) => {
+          if (dados) {
+            this.solicitacao = dados;
+            
+            this.solicitacao.idFormatado = 'OS-' + String(this.solicitacao.numeroOs).padStart(4, '0');
+            
+            this.atualizarEtapas();
 
-      if (solicitacaoExistente) {
-        this.solicitacao = this.mergeWithDefault(solicitacaoExistente);
-      } else {
-          console.warn(`TelaVisualizarComponent: Solicitação com ID ${idDaRota} não encontrada nos dados locais. Verifique se precisa buscar do backend. Usando dados default.`);
-        this.solicitacao = this.mergeWithDefault({ id: idDaRota, estado: 'DESCONHECIDO' });
-      }
-      
-      // O idFormatado agora usa o ID string
-      this.solicitacao.idFormatado = 'OS-' + (this.solicitacao.id ? String(this.solicitacao.id).padStart(6, '0') : 'N/A');
-
-      this.atualizarEtapas();
-
-      setTimeout(() => {
-        this.isLoaded = true;
-      }, 100); // Pequeno delay para simular carregamento e permitir renderização inicial
+          } else {
+            console.error(`TelaVisualizarComponent: Solicitação com ID ${idDaRota} não foi encontrada no backend.`);
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao buscar detalhes da solicitação:', err);
+          this.isLoaded = true;
+        },
+        complete: () => {
+          this.isLoaded = true;
+        }
+      });
     });
   }
 
@@ -100,36 +105,5 @@ export class TelaVisualizarComponent {
     } else {
       return 'incompleto';
     }
-  }
-
-  private mergeWithDefault(solicitacao: any): any {
-    const cliente = typeof solicitacao.cliente === 'string' 
-      ? { nome: solicitacao.cliente }
-      : solicitacao.cliente || {};
-  
-    const endereco = cliente.endereco || {};
-    
-    return {
-      id: solicitacao.id || 0,
-      idFormatado: 'OS-' + (solicitacao.id || 0).toString().padStart(6, '0'),
-      equipamento: solicitacao.equipamento || 'Teclado DELL KB216 USB',
-      categoria: solicitacao.categoria || 'Periférico',
-      problema: solicitacao.defeito || solicitacao.problema || 'N/A',
-      cliente: {
-        nome: cliente.nome || 'Joana Joaquina',
-        cpf: cliente.cpf || '000.000.000-00',
-        email: cliente.email || 'joana@gmail.com',
-        telefone: cliente.telefone || '(00) 00000-0000',
-        endereco: {
-          cep: endereco.cep || '00000-000',
-          logradouro: endereco.logradouro || 'Rua dos bobos',
-          complemento: endereco.complemento || 'N/A',
-          cidade: endereco.cidade || 'Bobolópolis',
-          estado: endereco.estado || 'Bobolândia'
-        }
-      },
-      estado: solicitacao.estado === 'ORCADA' ? 'ORÇADA' : solicitacao.estado || 'ABERTA',
-      dataHora: solicitacao.dataHora || new Date().toISOString()
-    };
   }
 }
