@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
 
 interface Etapa {
   nome: string;
@@ -16,12 +17,17 @@ interface Etapa {
 })
 
 export class TelaVisualizarComponent {
-  @Input() solicitacao: any;
+  @Input() solicitacao!: SolicitacaoComHistoricoDTO;
   isLoaded = false;
 
   etapas: Etapa[] = [];
-  etapasNormais = ['ABERTA', 'ORÇADA', 'APROVADA', 'ARRUMADA', 'PAGA', 'FINALIZADA'];
-  etapaRejeitada = 'REJEITADA';
+  private mapaDeEstados: { [key: string]: string } = {
+    '1': 'ABERTA', '2': 'ORÇADA', '3': 'APROVADA',
+    '4': 'REJEITADA', '5': 'REDIRECIONADA', '6': 'ARRUMADA',
+    '7': 'PAGA', '8': 'FINALIZADA', '9': 'ENTREGADA'
+  };
+  etapasNormais = ['1', '2', '3', '6', '7', '8'];
+  etapaRejeitada = '4';
 
   constructor (private solicitacaoService: SolicitacaoService,private route: ActivatedRoute, private router: Router) {}
 
@@ -62,31 +68,39 @@ export class TelaVisualizarComponent {
 
   private atualizarEtapas(): void {
     const estadoAtual = this.solicitacao.estado;
-    const temRejeitada = estadoAtual === 'REJEITADA' || 
-                        (this.solicitacao.historicoEstados && 
-                         this.solicitacao.historicoEstados.includes('REJEITADA'));
-  
+    const historicoIds = this.solicitacao.historico.map(h => h.estadoNovo);
+    const temRejeitada = historicoIds.includes(this.etapaRejeitada);
+
     this.etapas = [];
   
     for (let i = 0; i < this.etapasNormais.length; i++) {
       const etapaNome = this.etapasNormais[i];
       
-      if (etapaNome === 'APROVADA' && temRejeitada) {
+      if (etapaNome === '3' && temRejeitada) {
         this.etapas.push({
-          nome: this.etapaRejeitada,
+          nome: this.mapaDeEstados[this.etapaRejeitada],
           estado: estadoAtual === 'REJEITADA' ? 'ativo' : 'completo'
         });
       }
   
       this.etapas.push({
-        nome: etapaNome,
+        nome: this.mapaDeEstados[etapaNome],
         estado: this.getEstadoEtapa(etapaNome, estadoAtual, i)
       });
     }
   
-    if (estadoAtual === 'REJEITADA') {
-      const indexRejeitada = this.etapas.findIndex(e => e.nome === 'REJEITADA');
-      this.etapas = this.etapas.slice(0, indexRejeitada + 1);
+    if (estadoAtual === this.etapaRejeitada) {
+        const etapasAteRejeicao: Etapa[] = [];
+        const orcou = historicoIds.includes('2');
+        
+        etapasAteRejeicao.push({ nome: this.mapaDeEstados['1'], estado: 'completo'});
+        if (orcou) {
+            etapasAteRejeicao.push({ nome: this.mapaDeEstados['2'], estado: 'completo'});
+        }
+        etapasAteRejeicao.push({ nome: this.mapaDeEstados[this.etapaRejeitada], estado: 'ativo'});
+        this.etapas = etapasAteRejeicao;
+    } else {
+        this.etapas = this.etapas;
     }
   }
 
@@ -94,13 +108,21 @@ export class TelaVisualizarComponent {
     const estadoIndex = this.etapasNormais.indexOf(estadoAtual);
     const etapaIndex = this.etapasNormais.indexOf(etapaNome);
   
-    if (estadoAtual === 'REJEITADA') {
+    if (estadoAtual === this.etapaRejeitada) {
       return 'incompleto';
     }
   
+    if (estadoIndex === -1) {
+      const historicoIds = this.solicitacao.historico.map(h => h.estadoNovo);
+      if(historicoIds.includes(etapaNome)) {
+        return 'completo';
+      }
+      return 'incompleto';
+    }
+ 
     if (etapaIndex < estadoIndex) {
       return 'completo';
-    } else if (etapaNome === estadoAtual) {
+    } else if (etapaIndex === estadoIndex) {
       return 'ativo';
     } else {
       return 'incompleto';
