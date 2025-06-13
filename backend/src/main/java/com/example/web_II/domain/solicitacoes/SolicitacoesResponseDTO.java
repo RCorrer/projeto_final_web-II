@@ -7,6 +7,6 @@ public record SolicitacoesResponseDTO(String id,
                                       String categoriaEquip,
                                       String descricaoDefeito,
                                       String estadoSolicitacao,
-                                      float orcamento,
+                                      Float orcamento,
                                       String funcionario) {
 }

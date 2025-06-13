@@ -22,17 +22,6 @@ public class SolicitacoesController {
     private SolicitacoesService solicitacoesService;
 
 
-
-    /*
-    DEIXEI AQUI PARA SALVAR JUNTO DO CÓDIGO
-    {
-      "idCliente": "cli1",
-      "descEquip": "string",
-      "categoria": "Notebook",
-      "descDefeito": "string"
-     }
-     */
-
     @PostMapping("/solicitacao/criar")
     public ResponseEntity<String> criarSolicitacao(@RequestBody @Valid AbrirSolicitacaoDTO data){
         return solicitacoesService.criarSolicitacao(data);
@@ -96,5 +85,10 @@ public class SolicitacoesController {
     @GetMapping("/solicitacao/detalhes/{id}")
     public ResponseEntity<SolicitacaoComHistoricoDTO> getSolicitacaoComHistorico(@PathVariable String id) {
         return solicitacoesService.getSolicitacaoComHistorico(id);
+    }
+
+    @GetMapping("/solicitacao/funcionario/{funcionarioId}")
+    public ResponseEntity<List<SolicitacaoFuncionarioDTO>> getSolicitacoesAbertasOuAlocadasAoFuncionario(@PathVariable String funcionarioId) {
+        return solicitacoesService.getSolicitacoesAbertasOuAlocadasAoFuncionario(funcionarioId);
     }
 }
