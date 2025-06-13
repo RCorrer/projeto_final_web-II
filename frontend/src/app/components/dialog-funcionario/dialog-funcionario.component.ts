@@ -1,19 +1,22 @@
 // dialog-funcionario.component.ts
 import { Component, Inject, ViewEncapsulation } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, NgForm } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { materialImports } from "../../material-imports";
+import { ViewChild } from "@angular/core";
 
 @Component({
   selector: "app-dialog-funcionario",
   standalone: true,
-  templateUrl: './dialog-funcionario.component.html',
-  styleUrl: './dialog-funcionario.component.css',
+  templateUrl: "./dialog-funcionario.component.html",
+  styleUrl: "./dialog-funcionario.component.css",
   imports: [...materialImports, CommonModule, FormsModule],
   encapsulation: ViewEncapsulation.None,
 })
 export class DialogFuncionarioComponent {
+  @ViewChild("form") form!: NgForm;
+
   constructor(
     public dialogRef: MatDialogRef<DialogFuncionarioComponent>,
     @Inject(MAT_DIALOG_DATA)
@@ -26,5 +29,11 @@ export class DialogFuncionarioComponent {
     }
   ) {
     console.log("Dados do DialogFuncionarioComponent:", data);
+  }
+
+  salvar() {
+    if (this.form.valid) {
+      this.dialogRef.close(this.data);
+    }
   }
 }

@@ -2,7 +2,7 @@ import { Usuario } from "./usuario.model";
 
 export interface Funcionario {
     id: number;
-    dataNascimento: string; // string porque o backend manda LocalDate como ISO string (ex: '2025-03-01')
+    dataNascimento: string;
     senha: string;
     usuario: Usuario;
 }
