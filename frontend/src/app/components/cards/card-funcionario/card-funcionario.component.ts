@@ -16,18 +16,24 @@ export class CardFuncionarioComponent extends CardBaseComponent<Funcionario> {
   private dialog = inject(MatDialog);
 
   @Input() funcionario!: Funcionario;
-  
-  override getMenuItems(): MenuItem[] {
+
+  getMenuItems(): MenuItem[] {
     return [
       {
         icon: "edit",
         label: "Editar",
-        action: () => this.editar.emit(this.funcionario)
+        action: () => {
+          console.log("Editando:", this.funcionario);
+          this.editar.emit(this.funcionario);
+        },
       },
       {
         icon: "delete",
         label: "Excluir",
-        action: () => this.excluir.emit(this.funcionario)
+        action: () => {
+          console.log("Excluindo:", this.funcionario);
+          this.excluir.emit({ ...this.funcionario }); // Passa cópia do objeto
+        },
       },
     ];
   }

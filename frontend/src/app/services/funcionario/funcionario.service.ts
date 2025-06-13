@@ -19,22 +19,38 @@ export class FuncionarioService {
   private carregarFuncionarios() {
     this.http.get<any>(`${this.apiUrl}/funcionarios`).subscribe({
       next: (response) => {
-        const funcionarios = response.content.map((item: any) =>
-          this.mapToFuncionario(item)
-        );
+        console.log("Resposta completa:", response);
+
+        if (!response.content) {
+          console.error("Estrutura inesperada:", response);
+          return;
+        }
+
+        const funcionarios = response.content.map((item: any) => {
+          const funcionario = this.mapToFuncionario(item);
+          console.log("Funcionário mapeado:", funcionario);
+          return funcionario;
+        });
+
         this.funcionariosSource.next(funcionarios);
       },
-      error: (err) => console.error("Erro ao carregar funcionários", err),
+      error: (err) => console.error("Erro ao carregar:", err),
     });
   }
 
   private mapToFuncionario(item: any): Funcionario {
+    console.log("Item original do backend:", item); // Adicione este log
+
+    if (!item.id) {
+      console.error("Item sem ID:", item);
+    }
+
     return {
-      id: item.id || 0,
-      dataNascimento: item.nascimento || item.dataNascimento || "",
+      id: item.id, // Garanta que está pegando o ID correto
+      dataNascimento: item.dataNascimento || item.nascimento || "",
       senha: "",
       usuario: {
-        id: (item.id || 0).toString(),
+        id: item.id, // Mesmo ID do funcionário
         nome: item.nome || item.usuario?.nome || "",
         email: item.email || item.usuario?.email || "",
       },
@@ -56,25 +72,24 @@ export class FuncionarioService {
       .pipe(tap(() => this.carregarFuncionarios()));
   }
 
-  removerFuncionario(id: number): Observable<any> {
-    console.log("ID recebido no service:", id, "Tipo:", typeof id);
+  removerFuncionario(id: string): Observable<any> {
+    console.log("ID recebido para exclusão:", id); // Debug
 
-    if (!id || id === 0) {
-      console.error("ID inválido para exclusão");
+    if (!id) {
+      console.error("ID inválido recebido no serviço");
       return throwError(() => new Error("ID inválido"));
     }
 
     return this.http.delete(`${this.apiUrl}/funcionarios/${id}`).pipe(
       tap(() => {
-        console.log("Lista antes da exclusão:", this.funcionariosSource.value);
+        console.log("Exclusão bem sucedida, atualizando lista...");
         const funcionariosAtualizados = this.funcionariosSource.value.filter(
           (e) => e.id !== id
         );
-        console.log("Lista após exclusão:", funcionariosAtualizados);
         this.funcionariosSource.next(funcionariosAtualizados);
       }),
       catchError((error) => {
-        console.error("Erro completo:", error);
+        console.error("Erro completo na exclusão:", error);
         this.carregarFuncionarios();
         return throwError(() => error);
       })
@@ -86,7 +101,7 @@ export class FuncionarioService {
   }
 
   atualizarFuncionario(
-    id: number,
+    id: string,
     dadosAtualizados: {
       nome: string;
       email: string;
@@ -110,7 +125,7 @@ export class FuncionarioService {
     return this.funcionariosSource.value;
   }
 
-  getFuncionarioById(id: number): any {
+  getFuncionarioById(id: string): any {
     return this.funcionariosSource.value.find((s) => s.id === id);
   }
 }

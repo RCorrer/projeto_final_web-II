@@ -73,10 +73,10 @@ export class TelaFuncionariosComponent implements OnInit {
   }
 
   excluirFuncionario(funcionario: Funcionario) {
-    console.log("Funcionário recebido para exclusão:", funcionario); // Verifique o objeto completo
+    console.log("Dados recebidos para exclusão:", funcionario);
 
-    if (!funcionario?.id) {
-      console.error("Funcionário sem ID válido", funcionario);
+    if (!funcionario?.id || typeof funcionario.id !== "string") {
+      console.error("ID inválido ou ausente:", funcionario?.id);
       return;
     }
 
@@ -90,7 +90,7 @@ export class TelaFuncionariosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmado) => {
       if (confirmado) {
         this.funcionarioService.removerFuncionario(funcionario.id).subscribe({
-          next: () => console.log(`Funcionário ${funcionario.id} excluído`),
+          next: () => console.log("Excluído com sucesso"),
           error: (err) => console.error("Erro:", err),
         });
       }
