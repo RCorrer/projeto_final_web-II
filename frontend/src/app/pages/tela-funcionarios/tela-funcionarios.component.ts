@@ -16,8 +16,8 @@ import { DialogConfirmComponent } from "../../components/dialog/dialog.component
     ...materialImports,
     NavbarComponent,
     CardFuncionarioComponent,
-    CommonModule
-],
+    CommonModule,
+  ],
   templateUrl: "./tela-funcionarios.component.html",
   styleUrl: "./tela-funcionarios.component.css",
 })
@@ -39,7 +39,7 @@ export class TelaFuncionariosComponent implements OnInit {
         titulo: funcionarioEditando ? "Editar Funcionário" : "Novo Funcionário",
         nome: funcionarioEditando?.usuario?.nome || "",
         email: funcionarioEditando?.usuario?.email || "",
-        senha: funcionarioEditando?.senha || "",
+        senha: "",
         dataNascimento: funcionarioEditando?.dataNascimento || "2000-01-01",
       },
     });
@@ -48,42 +48,51 @@ export class TelaFuncionariosComponent implements OnInit {
       if (dadosFuncionario) {
         if (funcionarioEditando) {
           this.funcionarioService
-          this.funcionarioService.atualizarFuncionario(
-            funcionarioEditando.id,
-            {
+            .atualizarFuncionario(funcionarioEditando.id, {
               nome: dadosFuncionario.nome,
               email: dadosFuncionario.email,
               senha: dadosFuncionario.senha,
-              dataNascimento: dadosFuncionario.dataNascimento
-            }
-          ).subscribe();
-          
+              dataNascimento: dadosFuncionario.dataNascimento,
+            })
+            .subscribe();
         } else {
-          this.funcionarioService.adicionarFuncionario({
-            dataNascimento: dadosFuncionario.dataNascimento,
-            senha: dadosFuncionario.senha,
-            usuario: {
-              id: Date.now().toString(),
-              nome: dadosFuncionario.nome,
-              email: dadosFuncionario.email,
-            },
-          });
+          this.funcionarioService
+            .adicionarFuncionario({
+              dataNascimento: dadosFuncionario.dataNascimento,
+              senha: dadosFuncionario.senha,
+              usuario: {
+                id: "0",
+                nome: dadosFuncionario.nome,
+                email: dadosFuncionario.email,
+              },
+            })
+            .subscribe();
         }
       }
     });
   }
 
   excluirFuncionario(funcionario: Funcionario) {
+    console.log("Funcionário recebido para exclusão:", funcionario); // Verifique o objeto completo
+
+    if (!funcionario?.id) {
+      console.error("Funcionário sem ID válido", funcionario);
+      return;
+    }
+
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
-        titulo: 'Confirmação',
-        mensagem: 'Deseja realmente excluir o funcionario?',
+        titulo: "Confirmação",
+        mensagem: `Deseja realmente excluir ${funcionario.usuario.nome}?`,
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((confirmado) => {
       if (confirmado) {
-        this.funcionarioService.removerFuncionario(funcionario.id);
+        this.funcionarioService.removerFuncionario(funcionario.id).subscribe({
+          next: () => console.log(`Funcionário ${funcionario.id} excluído`),
+          error: (err) => console.error("Erro:", err),
+        });
       }
     });
   }
