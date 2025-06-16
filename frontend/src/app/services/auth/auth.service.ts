@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+interface LoginResponse { // Deve bater com o LoginResponseDTO do backend
+  token: string;
+  nome: string;
+  idRole: string | null; // Espera-se que seja Clientes.id para um cliente
+  id: string;           // Usuarios.id
+  role: 'FUNCIONARIO' | 'CLIENTE';
+  mensagem: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +20,7 @@ export class AuthService {
   private token: string | null = null;
   private userId: string | null = null;
   private userName: string | null = null;
+  private idRole: string | null = null;
 
   constructor(private router: Router) {
     this.loadUserData();
@@ -21,18 +31,25 @@ export class AuthService {
     this.token = localStorage.getItem('token');
     this.userId = localStorage.getItem('userId');
     this.userName = localStorage.getItem('userName');
+    this.idRole = localStorage.getItem('idRole');
   }
 
-  login(response: { token: string; nome: string; id: string; role: 'FUNCIONARIO' | 'CLIENTE' }) {
+  login(response: LoginResponse) {
     this.userRole = response.role;
     this.token = response.token;
     this.userId = response.id;
     this.userName = response.nome;
+    this.idRole = response.idRole;
 
     localStorage.setItem('userRole', this.userRole);
     localStorage.setItem('token', this.token);
     localStorage.setItem('userId', this.userId);
     localStorage.setItem('userName', this.userName);
+    if (this.idRole) {
+      localStorage.setItem('idRole', this.idRole);
+    } else {
+      localStorage.removeItem('idRole');
+    }
   }
 
   // isCliente(): boolean {
@@ -58,6 +75,7 @@ export class AuthService {
   }
 
   getUserId(): string | null {
+    this.userId = localStorage.getItem('userId');
     return this.userId;
   }
 
@@ -65,16 +83,23 @@ export class AuthService {
     return this.userName;
   }
 
+  getIdRole(): string | null {
+    this.idRole = localStorage.getItem('idRole');
+    return this.idRole;
+  }
+
   logout() {
     this.userRole = null;
     this.token = null;
     this.userId = null;
     this.userName = null;
+    this.idRole = null;
 
     localStorage.removeItem('userRole');
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
+    localStorage.removeItem('idRole');
 
     this.router.navigate(['/']);
   }

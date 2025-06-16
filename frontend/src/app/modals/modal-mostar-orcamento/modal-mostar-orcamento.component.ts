@@ -14,7 +14,7 @@ export class ModalMostarOrcamentoComponent {
   @Input() solicitacao: any;
 
   @Output() closed = new EventEmitter<void>();
-  @Output() alterarEstado = new EventEmitter<{ id: number, novoEstado: string }>();
+  @Output() alterarEstado = new EventEmitter<{ id: string, novoEstado: string }>();
 
   mostrarRejeicao = false;
   mostrarAprovacao = false;
