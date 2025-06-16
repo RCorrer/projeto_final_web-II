@@ -54,10 +54,19 @@ public class SecurityConfigurations {
                         .requestMatchers("/categoria/**").hasRole("FUNCIONARIO")
                         .requestMatchers("/funcionarios").hasRole("FUNCIONARIO")
                         .requestMatchers("/cadastro/funcionario").hasRole("FUNCIONARIO")
+                        .requestMatchers("/relatorio/**").hasRole("FUNCIONARIO")
+                        .requestMatchers("/solicitacao/redirecionarSolicitacao").hasRole("FUNCIONARIO")
+                        .requestMatchers("/solicitacao/capturarSolicitacao").hasRole("FUNCIONARIO")
+                        .requestMatchers("/solicitacao/atualizarEstado/orcado").hasRole("FUNCIONARIO")
+                        .requestMatchers("/solicitacao/atualizarEstado/finalizada").hasRole("FUNCIONARIO")
+                        .requestMatchers("/solicitacao/atualizarEstado/entregue").hasRole("FUNCIONARIO")
+                        .requestMatchers("/solicitacao/atualizarEstado/arrumada").hasRole("FUNCIONARIO")
 
                         // Rotas protegidas (Clientes)
-
-
+                        .requestMatchers("/solicitacao/criar").hasRole("CLIENTE")
+                        .requestMatchers("/solicitacao/atualizarEstado/rejeitar").hasRole("CLIENTE")
+                        .requestMatchers("/solicitacao/atualizarEstado/aprovar").hasRole("CLIENTE")
+                        .requestMatchers("/solicitacao/atualizarEstado/paga").hasRole("CLIENTE")
 
                         //separar rota de solicitação por endpoints
                         //o que é de funcionario/cliente ou ambos

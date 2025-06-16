@@ -1,7 +1,7 @@
 <div class="layout-container">
   <app-navbar class="sidenav"></app-navbar>
     <div class="content">
-      <h2>Olá, Maria Joaquina!</h2>
+      <h2 *ngIf="nomeCliente">Olá, {{ nomeCliente }}!</h2>
 
       <a routerLink="/abrir-solicitacao">Abrir solicitação</a>
 
