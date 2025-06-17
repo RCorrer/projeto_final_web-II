@@ -48,3 +48,10 @@ export interface OrcamentoDTO {
   id: string;
   valor: number;
 }
+
+// Interface EfetuarManutencaoDTO.java
+export interface EfetuarManutencaoDTO {
+  idSolicitacao: string;
+  descricaoManutencao?: string;
+  orientacoesCliente?: string;
+}

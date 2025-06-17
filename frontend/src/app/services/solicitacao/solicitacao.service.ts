@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { tap, catchError, map } from 'rxjs/operators';
 import { Solicitacao } from '../../models/Solicitacao.model';
 import { SolicitacaoFuncionarioBackendDTO } from '../../models/SolicitacaoFuncionarioBackendDTO.model';
-import { MudarEstadoDTO, OrcamentoDTO, SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
+import { EfetuarManutencaoDTO, MudarEstadoDTO, OrcamentoDTO, SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -172,6 +172,16 @@ export class SolicitacaoService {
           console.log('Resposta do backend (Orçamento):', response);
         }),
         catchError(this.handleError<string>('submeterOrcamento'))
+      );
+  }
+
+  efetuarManutencao(dadosManutencao: EfetuarManutencaoDTO): Observable<string> {
+    console.log('SolicitacaoService: Enviando dados da manutenção:', dadosManutencao);
+    const endpoint = `${this.apiUrl}/solicitacao/atualizarEstado/arrumada`;
+    return this.http.post(endpoint, dadosManutencao, { responseType: 'text' })
+      .pipe(
+        tap(response => console.log('Resposta do backend (Manutenção Efetuada):', response)),
+        catchError(this.handleError<string>('efetuarManutencao'))
       );
   }
 
