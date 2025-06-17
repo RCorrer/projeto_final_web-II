@@ -4,10 +4,10 @@ import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { Funcionario } from "../../models/funcionario.model";
 import { tap, catchError } from "rxjs/operators";
 
-interface FuncionarioPayload {
-  name: string;
-  login: string;
-  password: string;
+interface funcionarioPayload {
+  nome: string;
+  email: string;
+  senha: string;
   dataNascimento: string;
 }
 
@@ -35,29 +35,29 @@ export class FuncionarioService {
       });
   }
 
-  adicionarFuncionario(payload: FuncionarioPayload): Observable<string> {
-    return this.http
-      .post(`${this.apiUrl}/cadastro/funcionario`, payload, {
-        responseType: "text",
+  adicionarFuncionario(payload: funcionarioPayload): Observable<string> {
+  return this.http
+    .post(`${this.apiUrl}/cadastro/funcionario`, payload, {
+      responseType: "text",
+    })
+    .pipe(
+      tap(() => this.carregarFuncionarios()),
+      catchError((error) => {
+        console.error("Erro ao adicionar funcionário:", error);
+        return throwError(() => error);
       })
-      .pipe(
-        tap(() => this.carregarFuncionarios()),
-        catchError((error) => {
-          console.error("Erro ao adicionar funcionário:", error);
-          return throwError(() => error);
-        })
-      );
-  }
+    );
+}
 
   atualizarFuncionario(
     id: string,
     dados: Partial<Funcionario>
   ): Observable<Funcionario> {
     const payload = {
-      name: dados.name,
-      login: dados.login,
-      password: dados.password,
-      dataNascimento: dados.dataNascimento,
+      name: dados.nome,
+      login: dados.email,
+      password: dados.senha,
+      dataNascimento: dados.nascimento,
       role: "FUNCIONARIO",
     };
 

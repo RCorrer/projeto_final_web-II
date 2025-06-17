@@ -8,7 +8,7 @@
       <input
         matInput
         name="name"
-        [(ngModel)]="data.name"
+        [(ngModel)]="data.nome"
         #nomeInput="ngModel"
         required
       />
@@ -22,7 +22,7 @@
       <input
         matInput
         name="login"
-        [(ngModel)]="data.login"
+        [(ngModel)]="data.email"
         #emailInput="ngModel"
         required
       />
@@ -37,7 +37,7 @@
         matInput
         name="password"
         #senhaInput="ngModel"
-        [(ngModel)]="data.password"
+        [(ngModel)]="data.senha"
         type="password"
         required
       />
@@ -51,7 +51,7 @@
       <input
         matInput
         name="dataNascimento"
-        [(ngModel)]="data.dataNascimento"
+        [(ngModel)]="data.nascimento"
         type="date"
       />
     </mat-form-field>
