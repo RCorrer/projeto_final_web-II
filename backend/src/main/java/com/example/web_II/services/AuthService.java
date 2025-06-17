@@ -88,11 +88,11 @@ public class AuthService {
     }
 
     public ResponseEntity registerFuncionario(CadastroFuncionarioDTO data) {
-        if (usuarioRepository.findUserDetailsByEmail(data.login()) != null)
+        if (usuarioRepository.findUserDetailsByEmail(data.email()) != null)
             throw new EmailJaCadastradoException();
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        Usuario novoUsuario = new Usuario(data.name(), data.login(), encryptedPassword, UsuarioRole.FUNCIONARIO);
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
+        Usuario novoUsuario = new Usuario(data.nome(), data.email(), encryptedPassword, UsuarioRole.FUNCIONARIO);
 
         Funcionario novoFuncionario = new Funcionario(data.dataNascimento(), novoUsuario);
 
@@ -109,7 +109,7 @@ public class AuthService {
         // Gera senha aleatória
         String senha = Cliente.gerarSenha();
         String encryptedPassword = new BCryptPasswordEncoder().encode(senha);
-        Usuario novoUsuario = new Usuario(data.name(), data.login(), encryptedPassword, UsuarioRole.CLIENTE);
+        Usuario novoUsuario = new Usuario(data.nome(), data.login(), encryptedPassword, UsuarioRole.CLIENTE);
 
         Endereco novoEndereco = new Endereco(
                 data.cep(), data.logradouro(), data.complemento(),
@@ -123,7 +123,7 @@ public class AuthService {
         clienteRepository.save(novoCliente);
 
         try {
-            emailService.sendPasswordEmail(data.login(), data.name(), senha);
+            emailService.sendPasswordEmail(data.login(), data.nome(), senha);
         } catch (Exception e) {
             System.err.println("Erro ao enviar e-mail: " + e.getMessage());
         }

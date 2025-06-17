@@ -7,7 +7,7 @@
       <mat-label>Nome</mat-label>
       <input
         matInput
-        name="nome"
+        name="name"
         [(ngModel)]="data.nome"
         #nomeInput="ngModel"
         required
@@ -21,7 +21,7 @@
       <mat-label>Email</mat-label>
       <input
         matInput
-        name="email"
+        name="login"
         [(ngModel)]="data.email"
         #emailInput="ngModel"
         required
@@ -35,7 +35,7 @@
       <mat-label>Senha</mat-label>
       <input
         matInput
-        name="senha"
+        name="password"
         #senhaInput="ngModel"
         [(ngModel)]="data.senha"
         type="password"
@@ -51,7 +51,7 @@
       <input
         matInput
         name="dataNascimento"
-        [(ngModel)]="data.dataNascimento"
+        [(ngModel)]="data.nascimento"
         type="date"
       />
     </mat-form-field>

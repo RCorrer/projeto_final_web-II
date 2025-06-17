@@ -1,4 +1,4 @@
-import { Component, inject, Input } from "@angular/core";
+import { Component, inject, Input, Output, EventEmitter } from "@angular/core";
 import { materialImports } from "../../../material-imports";
 import { CommonModule } from "@angular/common";
 import { CardBaseComponent, MenuItem } from "../card-base/card-base.component";
@@ -15,19 +15,31 @@ import { MatDialog } from "@angular/material/dialog";
 export class CardFuncionarioComponent extends CardBaseComponent<Funcionario> {
   private dialog = inject(MatDialog);
 
-  @Input() funcionario!: Funcionario;
-  
+  @Input() set funcionario(value: Funcionario) {
+    console.log('Recebido no card:', value);
+    this.data = value;
+  }
+
+  get funcionario(): Funcionario {
+    return this.data;
+  }
+
+  @Output() override editar = new EventEmitter<Funcionario>();
+  @Output() override excluir = new EventEmitter<Funcionario>();
+
   override getMenuItems(): MenuItem[] {
     return [
       {
         icon: "edit",
         label: "Editar",
-        action: () => this.editar.emit(this.funcionario)
+        action: () => this.editar.emit(this.data),
+        color: "primary",
       },
       {
         icon: "delete",
         label: "Excluir",
-        action: () => this.excluir.emit(this.funcionario)
+        action: () => this.excluir.emit(this.data),
+        color: "warn",
       },
     ];
   }
