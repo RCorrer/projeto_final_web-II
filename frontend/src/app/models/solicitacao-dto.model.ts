@@ -42,3 +42,9 @@ export interface SolicitacaoComHistoricoDTO {
 export interface MudarEstadoDTO {
   idSolicitacao: string;
 }
+
+// Interface OrcamentoDTO.java
+export interface OrcamentoDTO {
+  id: string;
+  valor: number;
+}

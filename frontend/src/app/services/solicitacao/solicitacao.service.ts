@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { tap, catchError, map } from 'rxjs/operators';
 import { Solicitacao } from '../../models/Solicitacao.model';
 import { SolicitacaoFuncionarioBackendDTO } from '../../models/SolicitacaoFuncionarioBackendDTO.model';
-import { MudarEstadoDTO, SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
+import { MudarEstadoDTO, OrcamentoDTO, SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -162,6 +162,17 @@ export class SolicitacaoService {
         return of({ success: true });
     }
     return throwError(() => new Error(`Mock: Solicitação com ID ${id} não encontrada.`));
+  }
+
+  enviarOrcamento(dadosOrcamento: OrcamentoDTO): Observable<string> {
+    console.log('SolicitacaoService: Enviando orçamento para o backend:', dadosOrcamento);
+    return this.http.post<string>(`${this.apiUrl}/solicitacao/atualizarEstado/orcado`, dadosOrcamento, { responseType: 'text' as 'json' })
+      .pipe(
+        tap(response => {
+          console.log('Resposta do backend (Orçamento):', response);
+        }),
+        catchError(this.handleError<string>('submeterOrcamento'))
+      );
   }
 
   finalizarSolicitacao(solicitacaoId: string): Observable<string> {
