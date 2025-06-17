@@ -45,10 +45,10 @@ export class TelaFuncionariosComponent implements OnInit {
           }
         : {
             titulo: "Novo Funcionário",
-            nome: "",
-            email: "",
+            name: "",
+            login: "",
             dataNascimento: "",
-            senha: "",
+            password: "",
           },
     });
 
@@ -72,7 +72,7 @@ export class TelaFuncionariosComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
         titulo: "Confirmar Exclusão",
-        mensagem: `Tem certeza que deseja excluir ${funcionario.nome}?`,
+        mensagem: `Tem certeza que deseja excluir ${funcionario.name}?`,
       },
     });
 

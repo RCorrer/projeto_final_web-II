@@ -2,9 +2,9 @@ import { Usuario } from "./usuario.model";
 
 export interface Funcionario {
   id: string;
-  nome: string;
-  email: string;
+  name: string;
+  login: string;
   dataNascimento: string;
-  senha?: string;
+  password?: string;
   role?: string;
 }

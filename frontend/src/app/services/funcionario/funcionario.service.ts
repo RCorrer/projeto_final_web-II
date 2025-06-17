@@ -4,6 +4,13 @@ import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { Funcionario } from "../../models/funcionario.model";
 import { tap, catchError } from "rxjs/operators";
 
+interface FuncionarioPayload {
+  name: string;
+  login: string;
+  password: string;
+  dataNascimento: string;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -28,20 +35,11 @@ export class FuncionarioService {
       });
   }
 
-  // funcionario.service.ts
-  adicionarFuncionario(
-    funcionario: Omit<Funcionario, "id">
-  ): Observable<Funcionario> {
-    const payload = {
-      nome: funcionario.nome,
-      email: funcionario.email,
-      senha: funcionario.senha || "",
-      nascimento: funcionario.dataNascimento,
-      role: "FUNCIONARIO",
-    };
-
+  adicionarFuncionario(payload: FuncionarioPayload): Observable<string> {
     return this.http
-      .post<Funcionario>(`${this.apiUrl}/cadastro/funcionario`, payload)
+      .post(`${this.apiUrl}/cadastro/funcionario`, payload, {
+        responseType: "text",
+      })
       .pipe(
         tap(() => this.carregarFuncionarios()),
         catchError((error) => {
@@ -56,10 +54,10 @@ export class FuncionarioService {
     dados: Partial<Funcionario>
   ): Observable<Funcionario> {
     const payload = {
-      nome: dados.nome,
-      email: dados.email,
-      senha: dados.senha,
-      nascimento: dados.dataNascimento,
+      name: dados.name,
+      login: dados.login,
+      password: dados.password,
+      dataNascimento: dados.dataNascimento,
       role: "FUNCIONARIO",
     };
 
@@ -82,7 +80,7 @@ export class FuncionarioService {
     return this.funcionariosSource.value;
   }
 
-  getFuncionarioById(id: string): any {
+  getFuncionarioById(id: string): Funcionario | undefined {
     return this.funcionariosSource.value.find((s) => s.id === id);
   }
 }
