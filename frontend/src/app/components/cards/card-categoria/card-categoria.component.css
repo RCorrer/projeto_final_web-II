@@ -1,31 +1,34 @@
-.card-equipamento {
+.card-container {
   display: flex;
-  background-color: var(--color-surface);
   justify-content: space-between;
   align-items: center;
-  border-radius: 0.5rem;
-  margin-block-end: 1rem;
-}
-
-.card-equipamento-info {
-  margin-inline: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1rem;
-}
-
-button {
-  border: none;
-  background-color: transparent;
-}
-
-button:hover {
-  cursor: pointer;
-  color: var(--color-primary);
-  transition: 0.3s;
-}
-
-mat-menu button {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border-radius: .5rem;
   background-color: var(--color-surface);
+  margin-bottom: 1rem;
+}
+
+.card-content {
+  flex-grow: 1;
+  color: #333;
+  font-weight: 500;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* Ajusta a aparência dos botões de ícone do Angular Material */
+.card-actions button.mat-icon-button {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+}
+
+.card-actions mat-icon {
+  font-size: 20px;
 }

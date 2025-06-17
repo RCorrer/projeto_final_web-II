@@ -1,6 +1,6 @@
+import { Injectable } from '@angular/core';
 import { Categoria } from "./../../models/categoria.model";
 import { environment } from "../../../environments/environment";
-import { Injectable } from "@angular/core";
 import {
   BehaviorSubject,
   Observable,
@@ -112,7 +112,7 @@ export class CategoriaService {
     descricaoAntiga: string,
     novaDescricao: string
   ): Observable<string> {
-    const url = `${this.baseUrl}/edita/${encodeURIComponent(descricaoAntiga)}`;
+    const url = `${this.baseUrl}/${encodeURIComponent(descricaoAntiga)}`;
     const payload = { descricao: novaDescricao };
     console.log(
       "CategoriaService: atualizarCategoria - Enviando PUT para:",
