@@ -1,5 +1,16 @@
-<app-card-base-template [menuItems]="getMenuItems()">
+<div class="card-container">
+  
   <div class="card-content">
-    <p> {{ data }} </p>
+    <p>{{ data }}</p>
   </div>
-</app-card-base-template>
+
+  <div class="card-actions">
+    <button mat-icon-button (click)="onEditarClick()" aria-label="Editar Categoria">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="onExcluirClick()" aria-label="Excluir Categoria" color="warn">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+</div>
