@@ -1,4 +1,4 @@
-import { Component, inject, Input } from "@angular/core";
+import { Component, inject, Input, Output, EventEmitter } from "@angular/core";
 import { materialImports } from "../../../material-imports";
 import { CommonModule } from "@angular/common";
 import { CardBaseComponent, MenuItem } from "../card-base/card-base.component";
@@ -23,6 +23,9 @@ export class CardFuncionarioComponent extends CardBaseComponent<Funcionario> {
   get funcionario(): Funcionario {
     return this.data;
   }
+
+  @Output() override editar = new EventEmitter<Funcionario>();
+  @Output() override excluir = new EventEmitter<Funcionario>();
 
   override getMenuItems(): MenuItem[] {
     return [
