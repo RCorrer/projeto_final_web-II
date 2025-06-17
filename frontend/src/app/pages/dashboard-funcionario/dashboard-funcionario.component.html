@@ -68,8 +68,9 @@
         <div class="cards-container" *ngIf="!isLoading && solicitacoesFiltradas.length > 0">
           <app-card-solicitacao
             *ngFor="let solicitacao of solicitacoesFiltradas"
-            [solicitacao]="solicitacao">
-            </app-card-solicitacao>
+            [solicitacao]="solicitacao"
+            (finalizarAcao)="handleFinalizarSolicitacao($event)">
+          </app-card-solicitacao>
         </div>
 
         <div *ngIf="!isLoading && solicitacoesFiltradas.length === 0" class="sem-solicitacoes-mensagem">

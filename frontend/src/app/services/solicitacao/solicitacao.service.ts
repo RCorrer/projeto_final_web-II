@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { tap, catchError, map } from 'rxjs/operators';
 import { Solicitacao } from '../../models/Solicitacao.model';
 import { SolicitacaoFuncionarioBackendDTO } from '../../models/SolicitacaoFuncionarioBackendDTO.model';
-import { SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
+import { MudarEstadoDTO, SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -162,6 +162,20 @@ export class SolicitacaoService {
         return of({ success: true });
     }
     return throwError(() => new Error(`Mock: Solicitação com ID ${id} não encontrada.`));
+  }
+
+  finalizarSolicitacao(solicitacaoId: string): Observable<string> {
+    const dto: MudarEstadoDTO = { idSolicitacao: solicitacaoId };
+    
+    console.log(`SolicitacaoService: Marcando OS ${solicitacaoId} como FINALIZADA.`);
+    
+    return this.http.post<string>(`${this.apiUrl}/solicitacao/atualizarEstado/finalizada`, dto, { responseType: 'text' as 'json' })
+      .pipe(
+        tap(response => {
+          console.log('Resposta do backend (Finalizada):', response);
+        }),
+        catchError(this.handleError<string>('marcarComoFinalizada'))
+      );
   }
 
   getSolicitacoes(): Solicitacao[] {
