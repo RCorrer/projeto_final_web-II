@@ -12,6 +12,7 @@ com/example/web_II/domain/solicitacoes/OrcamentoDTO.class
 com/example/web_II/exceptions/CpfInvalidoException.class
 com/example/web_II/domain/solicitacoes/AtribuirFuncionarioDTO.class
 com/example/web_II/domain/receita/ReceitaDTO.class
+com/example/web_II/services/CategoriaService.class
 com/example/web_II/exceptions/CategoriaJaExisteException.class
 com/example/web_II/services/CategoriaService.class
 com/example/web_II/controllers/AuthenticationController.class
@@ -30,13 +31,14 @@ com/example/web_II/repositories/SolicitacaoRepository.class
 com/example/web_II/repositories/HistoricoAlteracaoRepository.class
 com/example/web_II/repositories/UsuarioRepository.class
 com/example/web_II/domain/solicitacoes/SolicitacoesResponseDTO.class
-com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.class
 com/example/web_II/repositories/ClienteRepository.class
+com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.class
 com/example/web_II/domain/usuarios/Usuario.class
 com/example/web_II/domain/funcionarios/Funcionario.class
 com/example/web_II/controllers/RelatoriosController.class
 com/example/web_II/domain/solicitacoes/Solicitacao.class
 com/example/web_II/WebIiApplication.class
+com/example/web_II/domain/solicitacoes/Solicitacao.class
 com/example/web_II/domain/solicitacoes/SolicitacaoFuncionarioDTO.class
 com/example/web_II/infra/SwaggerConfig.class
 com/example/web_II/services/SolicitacoesService.class
@@ -60,5 +62,5 @@ com/example/web_II/domain/usuarios/UsuarioRole.class
 com/example/web_II/services/AuthService.class
 com/example/web_II/services/EmailService.class
 com/example/web_II/controllers/SolicitacoesController.class
-com/example/web_II/domain/solicitacoes/AbrirSolicitacaoDTO.class
 com/example/web_II/repositories/FuncionarioRepository.class
+com/example/web_II/domain/solicitacoes/AbrirSolicitacaoDTO.class

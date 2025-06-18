@@ -4,6 +4,7 @@
 /app/src/main/java/com/example/web_II/exceptions/CpfJaCadastradoException.java
 /app/src/main/java/com/example/web_II/domain/cliente/EnviarClienteDTO.java
 /app/src/main/java/com/example/web_II/repositories/EnderecoRepository.java
+/app/src/main/java/com/example/web_II/domain/cliente/EnviarClienteDTO.java
 /app/src/main/java/com/example/web_II/services/AuthService.java
 /app/src/main/java/com/example/web_II/services/CategoriaService.java
 /app/src/main/java/com/example/web_II/domain/solicitacoes/AprovarRejeitarDTO.java

@@ -8,7 +8,7 @@ import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
 import { Observable, of } from 'rxjs';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
+import { OrcamentoDTO, SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
@@ -81,34 +81,31 @@ export class OrcamentoFuncionarioComponent implements OnInit{
   }
 
   enviarOrcamento() {
-    const dataHoraAtual = new Date();
-
-    const registroOrcamento = {
-      valor: this.valorOrcamento,
-      funcionario: 'Funcionario logado',
-      dataHora: dataHoraAtual.toLocaleString('pt-BR')
-    };
-
-    console.log('BUM! ENVIADO! Orçamento registrado: ', registroOrcamento);
-  };
-
-  realizarAcao(novoEstado: string): Observable<any> {
-    if (this.solicitacao) {
-      this.enviarOrcamento();
-      this.solicitacao.estado = novoEstado;
-      this.solicitacaoService.atualizarSolicitacao(this.solicitacao.id, novoEstado)
-        .subscribe ({
-          next: () => {
-            this.router.navigate(['/home']);
-          },
-          error: (err) => {
-            console.error('Erro ao atualizar:', err);
-            this.solicitacao.estado = 'ABERTA';
-          }
-        });
+    if (!this.solicitacao || !this.valorOrcamento) {
+      console.error("Por favor, preencha o valor do orçamento.");
+      return;
+    }
+    
+    const valorNumerico = parseFloat(this.valorOrcamento.replace(/[^0-9,]/g, '').replace(',', '.'));
+    
+    if (isNaN(valorNumerico) || valorNumerico <= 0) {
+        console.error("Valor do orçamento inválido.");
+        return;
     }
 
-    return of({ success: true});
-  }
+    const orcamentoData: OrcamentoDTO = {
+      id: this.solicitacao.id,
+      valor: valorNumerico,
+    };
 
+    this.solicitacaoService.enviarOrcamento(orcamentoData).subscribe({
+      next: (response) => {
+        console.log("Orçamento enviado com sucesso!", response);
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        console.error('Erro ao enviar o orçamento:', err);
+      }
+    });
+  }
 }

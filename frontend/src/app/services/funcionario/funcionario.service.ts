@@ -36,18 +36,18 @@ export class FuncionarioService {
   }
 
   adicionarFuncionario(payload: funcionarioPayload): Observable<string> {
-  return this.http
-    .post(`${this.apiUrl}/cadastro/funcionario`, payload, {
-      responseType: "text",
-    })
-    .pipe(
-      tap(() => this.carregarFuncionarios()),
-      catchError((error) => {
-        console.error("Erro ao adicionar funcionário:", error);
-        return throwError(() => error);
+    return this.http
+      .post(`${this.apiUrl}/cadastro/funcionario`, payload, {
+        responseType: "text",
       })
-    );
-}
+      .pipe(
+        tap(() => this.carregarFuncionarios()),
+        catchError((error) => {
+          console.error("Erro ao adicionar funcionário:", error);
+          return throwError(() => error);
+        })
+      );
+  }
 
   atualizarFuncionario(
     id: string,
