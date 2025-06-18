@@ -71,7 +71,7 @@ export class AuthService {
   }
 
   getToken():string | null {
-    return this.token;
+    return localStorage.getItem('token');
   }
 
   getUserId(): string | null {
