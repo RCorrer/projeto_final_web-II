@@ -7,38 +7,31 @@
                     <label>Descrição do Equipamento</label>
 
                     <mat-form-field id="topo" appearance="outline">
-                        <input matInput placeholder="Descrição do Equipamento" type="text" [(ngModel)]="data.descEquip" name="descEquip" required>
+                        <input matInput placeholder="Descrição do Equipamento" type="text" [(ngModel)]="data.descEquip"
+                            name="descEquip" required>
                     </mat-form-field>
 
                     <label>Escolha a categoria do Equipamento</label>
                     <mat-form-field appearance="outline">
-                        <mat-select placeholder="Categoria do Equipamento" [(ngModel)]="data.categoria" name="categoria" required>
-                            <mat-option value="computador">Computador</mat-option>
-                            <mat-option value="periferico">Periférico</mat-option>
-                            <mat-option value="monitor">Monitor</mat-option>
-                            <mat-option value="rede">Rede</mat-option>
+                        <mat-select placeholder="Categoria do Equipamento" [(ngModel)]="data.categoria" name="categoria"
+                            required>
+                            <mat-option value="Mouse">Mouse</mat-option>
+                            <mat-option value="Notebook">Notebook</mat-option>
                         </mat-select>
                     </mat-form-field>
 
                     <label>Descrição do Defeito</label>
                     <mat-form-field appearance="outline">
-                        <textarea matInput rows="8" placeholder="Descrição do Defeito" style="resize:none;" [(ngModel)]="data.descDefeito" name="descDefeito"required></textarea>
+                        <textarea matInput rows="8" placeholder="Descrição do Defeito" style="resize:none;"
+                            [(ngModel)]="data.descDefeito" name="descDefeito" required></textarea>
                     </mat-form-field>
-                    
+
                     <div class="botoes">
-                        <button
-                            id="cancelar"
-                            mat-stroked-button
-                            (click)="mostarModalRejeitar()"
-                        >
+                        <button id="cancelar" mat-stroked-button (click)="mostarModalRejeitar()">
                             Cancelar
                         </button>
-                    
-                        <button
-                            id="abrir"
-                            mat-button
-                            (click)="abrirSolicitacao()"
-                        >
+
+                        <button id="abrir" mat-button (click)="abrirSolicitacao()">
                             Abrir Solicitação
                         </button>
                     </div>
@@ -52,20 +45,11 @@
     <div class="modal-confirmacao" (click)="$event.stopPropagation()">
         <h4>Você tem certeza que deseja cancelar a solicitação?</h4>
         <div class="btnsRejeitar">
-            <button 
-                id="btnRejeitar"
-                mat-stroked-button
-                (click)="confirmarRejeicao()"
-                routerLink="/home-cliente"
-                >
-                    Sim
+            <button id="btnRejeitar" mat-stroked-button (click)="confirmarRejeicao()" routerLink="/home-cliente">
+                Sim
             </button>
-            <button 
-                id="btnCancelar"
-                mat-button
-                (click)="cancelarRejeicao()"
-                >
-                    Não
+            <button id="btnCancelar" mat-button (click)="cancelarRejeicao()">
+                Não
             </button>
         </div>
     </div>

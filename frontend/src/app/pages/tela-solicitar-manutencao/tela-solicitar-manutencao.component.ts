@@ -28,6 +28,7 @@ export class TelaSolicitarManutencaoComponent {
   mostrarRejeicao = false;
 
   data = {
+    idCliente: "",
     descEquip: "",
     categoria: "",
     descDefeito: "",
@@ -40,9 +41,9 @@ export class TelaSolicitarManutencaoComponent {
   ) {}
 
   abrirSolicitacao() {
-    const idClienteLogado = this.authService.getUserId();
+    this.data.idCliente = this.authService.getIdRole() ?? "";
 
-    if (!idClienteLogado) {
+    if (!this.data.idCliente) {
       console.error(
         "ID do cliente não encontrado. Não é possível criar a solicitação."
       );
@@ -50,7 +51,7 @@ export class TelaSolicitarManutencaoComponent {
     }
 
     const solicitacao = {
-      idCliente: idClienteLogado,
+      idCliente: this.data.idCliente,
       descEquip: this.data.descEquip,
       categoria: this.data.categoria,
       descDefeito: this.data.descDefeito,

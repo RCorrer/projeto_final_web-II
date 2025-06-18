@@ -9,7 +9,7 @@ import {
 import { tap, catchError, map } from "rxjs/operators";
 import { Solicitacao } from "../../models/Solicitacao.model";
 import { SolicitacaoFuncionarioBackendDTO } from "../../models/SolicitacaoFuncionarioBackendDTO.model";
-import { SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
+import { EfetuarManutencaoDTO, MudarEstadoDTO, OrcamentoDTO, SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
 
 interface criacaoPayload {
   idCliente: string;
