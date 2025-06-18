@@ -1,3 +1,4 @@
+
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of, throwError } from "rxjs";
 import {
@@ -248,6 +249,41 @@ export class SolicitacaoService {
     return throwError(
       () => new Error(`Mock: Solicitação com ID ${id} não encontrada.`)
     );
+  }
+
+  enviarOrcamento(dadosOrcamento: OrcamentoDTO): Observable<string> {
+    console.log('SolicitacaoService: Enviando orçamento para o backend:', dadosOrcamento);
+    return this.http.post<string>(`${this.apiUrl}/solicitacao/atualizarEstado/orcado`, dadosOrcamento, { responseType: 'text' as 'json' })
+      .pipe(
+        tap(response => {
+          console.log('Resposta do backend (Orçamento):', response);
+        }),
+        catchError(this.handleError<string>('submeterOrcamento'))
+      );
+  }
+
+  efetuarManutencao(dadosManutencao: EfetuarManutencaoDTO): Observable<string> {
+    console.log('SolicitacaoService: Enviando dados da manutenção:', dadosManutencao);
+    const endpoint = `${this.apiUrl}/solicitacao/atualizarEstado/arrumada`;
+    return this.http.post(endpoint, dadosManutencao, { responseType: 'text' })
+      .pipe(
+        tap(response => console.log('Resposta do backend (Manutenção Efetuada):', response)),
+        catchError(this.handleError<string>('efetuarManutencao'))
+      );
+  }
+
+  finalizarSolicitacao(solicitacaoId: string): Observable<string> {
+    const dto: MudarEstadoDTO = { idSolicitacao: solicitacaoId };
+    
+    console.log(`SolicitacaoService: Marcando OS ${solicitacaoId} como FINALIZADA.`);
+    
+    return this.http.post<string>(`${this.apiUrl}/solicitacao/atualizarEstado/finalizada`, dto, { responseType: 'text' as 'json' })
+      .pipe(
+        tap(response => {
+          console.log('Resposta do backend (Finalizada):', response);
+        }),
+        catchError(this.handleError<string>('marcarComoFinalizada'))
+      );
   }
 
   getSolicitacoes(): Solicitacao[] {

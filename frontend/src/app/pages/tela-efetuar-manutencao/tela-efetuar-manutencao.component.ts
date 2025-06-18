@@ -1,91 +1,93 @@
-import { Component, Input } from '@angular/core';
-import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { materialImports } from '../../material-imports';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
+import { SolicitacaoComHistoricoDTO, EfetuarManutencaoDTO } from '../../models/solicitacao-dto.model';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'app-tela-visualizar',
-  imports: [CommonModule, RouterLink, MatButtonModule],
+  selector: 'app-tela-efetuar-manutencao',
+  standalone: true,
+  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, MatButtonModule, RouterLink, MatProgressSpinnerModule],
   templateUrl: './tela-efetuar-manutencao.component.html',
   styleUrl: './tela-efetuar-manutencao.component.css'
 })
-export class TelaEfetuarManutencaoComponent {
-  @Input() solicitacao: any;
+export class TelaEfetuarManutencaoComponent implements OnInit {
+  solicitacao!: SolicitacaoComHistoricoDTO;
   isLoaded = false;
+  descricaoManutencao: string = '';
+  orientacoesCliente: string = '';
 
-  constructor (private solicitacaoService: SolicitacaoService,private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private solicitacaoService: SolicitacaoService, 
+    private router: Router, 
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      const idDaRota: string = params['id'];
+      const idDaRota: string = params['id']; 
 
       if (!idDaRota) {
         console.error("tela-efetuar-manutencao: ID da solicitação não encontrado na rota!");
         this.isLoaded = true;
         return;
       }
-
-      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(idDaRota);
-
-      if (solicitacaoExistente) {
-        this.solicitacao = this.mergeWithDefault(solicitacaoExistente);
-      } else {
-        console.warn(`tela-efetuar-manutencao: solicitação com ID ${idDaRota} não encontrada.`);
-        this.solicitacao = this.mergeWithDefault({ id: idDaRota, estado: 'DESCONHECIDO' }); 
-      }
       
-      setTimeout(() => {
-        this.isLoaded = true;
-      }, 100);
+      this.isLoaded = false;
+      this.solicitacaoService.fetchDetalhesSolicitacao(idDaRota).subscribe({
+        next: (dados) => {
+          if (dados) {
+            this.solicitacao = dados;
+            this.solicitacao.idFormatado = 'OS-' + String(this.solicitacao.numeroOs).padStart(4, '0');
+          } else {
+            console.error(`tela-efetuar-manutencao: Solicitação com ID ${idDaRota} não foi encontrada.`);
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao buscar detalhes da solicitação:', err);
+          this.isLoaded = true;
+        },
+        complete: () => {
+          this.isLoaded = true;
+        }
+      });
     });
   }
 
-  private mergeWithDefault(solicitacao: any): any {
-    const cliente = typeof solicitacao.cliente === 'string' 
-      ? { nome: solicitacao.cliente }
-      : solicitacao.cliente || {};
-  
-    const endereco = cliente.endereco || {};
-    
-    return {
-      id: solicitacao.id || 0,
-      idFormatado: 'OS-' + (solicitacao.id || 0).toString().padStart(6, '0'),
-      equipamento: solicitacao.equipamento || 'Teclado DELL KB216 USB',
-      categoria: solicitacao.categoria || 'Periférico',
-      problema: solicitacao.defeito || solicitacao.problema || 'N/A',
-      cliente: {
-        nome: cliente.nome || 'Joana Joaquina',
-        cpf: cliente.cpf || '000.000.000-00',
-        email: cliente.email || 'joana@gmail.com',
-        telefone: cliente.telefone || '(00) 00000-0000',
-        endereco: {
-          cep: endereco.cep || '00000-000',
-          logradouro: endereco.logradouro || 'Rua dos bobos',
-          complemento: endereco.complemento || 'N/A',
-          cidade: endereco.cidade || 'Bobolópolis',
-          estado: endereco.estado || 'Bobolândia'
-        }
-      },
-      estado: solicitacao.estado === 'ORCADA' ? 'ORÇADA' : solicitacao.estado || 'ABERTA',
-      dataHora: solicitacao.dataHora || new Date().toISOString()
-    };
-  }
-
   efetuarManutencao() {
-    this.solicitacaoService.atualizarSolicitacao(this.solicitacao.id, 'ARRUMADA')
-      .subscribe({
-        next: () => {
-          this.solicitacao.estado = 'ARRUMADA';
-          this.router.navigate(['/home']);
-        },
-        error: (error) => {
-          console.error('Erro ao atualizar a solicitação:', error);
-        }
-      });
+    if (!this.solicitacao?.id) {
+      console.error('Erro: Solicitação ou ID da solicitação inválido.');
+      return;
+    }
+
+    // if (!this.solicitacao || !this.descricaoManutencao || !this.orientacoesCliente) {
+    //   console.error("Por favor, preencha todos os campos da manutenção.");
+    //   return;
+    // }
+
+    const dadosManutencao: EfetuarManutencaoDTO = {
+      idSolicitacao: this.solicitacao.id,
+      descricaoManutencao: this.descricaoManutencao || "Manutenção padrão realizada.", // placeholder
+      orientacoesCliente: this.orientacoesCliente || "Nenhuma orientação específica." // placeholder
+    };
+
+    this.solicitacaoService.efetuarManutencao(dadosManutencao).subscribe({
+      next: (response) => {
+        console.log("Manutenção concluída com sucesso!", response);
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        console.error('Erro ao concluir a manutenção:', err);
+      }
+    });
   }
 
   redirecionarManutencao() {
-
+    console.log('TODO: Implementar navegação para a tela de redirecionamento para a OS:', this.solicitacao.id);
   }
 }

@@ -21,7 +21,7 @@ public class Solicitacao {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "numero_os", unique = true, updatable = false)
+    @Column(name = "numero_os", unique = true, updatable = false,insertable = false)
     private Integer numeroOs;
 
     @Column(name ="fk_cliente")
