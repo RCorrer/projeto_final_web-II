@@ -1,11 +1,13 @@
 import { Component, AfterViewInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { RouterLink, Router } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
+import { CommonModule } from '@angular/common';
+import { HttpClient } from "@angular/common/http";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from "@angular/material/input";
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { CommonModule } from '@angular/common';
 
 interface dadosCEP {
   cep: string;
@@ -25,7 +27,7 @@ interface dadosCEP {
 
 @Component({
   selector: "app-cadastro",
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatIconModule, RouterLink],
   templateUrl: "./cadastro.component.html",
   styleUrl: "./cadastro.component.css",
 })
