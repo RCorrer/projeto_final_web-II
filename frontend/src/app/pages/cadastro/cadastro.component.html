@@ -4,8 +4,7 @@
       <defs>
         <filter id="goo">
           <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-          <feColorMatrix in="blur" mode="matrix"
-            values="1 0 0 0 0  
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  
                     0 1 0 0 0  
                     0 0 1 0 0  
                     0 0 0 18 -8" result="goo" />
@@ -34,7 +33,7 @@
 
       <h1>Cadastre-se!</h1>
 
-      <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="cadastro-form">
+      <form [formGroup]="cadastroForm" class="cadastro-form">
         <mat-form-field appearance="fill">
           <mat-label>Nome Completo</mat-label>
           <input matInput formControlName="nomeCompleto" required />
@@ -67,7 +66,7 @@
 
         <mat-form-field appearance="fill">
           <mat-label>CEP</mat-label>
-          <input matInput formControlName="cep" maxlength="9" (blur)="buscarCEP(cadastroForm.get('cep')?.value)" />
+          <input matInput formControlName="cep" maxlength="9" (input)="formatarCEP($event)" />
           <mat-error *ngIf="cadastroForm.get('cep')?.hasError('required')">CEP é obrigatório</mat-error>
           <mat-error *ngIf="cepNaoEncontrado">CEP não encontrado</mat-error>
         </mat-form-field>
@@ -103,18 +102,26 @@
           <mat-label>Complemento</mat-label>
           <input matInput formControlName="complemento" />
         </mat-form-field>
-
-        <div class="button-container">
-          <button mat-flat-button color="primary" type="submit" [disabled]="cadastroForm.invalid">
-            Cadastrar-se
-          </button>
-        </div>
       </form>
+
+      <div class="button-container">
+        <button mat-flat-button color="primary" (click)="onSubmit()"
+          [disabled]="cadastroForm.invalid || cepNaoEncontrado || cadastroForm.get('cpf')?.hasError('cpfInvalido')">
+          Cadastrar-se
+        </button>
+
+      </div>
     </div>
 
     <div class="logo-container">
       <img src="bipbip-logo.png" class="logo" (click)="playSound()" />
       <h1>BipBip Consertos</h1>
     </div>
+  </div>
+</div>
+
+<div class="loading-overlay" *ngIf="carregando">
+  <div class="logo-spinner">
+    <img src="bipbip-logo.png" alt="Carregando..." />
   </div>
 </div>

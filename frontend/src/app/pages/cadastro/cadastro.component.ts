@@ -1,7 +1,12 @@
 import { Component, AfterViewInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { RouterLink } from "@angular/router";
-import { ReactiveFormsModule } from "@angular/forms";
+import { RouterLink, Router } from "@angular/router";
+import {
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { MatButtonModule } from "@angular/material/button";
@@ -43,8 +48,17 @@ export class CadastroComponent implements AfterViewInit {
   private audio = new Audio("bipbip-sound.mp3");
   cadastroForm: FormGroup;
   cepNaoEncontrado: boolean = false;
+  cpfNaoEncontrado: boolean = false;
+  private atualizandoCPF = false;
+  carregando = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  readonly apiUrl = "http://localhost:8080";
+
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router
+  ) {
     this.cadastroForm = this.fb.group({
       nomeCompleto: ["", Validators.required],
       cpf: [
@@ -52,7 +66,7 @@ export class CadastroComponent implements AfterViewInit {
         [
           Validators.required,
           Validators.pattern(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/),
-          this.validarCPFValidator.bind(this),
+          this.validadorCPF(),
         ],
       ],
       email: ["", [Validators.required, Validators.email]],
@@ -98,14 +112,20 @@ export class CadastroComponent implements AfterViewInit {
     this.cadastroForm.get("cep")?.valueChanges.subscribe((cep: string) => {
       const cleanedCEP = cep.replace(/\D/g, "");
       if (cleanedCEP.length === 8) {
-        this.buscarCEP(cep);
+        this.buscarCEP();
       }
     });
 
     this.cadastroForm.get("cpf")?.valueChanges.subscribe((cpf: string) => {
+      if (this.atualizandoCPF) return;
+
       const cleanedCPF = cpf.replace(/\D/g, "");
       if (cleanedCPF.length === 11) {
-        this.cadastroForm.get("cpf")?.updateValueAndValidity({ onlySelf: true });
+        this.atualizandoCPF = true;
+        this.cadastroForm
+          .get("cpf")
+          ?.updateValueAndValidity({ onlySelf: true });
+        this.atualizandoCPF = false;
       }
     });
   }
@@ -116,9 +136,49 @@ export class CadastroComponent implements AfterViewInit {
   }
 
   onSubmit() {
-    if (this.cadastroForm.invalid) return;
-    console.log("Formulário enviado:", this.cadastroForm.value);
-    // Aqui você pode redirecionar, chamar API, etc.
+    if (
+      this.cadastroForm.invalid ||
+      this.cepNaoEncontrado ||
+      this.cadastroForm.get("cpf")?.hasError("cpfInvalido")
+    ) {
+      return;
+    }
+
+    this.carregando = true;
+
+    const formData = this.cadastroForm.getRawValue();
+    const payload = {
+      nome: formData.nomeCompleto,
+      login: formData.email,
+      cpf: formData.cpf,
+      telefone: formData.telefone,
+      cep: formData.cep,
+      logradouro: formData.rua,
+      complemento: formData.complemento,
+      bairro: formData.bairro,
+      localidade: formData.cidade,
+      uf: formData.estado,
+      numero: formData.numero,
+    };
+
+    this.http
+      .post(`${this.apiUrl}/cadastro/cliente`, payload, {
+        responseType: "text",
+      })
+      .subscribe({
+        next: (res) => {
+          console.log("✅ Cadastro realizado:", res);
+          // Delay antes de redirecionar
+          setTimeout(() => {
+            this.carregando = false;
+            this.router.navigate(["/"]);
+          }, 1500); // 1,5 segundos de espera
+        },
+        error: (err) => {
+          console.error("❌ Erro ao cadastrar:", err);
+          this.carregando = false;
+        },
+      });
   }
 
   formatarCPF() {
@@ -139,29 +199,58 @@ export class CadastroComponent implements AfterViewInit {
     control.setValue(value, { emitEvent: false });
   }
 
-  validarCPFValidator(control: any) {
-    const value = control.value || "";
-    if (value.length !== 14) return null;
-    return this.validarCPF(value) ? null : { cpfInvalido: true };
+  async verificarExistenciaCPF(cpf: string) {
+    const cleanedCPF = cpf.replace(/\D/g, "");
+    this.cpfNaoEncontrado = false;
+
+    if (cleanedCPF.length !== 11) return;
+
+    try {
+      const response = await this.http
+        .get<any>(
+          `https://scpa-backend.prod.saude.gov.br/public/scpa-usuario/validacao-cpf/${cleanedCPF}`
+        )
+        .toPromise();
+
+      if (!response || "erro" in response) {
+        this.cpfNaoEncontrado = true;
+        return;
+      }
+
+      this.cpfNaoEncontrado = false;
+    } catch (error) {
+      this.cpfNaoEncontrado = true;
+    }
   }
 
-  validarCPF(cpf: string): boolean {
-    cpf = cpf.replace(/\D/g, "");
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+  validadorCPF(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const cpf = (control.value || "").replace(/\D/g, "");
 
-    const calc = (base: number) =>
-      cpf
-        .substring(0, base)
-        .split("")
-        .reduce(
-          (sum, digit, idx) => sum + parseInt(digit) * (base + 1 - idx),
-          0
-        );
+      if (cpf.length !== 11) return { cpfInvalido: true };
+      if (/^(\d)\1{10}$/.test(cpf)) return { cpfInvalido: true };
 
-    const dig1 = (11 - (calc(9) % 11)) % 10;
-    const dig2 = (11 - ((calc(10) + dig1 * 2) % 11)) % 10;
+      let soma1 = 0;
+      for (let i = 0; i < 9; i++) {
+        soma1 += parseInt(cpf.charAt(i)) * (10 - i);
+      }
+      let resto1 = soma1 % 11;
+      let d1 = resto1 < 2 ? 0 : 11 - resto1;
 
-    return parseInt(cpf[9]) === dig1 && parseInt(cpf[10]) === dig2;
+      let soma2 = 0;
+      for (let i = 0; i < 9; i++) {
+        soma2 += parseInt(cpf.charAt(i)) * (11 - i);
+      }
+      soma2 += d1 * 2;
+      let resto2 = soma2 % 11;
+      let d2 = resto2 < 2 ? 0 : 11 - resto2;
+
+      if (parseInt(cpf.charAt(9)) !== d1 || parseInt(cpf.charAt(10)) !== d2) {
+        return { cpfInvalido: true };
+      }
+
+      return null;
+    };
   }
 
   formatarTelefone(event: Event) {
@@ -195,15 +284,18 @@ export class CadastroComponent implements AfterViewInit {
     input.value = value;
   }
 
-  async buscarCEP(cep: string) {
-    const cleanedCEP = cep.replace(/\D/g, "");
+  async buscarCEP() {
+    const cepControl = this.cadastroForm.get("cep");
+    if (!cepControl) return;
+
+    const cep = cepControl.value.replace(/\D/g, "");
     this.cepNaoEncontrado = false;
 
-    if (cleanedCEP.length !== 8) return;
+    if (cep.length !== 8) return;
 
     try {
       const response = await this.http
-        .get<dadosCEP>(`https://viacep.com.br/ws/${cleanedCEP}/json/`)
+        .get<dadosCEP>(`https://viacep.com.br/ws/${cep}/json/`)
         .toPromise();
 
       if (!response || "erro" in response) {
