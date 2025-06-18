@@ -41,7 +41,7 @@ export class AuthInterceptor implements HttpInterceptor {
           // Exemplo: Deslogar e redirecionar para login em caso de 401 (Não Autorizado) ou 403 (Proibido)
           console.error('AuthInterceptor: Erro de autorização', error.status, error.message);
           this.authService.logout(); // Limpa o token
-          this.router.navigate(['/login']); // Redireciona para a página de login
+          this.router.navigate(['/']); // Redireciona para a página de login
           // Poderia também exibir uma mensagem para o usuário
         }
         return throwError(() => error); // Propaga o erro para outros manipuladores

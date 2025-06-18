@@ -9,14 +9,8 @@
           Gerencie os colaboradores da sua empresa
         </p>
 
-        <button
-          mat-raised-button
-          (click)="abrirDialog()"
-          color="primary"
-          aria-label="Adicionar funcionário"
-          class="btn-add-funcionario"
-          matTooltip="Adicionar funcionário"
-        >
+        <button mat-raised-button (click)="abrirDialog()" color="primary" aria-label="Adicionar funcionário"
+          class="btn-add-funcionario" matTooltip="Adicionar funcionário">
           <mat-icon>person_add</mat-icon>
           Adicionar funcionário
         </button>
@@ -31,12 +25,8 @@
         </div>
 
         <ng-container *ngIf="funcionarios.length > 0; else vazio">
-          <app-card-funcionario
-            *ngFor="let funcionario of funcionarios"
-            [funcionario]="funcionario"
-            (editar)="abrirDialog(funcionario)"
-            (excluir)="excluirFuncionario(funcionario)"
-          ></app-card-funcionario>
+          <app-card-funcionario *ngFor="let funcionario of funcionarios" [funcionario]="funcionario"
+            (editar)="abrirDialog(funcionario)" (excluir)="excluirFuncionario($event)"></app-card-funcionario>
         </ng-container>
 
         <ng-template #vazio>
