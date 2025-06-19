@@ -2,8 +2,8 @@
   <div class="card-content">
     <mat-icon class="mat-18">person</mat-icon>
     <div class="card-funcionario-info">
-      <h3>{{ funcionario.usuario.nome }}</h3>
-      <p>{{ funcionario.usuario.email }}</p>
+      <h3>{{ funcionario.nome }}</h3>
+      <p>{{ funcionario.email }}</p>
     </div>
   </div>
 
@@ -12,11 +12,12 @@
   </button>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="editar.emit(funcionario)">
+    <button mat-menu-item (click)="editar.emit(funcionario)" color="primary">
       <mat-icon>edit</mat-icon>
       <span>Editar</span>
     </button>
-    <button mat-menu-item (click)="excluir.emit(funcionario)">
+
+    <button mat-menu-item (click)="excluir.emit(funcionario)" color="warn">
       <mat-icon>delete</mat-icon>
       <span>Excluir</span>
     </button>

@@ -5,6 +5,7 @@ import com.example.web_II.domain.receita.RelatorioCategoriaDTO;
 import com.example.web_II.domain.receita.RelatorioDTO;
 import com.example.web_II.services.RelatorioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +25,11 @@ public class RelatoriosController {
 
     @GetMapping("/relatorio/receitasPadrao")
     public ResponseEntity<List<RelatorioDTO>> gerarRelatorioDiario(
-            @RequestParam String dataInicio,
-            @RequestParam String dataFim) {
+            @RequestParam @DateTimeFormat(pattern = "yyyyMMdd") LocalDate dataInicio,
+            @RequestParam @DateTimeFormat(pattern = "yyyyMMdd") LocalDate dataFim) {
 
-        LocalDateTime inicio = LocalDate.parse(dataInicio).atStartOfDay();
-        LocalDateTime fim = LocalDate.parse(dataFim).plusDays(1).atStartOfDay();
+        LocalDateTime inicio = dataInicio.atStartOfDay();
+        LocalDateTime fim = dataFim.plusDays(1).atStartOfDay();
 
         return ResponseEntity.ok(relatorioService.gerarRelatorioPadrao(inicio, fim));
     }

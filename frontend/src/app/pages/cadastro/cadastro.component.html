@@ -1,98 +1,127 @@
 <div class="tela-cadastro">
-    <div class="gradient-bg">
-        <svg xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <filter id="goo">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
-                        result="goo" />
-                    <feBlend in="SourceGraphic" in2="goo" />
-                </filter>
-            </defs>
-        </svg>
+  <div class="gradient-bg">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  
+                    0 1 0 0 0  
+                    0 0 1 0 0  
+                    0 0 0 18 -8" result="goo" />
+          <feBlend in="SourceGraphic" in2="goo" />
+        </filter>
+      </defs>
+    </svg>
 
-        <div class="gradients-container">
-            <div class="g1"></div>
-            <div class="g2"></div>
-            <div class="g3"></div>
-            <div class="g4"></div>
-            <div class="g5"></div>
-            <div class="interactive"></div>
-        </div>
+    <div class="gradients-container">
+      <div class="g1"></div>
+      <div class="g2"></div>
+      <div class="g3"></div>
+      <div class="g4"></div>
+      <div class="g5"></div>
+      <div class="interactive"></div>
+    </div>
+  </div>
+
+  <div class="centro-cadastro">
+    <div class="cadastro">
+      <div id="retorno">
+        <a routerLink="/" class="link-retorno">
+          <mat-icon class="material-symbols-rounded">arrow_back</mat-icon>
+        </a>
+      </div>
+
+      <h1>Cadastre-se!</h1>
+
+      <form [formGroup]="cadastroForm" class="cadastro-form">
+        <mat-form-field appearance="fill">
+          <mat-label>Nome Completo</mat-label>
+          <input matInput formControlName="nomeCompleto" required />
+          <mat-error *ngIf="cadastroForm.get('nomeCompleto')?.hasError('required')">
+            Nome é obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CPF</mat-label>
+          <input matInput formControlName="cpf" maxlength="14" (input)="formatarCPF()" />
+          <mat-error *ngIf="cadastroForm.get('cpf')?.hasError('required')">CPF é obrigatório</mat-error>
+          <mat-error *ngIf="cadastroForm.get('cpf')?.hasError('pattern')">Formato inválido</mat-error>
+          <mat-error *ngIf="cadastroForm.get('cpf')?.hasError('cpfInvalido')">CPF inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Telefone</mat-label>
+          <input matInput formControlName="telefone" maxlength="15" (input)="formatarTelefone($event)" />
+          <mat-error *ngIf="cadastroForm.get('telefone')?.hasError('required')">Telefone é obrigatório</mat-error>
+          <mat-error *ngIf="cadastroForm.get('telefone')?.hasError('pattern')">Formato inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" />
+          <mat-error *ngIf="cadastroForm.get('email')?.hasError('required')">Email é obrigatório</mat-error>
+          <mat-error *ngIf="cadastroForm.get('email')?.hasError('email')">Email inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CEP</mat-label>
+          <input matInput formControlName="cep" maxlength="9" (input)="formatarCEP($event)" />
+          <mat-error *ngIf="cadastroForm.get('cep')?.hasError('required')">CEP é obrigatório</mat-error>
+          <mat-error *ngIf="cepNaoEncontrado">CEP não encontrado</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Estado</mat-label>
+          <input matInput formControlName="estado" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Cidade</mat-label>
+          <input matInput formControlName="cidade" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Bairro</mat-label>
+          <input matInput formControlName="bairro" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Rua</mat-label>
+          <input matInput formControlName="rua" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Número</mat-label>
+          <input matInput formControlName="numero" />
+          <mat-error *ngIf="cadastroForm.get('numero')?.hasError('required')">Número é obrigatório</mat-error>
+          <mat-error *ngIf="cadastroForm.get('numero')?.hasError('pattern')">Apenas números</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Complemento</mat-label>
+          <input matInput formControlName="complemento" />
+        </mat-form-field>
+      </form>
+
+      <div class="button-container">
+        <button mat-flat-button color="primary" (click)="onSubmit()"
+          [disabled]="cadastroForm.invalid || cepNaoEncontrado || cadastroForm.get('cpf')?.hasError('cpfInvalido')">
+          Cadastrar-se
+        </button>
+
+      </div>
     </div>
 
-    <div class="centro-cadastro">
-        <div class="cadastro">
-            <h1>
-                Cadastre-se!
-            </h1>
-
-            <form class="cadastro-form" [formGroup]="cadastroForm">
-                <label>Nome Completo</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" formControlName="nome" required>
-                </mat-form-field>
-
-                <label>CPF</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" placeholder="000.000.000-00" formControlName="cpf" (input)="formatarCPF($event)" maxlength="14" required>
-                </mat-form-field>
-
-                <label>E-mail</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" formControlName="login" required>
-                </mat-form-field>
-
-                <label>Telefone</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" maxlength="15" placeholder="(00) 00000-0000" formControlName="telefone" (input)="formatarTelefone($event)" required>
-                </mat-form-field>
-
-                <label>CEP</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" placeholder="00000-000" formControlName="cep" (input)="formatarCEP($event)" maxlength="9" required>
-                </mat-form-field>
-
-                <label>Estado</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="uf" required>
-                </mat-form-field>
-
-                <label>Cidade</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="localidade" required>
-                </mat-form-field>
-
-                <label>Bairro</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="bairro" required>
-                </mat-form-field>
-
-                <label>Rua</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" readonly formControlName="logradouro" required>
-                </mat-form-field>
-
-                <label>Numero</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" formControlName="numero" required>
-                </mat-form-field>
-
-                <label>Complemento</label>
-                <mat-form-field appearance="fill">
-                    <input matInput type="text" formControlName="complemento">
-                </mat-form-field>
-            </form>
-                
-                <div class="button-container">
-                    <button mat-flat-button >Cadastrar-se</button>
-                </div>
-
-        </div>
-
-        <div class="logo-container">
-            <img src="bipbip-logo.png" class="logo" (click)="playSound()">
-            <h1>BipBip Consertos</h1>
-        </div>
+    <div class="logo-container">
+      <img src="bipbip-logo.png" class="logo" (click)="playSound()" />
+      <h1>BipBip Consertos</h1>
     </div>
+  </div>
+</div>
+
+<div class="loading-overlay" *ngIf="carregando">
+  <div class="logo-spinner">
+    <img src="bipbip-logo.png" alt="Carregando..." />
+  </div>
 </div>

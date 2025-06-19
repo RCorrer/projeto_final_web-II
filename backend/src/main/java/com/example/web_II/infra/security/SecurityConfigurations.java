@@ -70,6 +70,7 @@ public class SecurityConfigurations {
 
                         //separar rota de solicitação por endpoints
                         //o que é de funcionario/cliente ou ambos
+                        .requestMatchers("/cadastro/cliente").permitAll()
                         .requestMatchers("/solicitacao/**").permitAll()
 
                         // Todas as outras rotas requerem autenticação
