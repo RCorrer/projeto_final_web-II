@@ -36,10 +36,10 @@ INSERT INTO Endereco (id, cep, logradouro, complemento, bairro, localidade, uf, 
 ('5', '50010020', 'Rua do Bom Jesus', 'Casa', 'Recife Antigo', 'Recife', 'PE', '123');
 
 INSERT INTO Usuarios (id, nome, email, senha, role) VALUES
-('f1', 'Maria', 'funcionario1@email.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.', 'FUNCIONARIO'),
-('f2', 'Mario', 'funcionario2@email.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.', 'FUNCIONARIO'),
-('f3', 'Mauro', 'funcionario3@email.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.', 'FUNCIONARIO'),
-('f4', 'Marcia', 'funcionario4@email.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.', 'FUNCIONARIO');
+('f1', 'Maria', 'funcionario1@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 'FUNCIONARIO'),
+('f2', 'Mario', 'funcionario2@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 'FUNCIONARIO'),
+('f3', 'Mauro', 'funcionario3@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 'FUNCIONARIO'),
+('f4', 'Marcia', 'funcionario4@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 'FUNCIONARIO');
 
 INSERT INTO Funcionarios (id, nascimento, fk_usuario) VALUES
 ('func1', '1985-05-15', 'f1'),
