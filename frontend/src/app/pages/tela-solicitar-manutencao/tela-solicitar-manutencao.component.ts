@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormField } from "@angular/material/form-field";
@@ -24,8 +25,11 @@ import { AuthService } from "../../services/auth/auth.service";
   templateUrl: "./tela-solicitar-manutencao.component.html",
   styleUrl: "./tela-solicitar-manutencao.component.css",
 })
-export class TelaSolicitarManutencaoComponent {
+export class TelaSolicitarManutencaoComponent implements OnInit {
+  categorias: string[] = [];
   mostrarRejeicao = false;
+
+  readonly apiUrl = "http://localhost:8080";
 
   data = {
     idCliente: "",
@@ -37,8 +41,25 @@ export class TelaSolicitarManutencaoComponent {
   constructor(
     private solicitacaoService: SolicitacaoService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private http: HttpClient
   ) {}
+
+  ngOnInit() {
+    this.carregarCategorias();
+  }
+
+  carregarCategorias() {
+    this.http.get<string[]>(`${this.apiUrl}/categoria`).subscribe({
+      next: (res) => {
+        this.categorias = res;
+        console.log("Categorias carregadas:", this.categorias);
+      },
+      error: (error) => {
+        console.error("Erro ao carregar categorias:", error);
+      },
+    });
+  }
 
   abrirSolicitacao() {
     this.data.idCliente = this.authService.getIdRole() ?? "";
