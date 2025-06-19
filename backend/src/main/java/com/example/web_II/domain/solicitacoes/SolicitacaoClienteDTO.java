@@ -1,0 +1,42 @@
+package com.example.web_II.domain.solicitacoes;
+
+import com.example.web_II.domain.historico.HistoricoAlteracaoSolicitacaoDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record SolicitacaoClienteDTO(
+        String id,
+        Integer numeroOs,
+        String fkCliente,
+        String descricaoEquipamento,  // Mudei para camelCase para consistência
+        String fkCategoriaEquipamento,
+        String descricaoDefeito,
+        String fkEstado,
+        String funcionarioNome,
+        Float orcamento,
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        LocalDateTime dataHora,
+        List<HistoricoAlteracaoSolicitacaoDTO> historicoAlteracoes
+) {
+    public static SolicitacaoClienteDTO fromEntity(Solicitacao solicitacao) {
+        String funcionarioNome = solicitacao.getFuncionario() != null ?
+                solicitacao.getFuncionario().getUsuario().getNome() : null;
+
+        return new SolicitacaoClienteDTO(
+                solicitacao.getId(),
+                solicitacao.getNumeroOs(),
+                solicitacao.getFkCliente(),
+                solicitacao.getDescricao_equipamento(),
+                solicitacao.getFk_categoria_equipamento(),
+                solicitacao.getDescricao_defeito(),
+                solicitacao.getFk_estado(),
+                funcionarioNome,
+                solicitacao.getOrcamento(),
+                solicitacao.getData_hora(),
+                solicitacao.getHistoricoAlteracoes().stream()
+                        .map(HistoricoAlteracaoSolicitacaoDTO::fromEntity)
+                        .toList()
+        );
+    }
+}

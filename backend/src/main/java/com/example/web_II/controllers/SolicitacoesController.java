@@ -33,7 +33,8 @@ public class SolicitacoesController {
     }
 
     @GetMapping("/solicitacao/buscarCliente/{cliente}")
-    public ResponseEntity<List<Solicitacao>> buscarSolicitacaoCliente(@PathVariable String cliente){
+    public ResponseEntity<List<SolicitacaoClienteDTO>> buscarSolicitacaoCliente(
+            @PathVariable String cliente) {
         return solicitacoesService.buscarSolicitacaoCliente(cliente);
     }
 
