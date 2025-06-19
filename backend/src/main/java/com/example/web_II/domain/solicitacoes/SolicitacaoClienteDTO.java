@@ -9,7 +9,7 @@ public record SolicitacaoClienteDTO(
         String id,
         Integer numeroOs,
         String fkCliente,
-        String descricaoEquipamento,  // Mudei para camelCase para consistência
+        String descricaoEquipamento,
         String fkCategoriaEquipamento,
         String descricaoDefeito,
         String fkEstado,
@@ -19,7 +19,7 @@ public record SolicitacaoClienteDTO(
         LocalDateTime dataHora,
         List<HistoricoAlteracaoSolicitacaoDTO> historicoAlteracoes
 ) {
-    public static SolicitacaoClienteDTO fromEntity(Solicitacao solicitacao) {
+    public static SolicitacaoClienteDTO fromEntity(Solicitacao solicitacao, String descricaoCategoria) {
         String funcionarioNome = solicitacao.getFuncionario() != null ?
                 solicitacao.getFuncionario().getUsuario().getNome() : null;
 
@@ -28,7 +28,7 @@ public record SolicitacaoClienteDTO(
                 solicitacao.getNumeroOs(),
                 solicitacao.getFkCliente(),
                 solicitacao.getDescricao_equipamento(),
-                solicitacao.getFk_categoria_equipamento(),
+                descricaoCategoria,
                 solicitacao.getDescricao_defeito(),
                 solicitacao.getFk_estado(),
                 funcionarioNome,

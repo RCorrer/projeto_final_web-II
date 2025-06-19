@@ -24,9 +24,9 @@ public class SolicitacaoFuncionarioDTO {
 
     public SolicitacaoFuncionarioDTO(Solicitacao solicitacao, Cliente cliente) {
         this.id = solicitacao.getId();
-        this.numeroOs = solicitacao.getNumeroOs();  // Novo campo
+        this.numeroOs = solicitacao.getNumeroOs();
         this.descricaoEquipamento = solicitacao.getDescricao_equipamento();
-        this.categoriaEquipamento = solicitacao.getFk_categoria_equipamento();
+        this.categoriaEquipamento = solicitacao.getFkCategoriaEquipamento();
         this.descricaoDefeito = solicitacao.getDescricao_defeito();
         this.estado = solicitacao.getFk_estado();
         this.dataHora = solicitacao.getData_hora();

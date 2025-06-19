@@ -1,5 +1,6 @@
 package com.example.web_II.services;
 
+import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.cliente.Cliente;
 import com.example.web_II.domain.cliente.EnviarClienteDTO;
 import com.example.web_II.domain.funcionarios.Funcionario;
@@ -8,10 +9,7 @@ import com.example.web_II.domain.historico.SolicitacaoComHistoricoDTO;
 import com.example.web_II.domain.receita.Receita;
 import com.example.web_II.domain.solicitacoes.*;
 import com.example.web_II.domain.historico.HistoricoAlteracao;
-import com.example.web_II.repositories.ClienteRepository;
-import com.example.web_II.repositories.HistoricoAlteracaoRepository;
-import com.example.web_II.repositories.ReceitaRepository;
-import com.example.web_II.repositories.SolicitacaoRepository;
+import com.example.web_II.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +38,16 @@ public class SolicitacoesService {
     @Autowired
     private ReceitaRepository receitaRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
 
     public ResponseEntity<String> criarSolicitacao(AbrirSolicitacaoDTO data) {
+        Optional<Categoria> categoriaOpt = categoriaRepository.findById(data.categoria());
+        if (categoriaOpt.isEmpty() || !categoriaOpt.get().isAtiva()) {
+            return ResponseEntity.badRequest().body("Categoria inválida ou inativa");
+        }
+
         Solicitacao novaSolicitacao = new Solicitacao(
                 data.idCliente(),
                 data.descEquip(),
@@ -72,7 +78,7 @@ public class SolicitacoesService {
         return ResponseEntity.ok(solicitacaoBuscada.get().getId() + "\n" +
                 solicitacaoBuscada.get().getFkCliente() + "\n" +
                 solicitacaoBuscada.get().getDescricao_equipamento() + "\n" +
-                solicitacaoBuscada.get().getFk_categoria_equipamento() + "\n" +
+                solicitacaoBuscada.get().getFkCategoriaEquipamento() + "\n" + // Nome atualizado
                 solicitacaoBuscada.get().getDescricao_defeito() + "\n" +
                 solicitacaoBuscada.get().getFk_estado() + "\n" +
                 solicitacaoBuscada.get().getData_hora() + "\n" +
@@ -85,10 +91,15 @@ public class SolicitacoesService {
         }
 
         List<Solicitacao> solicitacoes = solicitacaoRepository.findByFkCliente(cliente);
+        List<SolicitacaoClienteDTO> response = new ArrayList<>();
 
-        List<SolicitacaoClienteDTO> response = solicitacoes.stream()
-                .map(SolicitacaoClienteDTO::fromEntity)
-                .toList();
+        for (Solicitacao solicitacao : solicitacoes) {
+            String descricaoCategoria = categoriaRepository.findById(solicitacao.getFkCategoriaEquipamento())
+                    .map(Categoria::getDescricao)
+                    .orElse("Categoria desconhecida");
+
+            response.add(SolicitacaoClienteDTO.fromEntity(solicitacao, descricaoCategoria));
+        }
 
         return ResponseEntity.ok(response);
     }
@@ -320,6 +331,10 @@ public class SolicitacoesService {
 
         Solicitacao solicitacao = solicitacaoOpt.get();
 
+        String descricaoCategoria = categoriaRepository.findById(solicitacao.getFkCategoriaEquipamento())
+                .map(Categoria::getDescricao)
+                .orElse("Categoria desconhecida");
+
         String funcionarioNome = "Não atribuído";
         if (solicitacao.getFuncionario() != null) {
             funcionarioNome = solicitacao.getFuncionario().getUsuario().getNome();
@@ -351,7 +366,7 @@ public class SolicitacoesService {
                 solicitacao.getId(),
                 solicitacao.getNumeroOs(),
                 solicitacao.getDescricao_equipamento(),
-                solicitacao.getFk_categoria_equipamento(),
+                descricaoCategoria,
                 solicitacao.getDescricao_defeito(),
                 solicitacao.getFk_estado(),
                 funcionarioNome,

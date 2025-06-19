@@ -29,7 +29,10 @@ public class Solicitacao {
     @NotNull
     private String fkCliente;
     private String descricao_equipamento;
-    private String fk_categoria_equipamento;
+
+    @Column(name = "fk_categoria_equipamento")
+    private String fkCategoriaEquipamento;
+
     private String descricao_defeito;
     private String fk_estado;
 
@@ -43,10 +46,10 @@ public class Solicitacao {
     @OneToMany(mappedBy = "fkSolicitacao", fetch = FetchType.LAZY)
     private List<com.example.web_II.domain.historico.HistoricoAlteracao> historicoAlteracoes = new ArrayList<>();
 
-    public Solicitacao(String cliente, String descEquipamento, String descricaoCategoria, String descricaoDefeito, String idSituacao) {
+    public Solicitacao(String cliente, String descEquipamento, String idCategoria, String descricaoDefeito, String idSituacao) {
         this.fkCliente = cliente;
         this.descricao_equipamento = descEquipamento;
-        this.fk_categoria_equipamento = descricaoCategoria;
+        this.fkCategoriaEquipamento = idCategoria;
         this.descricao_defeito = descricaoDefeito;
         this.fk_estado = idSituacao;
         this.data_hora = LocalDateTime.now();
@@ -55,4 +58,5 @@ public class Solicitacao {
     public String getFk_funcionario() {
         return funcionario != null ? funcionario.getId() : null;
     }
+
 }
