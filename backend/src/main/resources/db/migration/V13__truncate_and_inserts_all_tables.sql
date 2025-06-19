@@ -48,10 +48,10 @@ INSERT INTO Funcionarios (id, nascimento, fk_usuario) VALUES
 ('func4', '1988-11-30', 'f4');
 
 INSERT INTO Usuarios (id, nome, email, senha, role) VALUES
-('c1', 'João', 'cliente1@email.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.', 'CLIENTE'),
-('c2', 'José', 'cliente2@email.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.', 'CLIENTE'),
-('c3', 'Joana', 'cliente3@email.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.', 'CLIENTE'),
-('c4', 'Joaquina', 'cliente4@email.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.', 'CLIENTE');
+('c1', 'João', 'cliente1@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 'CLIENTE'),
+('c2', 'José', 'cliente2@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 'CLIENTE'),
+('c3', 'Joana', 'cliente3@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 'CLIENTE'),
+('c4', 'Joaquina', 'cliente4@email.com', '$2a$12$yLbB1z601xIsbkJWQr8Q..A8R4Kl4dQp7LjWaARDha1Mu1RDt.fsm', 'CLIENTE');
 
 INSERT INTO Clientes (id, cpf, telefone, fk_endereco, fk_usuario) VALUES
 ('cli1', '11122233344', '(11) 9999-8888', '1', 'c1'),
