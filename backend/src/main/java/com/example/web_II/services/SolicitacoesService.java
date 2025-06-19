@@ -63,7 +63,7 @@ public class SolicitacoesService {
         return ResponseEntity.ok("Solicitação criada com sucesso!");
     }
 
-    public ResponseEntity<String> xbuscarSolicitacao(String id){
+    public ResponseEntity<String> buscarSolicitacao(String id){
         if (!solicitacaoRepository.existsById(id)){
             return ResponseEntity.ok("Esta OS não existe!!");
         }
