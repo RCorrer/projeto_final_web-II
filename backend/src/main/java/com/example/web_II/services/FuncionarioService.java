@@ -9,6 +9,7 @@ import com.example.web_II.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +25,10 @@ public class FuncionarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    public List<FuncionarioListagemDTO> listarTodosFuncionarios() {
-        return funcionarioRepository.findAll().stream()
+    public ResponseEntity<List<FuncionarioListagemDTO>> listarTodosFuncionarios() {
+        return ResponseEntity.ok(funcionarioRepository.findAll().stream()
                 .map(FuncionarioListagemDTO::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @Transactional(readOnly = true)
@@ -45,7 +46,7 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public FuncionarioListagemDTO atualizarFuncionario(FuncionarioAtualizacaoDTO data) {
+    public ResponseEntity<FuncionarioListagemDTO> atualizarFuncionario(FuncionarioAtualizacaoDTO data) {
 
         Funcionario funcionario = funcionarioRepository.findById(data.id())
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
@@ -61,7 +62,7 @@ public class FuncionarioService {
         usuarioRepository.save(usuario);
         funcionarioRepository.save(funcionario);
 
-        return new FuncionarioListagemDTO(funcionario);
+        return ResponseEntity.ok(new FuncionarioListagemDTO(funcionario));
     }
 
 
