@@ -1,6 +1,6 @@
+import { Injectable } from '@angular/core';
 import { Categoria } from "./../../models/categoria.model";
 import { environment } from "../../../environments/environment";
-import { Injectable } from "@angular/core";
 import {
   BehaviorSubject,
   Observable,
@@ -15,8 +15,6 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 @Injectable({
   providedIn: "root",
 })
-
-// refazer futuramente (porém funciona)
 export class CategoriaService {
   private baseUrl = `${environment.apiURL}/categoria`;
 
@@ -27,51 +25,12 @@ export class CategoriaService {
     );
   }
 
-  adicionarCategoria(categoria: Omit<Categoria, "id">): Observable<string> {
-    const url = `${this.baseUrl}/adicionar`;
+  listarCategorias(): Observable<string[]> {
     console.log(
-      "CategoriaService: adicionarCategoria - Enviando POST para:",
-      url,
-      "Payload:",
-      categoria
+      "CategoriaService: listarCategorias - Enviando GET para:",
+      this.baseUrl
     );
-    return this.http.post(url, categoria, { responseType: "text" }).pipe(
-      tap((response) =>
-        console.log(
-          "CategoriaService: adicionarCategoria - Resposta:",
-          response
-        )
-      ),
-      catchError(
-        this.handleError<string>(
-          `adicionarCategoria ${JSON.stringify(categoria)}`
-        )
-      )
-    );
-  }
-
-  private handleError<T>(operation = "operation", result?: T) {
-    return (error: HttpErrorResponse): Observable<T> => {
-      console.error(
-        `CategoriaService: ${operation} falhou. Status: ${error.status}. Mensagem: ${error.message}`,
-        error
-      );
-
-      // Log mais detalhado do erro do backend
-      if (error.error) {
-        console.error(
-          `CategoriaService: Detalhes do erro do backend:`,
-          error.error
-        );
-      }
-      return of(result as T);
-    };
-  }
-
-  listarCategorias(): Observable<Categoria[]> {
-    const url = `${this.baseUrl}/listar`;
-    console.log("CategoriaService: listarCategorias - Enviando GET para:", url);
-    return this.http.get<Categoria[]>(url).pipe(
+    return this.http.get<string[]>(this.baseUrl).pipe(
       retry(2),
       tap((data) => {
         console.log(
@@ -92,8 +51,60 @@ export class CategoriaService {
             `CategoriaService: listarCategorias - ${data.length} categorias recebidas.`
           );
         }
+      })
+    );
+  }
+
+  adicionarCategoria(categoria: Omit<Categoria, "id">): Observable<string> {
+    const url = `${this.baseUrl}`;
+    console.log(
+      "CategoriaService: adicionarCategoria - Enviando POST para:",
+      url,
+      "Payload:",
+      categoria
+    );
+    return this.http.post(url, categoria, { responseType: "text" }).pipe(
+      tap((response) =>
+        console.log(
+          "CategoriaService: adicionarCategoria - Resposta:",
+          response
+        )
+      ),
+      catchError(
+        this.handleError<string>(
+          `adicionarCategoria ${JSON.stringify(categoria)}`
+        )
+      )
+    );
+  }
+  private handleError<T>(operation = "operation", result?: T) {
+    return (error: HttpErrorResponse): Observable<T> => {
+      console.error(
+        `CategoriaService: ${operation} falhou. Status: ${error.status}. Mensagem: ${error.message}`,
+        error
+      );
+
+      // Log mais detalhado do erro do backend
+      if (error.error) {
+        console.error(
+          `CategoriaService: Detalhes do erro do backend:`,
+          error.error
+        );
+      }
+      return of(result as T);
+    };
+  }
+  removerCategoria(descricao: string): Observable<any> {
+    const url = `${this.baseUrl}/${encodeURIComponent(descricao)}`;
+    console.log("CategoriaService: removerCategoria", url);
+    return this.http.delete(url).pipe(
+      tap((response) => {
+        console.log(
+          "CategoriaService: Resposta de sucesso ao remover.",
+          response
+        );
       }),
-      catchError(this.handleError<Categoria[]>("listarCategorias", [])) // Retorna array vazio em caso de erro
+      catchError(this.handleError<string>(`excluir categoria: `, descricao))
     );
   }
 
@@ -101,8 +112,7 @@ export class CategoriaService {
     descricaoAntiga: string,
     novaDescricao: string
   ): Observable<string> {
-    // ID? Descrição antiga?
-    const url = `${this.baseUrl}/edita/${encodeURIComponent(descricaoAntiga)}`;
+    const url = `${this.baseUrl}/${encodeURIComponent(descricaoAntiga)}`;
     const payload = { descricao: novaDescricao };
     console.log(
       "CategoriaService: atualizarCategoria - Enviando PUT para:",

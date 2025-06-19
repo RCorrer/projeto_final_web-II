@@ -1,7 +1,7 @@
 import { Component, inject, Input, Output, EventEmitter } from "@angular/core";
 import { materialImports } from "../../../material-imports";
 import { CommonModule } from "@angular/common";
-import { CardBaseComponent, MenuItem } from "../card-base/card-base.component";
+import { CardBaseComponent, MenuItem } from "../card-base/card-base.directive";
 import { Funcionario } from "../../../models/funcionario.model";
 import { MatDialog } from "@angular/material/dialog";
 

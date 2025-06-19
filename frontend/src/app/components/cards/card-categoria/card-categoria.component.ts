@@ -1,40 +1,32 @@
-import { Component, inject, Input } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { materialImports } from "../../../material-imports";
-import { MatDialog } from "@angular/material/dialog";
-import { CardBaseComponent, MenuItem } from "../card-base/card-base.component";
-import { Categoria } from "../../../models/categoria.model";
-import { DialogCategoriaComponent } from "../../dialog-categoria/dialog-categoria.component";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: "app-card-categoria",
   standalone: true,
-  imports: [CommonModule, ...materialImports],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule
+  ],
   templateUrl: "./card-categoria.component.html",
   styleUrl: "./card-categoria.component.css",
 })
-export class CardCategoriaComponent extends CardBaseComponent<Categoria> {
-  @Input() categoria!: Categoria;
+export class CardCategoriaComponent {
+  // Recebe a string da categoria do componente pai
+  @Input() data!: string;
 
-  override getMenuItems(): MenuItem[] {
-    return [
-      {
-        icon: "edit",
-        label: "Editar",
-        action: () => this.editar.emit(this.categoria),
-      },
-      {
-        icon: "delete",
-        label: "Excluir",
-        action: () => this.excluir.emit(this.categoria),
-      },
-    ];
+  // Emite eventos para o componente pai quando os botões são clicados
+  @Output() editar = new EventEmitter<string>();
+  @Output() excluir = new EventEmitter<string>();
+
+  onEditarClick(): void {
+    this.editar.emit(this.data);
   }
-  private dialog = inject(MatDialog);
 
-  abrirDialog() {
-    this.dialog.open(DialogCategoriaComponent, {
-      width: "600px",
-    });
+  onExcluirClick(): void {
+    this.excluir.emit(this.data);
   }
 }

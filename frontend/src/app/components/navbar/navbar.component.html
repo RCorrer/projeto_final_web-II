@@ -1,8 +1,8 @@
 <nav>
   <div class="topo" routerLink="/home">
-    <img src="bipbip.png" alt="Logo BipBip" class="logo">
+    <img src="bipbip.png" alt="Logo BipBip" class="logo" />
     <h3>BipBip</h3>
-  </div>  
+  </div>
   <ul>
     <li *ngIf="authService.isCliente()">
       <mat-icon class="mat-18">add_box</mat-icon>
@@ -27,7 +27,7 @@
     </li>
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">devices</mat-icon>
-      <a routerLink="/categorias">Equipamentos</a>
+      <a routerLink="/categorias">Categorias</a>
     </li>
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">description</mat-icon>

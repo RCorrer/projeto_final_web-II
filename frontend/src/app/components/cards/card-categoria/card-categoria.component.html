@@ -1,18 +1,16 @@
-<div class="card-equipamento">
-  <div class="card-equipamento-info">
-    <p>{{ categoria.descricao }}</p>
+<div class="card-container">
+  
+  <div class="card-content">
+    <p>{{ data }}</p>
   </div>
 
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-</div>
+  <div class="card-actions">
+    <button mat-icon-button (click)="onEditarClick()" aria-label="Editar Categoria">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="onExcluirClick()" aria-label="Excluir Categoria" color="warn">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
 
-<mat-menu #menu="matMenu">
-  <button mat-icon-button (click)="editar.emit(categoria)" aria-label="Editar">
-    <mat-icon>edit</mat-icon>
-  </button>
-  <button mat-icon-button (click)="excluir.emit(categoria)" aria-label="Excluir">
-    <mat-icon>delete</mat-icon>
-  </button>
-</mat-menu>
+</div>

@@ -9,7 +9,7 @@ import { materialImports } from "../../material-imports";
 import { Categoria } from "../../models/categoria.model";
 import { CategoriaService } from "../../services/categoria/categoria.service";
 import { DialogCategoriaComponent } from "../../components/dialog-categoria/dialog-categoria.component";
-import { catchError, Observable, of, tap } from "rxjs";
+import { BehaviorSubject, catchError, Observable, of, tap } from "rxjs";
 
 @Component({
   selector: "app-tela-categorias",
@@ -19,14 +19,14 @@ import { catchError, Observable, of, tap } from "rxjs";
     NavbarComponent,
     CardCategoriaComponent,
     CommonModule,
-    DialogConfirmComponent,
   ],
   templateUrl: "./tela-categorias.component.html",
   styleUrl: "./tela-categorias.component.css",
 })
 export class TelaCategoriasComponent implements OnInit {
-  categorias$!: Observable<Categoria[]>;
-  errorOccurred: boolean = false; // Nova flag
+  categorias$!: Observable<string[]>;
+  errorOccurred: boolean = false;
+  private categoriasSubject = new BehaviorSubject<string[]>([]);
 
   constructor(
     private categoriaService: CategoriaService,
@@ -40,118 +40,93 @@ export class TelaCategoriasComponent implements OnInit {
     this.listarCategorias();
   }
 
+  // --------------------------------------------------------------------------------------------------
   listarCategorias(): void {
-    this.errorOccurred = false; // Reseta a flag antes de tentar carregar
-    console.log(
-      "TelaCategoriasComponent: listarCategorias - Iniciando busca de categorias."
-    );
+    this.errorOccurred = false;
     this.categorias$ = this.categoriaService.listarCategorias().pipe(
-      tap((data) => {
-        console.log(
-          "TelaCategoriasComponent: listarCategorias - Dados recebidos:",
-          data
-        );
-        if (data && data.length === 0) {
-          console.warn(
-            "TelaCategoriasComponent: listarCategorias - Nenhuma categoria retornada."
-          );
-        }
-      }),
+      tap((data) => console.log("Dados recebidos:", data)),
       catchError((error) => {
-        console.error(
-          "TelaCategoriasComponent: listarCategorias - Erro ao buscar categorias:",
-          error
-        );
-        this.errorOccurred = true; // Define a flag de erro
+        console.error("Erro ao buscar categorias:", error);
+        this.errorOccurred = true;
         return of([]);
       })
     );
-    console.log(
-      "TelaCategoriasComponent: listarCategorias - Observable categorias$ atribuído."
-    );
   }
 
-  abrirDialog(categoriaEditando?: Categoria): void {
+  // --------------------------------------------------------------------------------------------------
+  abrirDialog(descricaoAtual?: string): void {
+    const isEditing = !!descricaoAtual;
     console.log(
-      "TelaCategoriasComponent: abrirDialog - Chamado com:",
-      categoriaEditando
+      isEditing
+        ? `Editando categoria: ${descricaoAtual}`
+        : "Adicionando nova categoria"
     );
-    // Descomente e ajuste conforme sua implementação do DialogCategoriaComponent
-    /*
+
     const dialogRef = this.dialog.open(DialogCategoriaComponent, {
-      width: '400px', // Exemplo
+      width: "450px",
       data: {
-        titulo: categoriaEditando ? "Editar Categoria" : "Nova Categoria",
-        // Passando a categoria inteira ou apenas os dados necessários
-        categoria: categoriaEditando || { descricao: "" },
+        titulo: isEditing ? "Editar Categoria" : "Nova Categoria",
+        categoria: { descricao: descricaoAtual || "" },
       },
+      disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((dados) => {
-      console.log("TelaCategoriasComponent: abrirDialog - Dialog fechado. Dados:", dados);
-      if (dados) { // 'dados' deve ser o objeto da categoria ou os dados para criar/atualizar
-        if (categoriaEditando && categoriaEditando.id) { // Verifica se é edição
-          this.categoriaService
-            .atualizarCategoria(categoriaEditando.descricao, dados.descricao) // Ajuste conforme a assinatura do seu método
-            .subscribe({
-              next: () => {
-                console.log("TelaCategoriasComponent: Categoria atualizada com sucesso.");
-                this.listarCategorias(); // Atualiza a lista
-              },
-              error: (err) => console.error("TelaCategoriasComponent: Erro ao atualizar categoria", err)
-            });
-        } else { // Nova categoria
-          this.categoriaService
-            .adicionarCategoria({ descricao: dados.descricao } as Categoria) // Ajuste conforme o tipo esperado
-            .subscribe({
-              next: () => {
-                console.log("TelaCategoriasComponent: Categoria adicionada com sucesso.");
-                this.listarCategorias(); // Atualiza a lista
-              },
-              error: (err) => console.error("TelaCategoriasComponent: Erro ao adicionar categoria", err)
-            });
+    dialogRef
+      .afterClosed()
+      .subscribe((result: { descricao: string } | undefined) => {
+        if (result && result.descricao.trim() !== "") {
+          const novaDescricao = result.descricao.trim();
+
+          if (isEditing) {
+            console.log(
+              `Atualizando de '${descricaoAtual}' para '${novaDescricao}'`
+            );
+            this.categoriaService
+              .atualizarCategoria(descricaoAtual, novaDescricao)
+              .subscribe({
+                next: () => this.listarCategorias(),
+                error: (err) =>
+                  console.error("Erro ao atualizar categoria", err),
+              });
+          } else {
+            console.log(`Adicionando nova categoria '${novaDescricao}'`);
+            this.categoriaService
+              .adicionarCategoria({ descricao: novaDescricao })
+              .subscribe({
+                next: () => this.listarCategorias(),
+                error: (err) =>
+                  console.error("Erro ao adicionar categoria", err),
+              });
+          }
         }
-      }
-    });
-    */
+      });
   }
 
-  excluirCategoria(categoriaParaExcluir: Categoria): void {
-    console.log(
-      "TelaCategoriasComponent: excluirCategoria - Chamado para:",
-      categoriaParaExcluir
-    );
-    // Descomente e ajuste conforme sua implementação do DialogConfirmComponent e serviço
-    /*
-    if (!categoriaParaExcluir || !categoriaParaExcluir.id) {
-      console.error("TelaCategoriasComponent: excluirCategoria - Categoria ou ID da categoria inválido.");
-      return;
-    }
+  // --------------------------------------------------------------------------------------------------
+  excluirCategoria(descricao: string): void {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
         titulo: "Confirmação de Exclusão",
-        mensagem: `Deseja realmente excluir a categoria "${categoriaParaExcluir.descricao}"?`,
+        mensagem: `Deseja realmente excluir a categoria "${descricao}"?`,
       },
     });
 
-    dialogRef.afterClosed().subscribe((confirmado) => {
-      console.log("TelaCategoriasComponent: excluirCategoria - Confirmação recebida:", confirmado);
+    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
       if (confirmado) {
-        // Assumindo que você terá um método removerCategoria no seu serviço que aceita o ID
-        // this.categoriaService.removerCategoria(categoriaParaExcluir.id).subscribe({
-        //   next: () => {
-        //     console.log(`TelaCategoriasComponent: Categoria ID: ${categoriaParaExcluir.id} excluída com sucesso.`);
-        //     this.listarCategorias(); // Atualiza a lista de categorias
-        //   },
-        //   error: (err) => console.error(`TelaCategoriasComponent: Erro ao excluir categoria ID: ${categoriaParaExcluir.id}`, err),
-        // });
-        console.warn("Lógica de exclusão da categoria não implementada no serviço.");
+        this.categoriaService.removerCategoria(descricao).subscribe({
+          next: () => {
+            console.log("Categoria removida com sucesso.");
+            this.listarCategorias();
+          },
+          error: (err) => console.error("Erro ao remover categoria", err),
+        });
       } else {
-        console.log("TelaCategoriasComponent: Exclusão da categoria cancelada.");
+        console.log("Exclusão cancelada pelo usuário.");
       }
     });
-    */
-    // Remova ou implemente a linha abaixo
-    // throw new Error("TelaCategoriasComponent: excluirCategoria - Método não completamente implementado.");
+  }
+
+  excluirTeste(descricao: string): void {
+    console.log("Teste");
   }
 }

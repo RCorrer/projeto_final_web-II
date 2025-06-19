@@ -2,7 +2,7 @@ import { Component, inject, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { materialImports } from "../../../material-imports";
 import { MatDialog } from "@angular/material/dialog";
-import { CardBaseComponent, MenuItem } from "../card-base/card-base.component";
+import { CardBaseComponent, MenuItem } from "../card-base/card-base.directive";
 import { Categoria } from "../../../models/categoria.model";
 
 @Component({
@@ -30,5 +30,4 @@ export class CardEquipamentoComponent extends CardBaseComponent<Categoria> {
     ];
   }
   private dialog = inject(MatDialog);
-
 }
