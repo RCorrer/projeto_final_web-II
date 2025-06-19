@@ -26,17 +26,13 @@ import { BehaviorSubject, catchError, Observable, of, tap } from "rxjs";
 export class TelaCategoriasComponent implements OnInit {
   categorias$!: Observable<string[]>;
   errorOccurred: boolean = false;
-  private categoriasSubject = new BehaviorSubject<string[]>([]);
 
   constructor(
     private categoriaService: CategoriaService,
     private dialog: MatDialog
-  ) {
-    console.log("TelaCategoriasComponent: Construtor chamado.");
-  }
+  ) {}
 
   ngOnInit(): void {
-    console.log("TelaCategoriasComponent: ngOnInit chamado.");
     this.listarCategorias();
   }
 
