@@ -6,6 +6,7 @@ import com.example.web_II.services.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class FuncionarioController {
     private FuncionarioService funcionarioService;
 
     @GetMapping
-    public List<FuncionarioListagemDTO> listarFuncionarios() {
+    public ResponseEntity<List<FuncionarioListagemDTO>> listarFuncionarios() {
         return funcionarioService.listarTodosFuncionarios();
     }
 
@@ -30,7 +31,7 @@ public class FuncionarioController {
 
     @PutMapping
     @Transactional
-    public FuncionarioListagemDTO atualizarFuncionario(@RequestBody FuncionarioAtualizacaoDTO data) {
+    public ResponseEntity<FuncionarioListagemDTO> atualizarFuncionario(@RequestBody FuncionarioAtualizacaoDTO data) {
         return funcionarioService.atualizarFuncionario(data);
     }
 

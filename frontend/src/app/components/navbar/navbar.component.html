@@ -15,7 +15,13 @@
 
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">hourglass_empty</mat-icon>
+<<<<<<< HEAD
       <a [routerLink]="['/home']" [queryParams]="{ estado: '1' }">Solicitações Abertas</a>
+=======
+      <a [routerLink]="['/home']" [queryParams]="{ estado: 'ABERTA' }"
+        >Solicitações Abertas</a
+      >
+>>>>>>> d981d14b (refactor: corrigir utilizção de dados do back/bd)
     </li>
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">list</mat-icon>

@@ -51,7 +51,9 @@ public class SecurityConfigurations {
                         ).permitAll()
 
                         // Rotas protegidas (Funcionarios)
-                        .requestMatchers("/categoria/**").hasRole("FUNCIONARIO")
+                        .requestMatchers(HttpMethod.POST,"/categoria").hasRole("FUNCIONARIO")
+                        .requestMatchers(HttpMethod.PUT,"/categoria/**").hasRole("FUNCIONARIO")
+                        .requestMatchers(HttpMethod.DELETE,"/categoria/**").hasRole("FUNCIONARIO")
                         .requestMatchers("/funcionarios").hasRole("FUNCIONARIO")
                         .requestMatchers("/cadastro/funcionario").hasRole("FUNCIONARIO")
                         .requestMatchers("/relatorio/**").hasRole("FUNCIONARIO")
@@ -70,6 +72,7 @@ public class SecurityConfigurations {
 
                         //separar rota de solicitação por endpoints
                         //o que é de funcionario/cliente ou ambos
+                        .requestMatchers(HttpMethod.GET,"/categoria/**").permitAll()
                         .requestMatchers("/cadastro/cliente").permitAll()
                         .requestMatchers("/solicitacao/**").permitAll()
 

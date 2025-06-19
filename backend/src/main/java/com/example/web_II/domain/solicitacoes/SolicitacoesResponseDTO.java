@@ -1,5 +1,7 @@
 package com.example.web_II.domain.solicitacoes;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public record SolicitacoesResponseDTO(String id,
                                       String cliente,
                                       String data_hora,

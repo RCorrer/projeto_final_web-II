@@ -2,6 +2,7 @@ package com.example.web_II.domain.solicitacoes;
 
 import com.example.web_II.domain.cliente.Cliente;
 import com.example.web_II.repositories.ClienteRepository;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
