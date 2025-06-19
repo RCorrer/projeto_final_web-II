@@ -9,23 +9,30 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-modal-mostar-orcamento",
-  imports: [CommonModule, MatButtonModule],
-  templateUrl: './modal-mostar-orcamento.component.html',
-  styleUrl: './modal-mostar-orcamento.component.css'
+  imports: [CommonModule, MatButtonModule, MatFormFieldModule, FormsModule],
+  templateUrl: "./modal-mostar-orcamento.component.html",
+  styleUrl: "./modal-mostar-orcamento.component.css",
 })
 export class ModalMostarOrcamentoComponent implements OnChanges {
   @Input() isOpen = false;
   @Input() solicitacao: any;
 
   @Output() closed = new EventEmitter<void>();
-  @Output() alterarEstado = new EventEmitter<{ id: string, novoEstado: string }>();
+  @Output() alterarEstado = new EventEmitter<{
+    id: string;
+    novoEstado: string;
+  }>();
 
   mostrarRejeicao = false;
   mostrarAprovacao = false;
+
+  motivoRejeicao: string = "";
 
   informacoesSolicitacao: SolicitacaoComHistoricoDTO | null = null;
 
@@ -57,8 +64,25 @@ export class ModalMostarOrcamentoComponent implements OnChanges {
   }
 
   aceitarOrcamento() {
+    const body = {
+      id: this.solicitacao.id,
+      motivo: ".",
+    };
+
+    this.solicitacaoService.aprovarSolicitacao(body).subscribe({
+      next: () => {
+        this.alterarEstado.emit({
+          id: this.solicitacao.id,
+          novoEstado: "3", // Estado "APROVADA"
+        });
+        this.mostrarAprovacao = true;
+      },
+      error: (err) => {
+        console.error("Erro ao aprovar:", err);
+      },
+    });
+
     this.close();
-    this.mostrarAprovacao = true;
   }
 
   confirmarAprovacao() {
@@ -86,7 +110,23 @@ export class ModalMostarOrcamentoComponent implements OnChanges {
   }
 
   confirmarRejeicao() {
-    this.mostrarRejeicao = false;
-    this.recusarOrcamento();
+    const body = {
+      id: this.solicitacao.id,
+      motivo: this.motivoRejeicao || ".",
+    };
+
+    this.solicitacaoService.rejeitarSolicitacao(body).subscribe({
+      next: () => {
+        this.alterarEstado.emit({
+          id: this.solicitacao.id,
+          novoEstado: "4", // Estado "REJEITADA"
+        });
+        this.mostrarRejeicao = false;
+        this.close();
+      },
+      error: (err) => {
+        console.error("Erro ao rejeitar:", err);
+      },
+    });
   }
 }
