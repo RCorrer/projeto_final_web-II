@@ -354,12 +354,27 @@ public class SolicitacoesService {
         );
 
         List<HistoricoAlteracaoDTO> historicoDTOs = solicitacao.getHistoricoAlteracoes().stream()
-                .map(historico -> new HistoricoAlteracaoDTO(
-                        historico.getDescricao(),
-                        historico.getEstadoAnterior(),
-                        historico.getEstadoNovo(),
-                        historico.getDataHora()
-                ))
+                .map(historico -> {
+                    String funcionarioRedirecionado = null;
+                    // Verifica se é um histórico de redirecionamento (estado novo = 5)
+                    if ("5".equals(historico.getEstadoNovo())) {
+                        String descricao = historico.getDescricao();
+                        // Extrai o nome do funcionário destino da descrição
+                        if (descricao.startsWith("Solicitação redirecionada de ")) {
+                            String[] partes = descricao.split(" para ");
+                            if (partes.length > 1) {
+                                funcionarioRedirecionado = partes[1];
+                            }
+                        }
+                    }
+                    return new HistoricoAlteracaoDTO(
+                            historico.getDescricao(),
+                            historico.getEstadoAnterior(),
+                            historico.getEstadoNovo(),
+                            historico.getDataHora(),
+                            funcionarioRedirecionado
+                    );
+                })
                 .collect(Collectors.toList());
 
         SolicitacaoComHistoricoDTO response = new SolicitacaoComHistoricoDTO(
