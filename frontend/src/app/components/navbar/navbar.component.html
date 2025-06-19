@@ -1,8 +1,8 @@
 <nav>
   <div class="topo" routerLink="/home">
-    <img src="bipbip.png" alt="Logo BipBip" class="logo">
+    <img src="bipbip.png" alt="Logo BipBip" class="logo" />
     <h3>BipBip</h3>
-  </div>  
+  </div>
   <ul>
     <li *ngIf="authService.isCliente()">
       <mat-icon class="mat-18">add_box</mat-icon>
@@ -15,11 +15,19 @@
 
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">hourglass_empty</mat-icon>
+<<<<<<< HEAD
       <a [routerLink]="['/home']" [queryParams]="{ estado: '1' }">Solicitações Abertas</a>
+=======
+      <a [routerLink]="['/home']" [queryParams]="{ estado: 'ABERTA' }"
+        >Solicitações Abertas</a
+      >
+>>>>>>> d981d14b (refactor: corrigir utilizção de dados do back/bd)
     </li>
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">list</mat-icon>
-      <a [routerLink]="['/home']" [queryParams]="{ estado: '' }">Todas as Solicitações</a>
+      <a [routerLink]="['/home']" [queryParams]="{ estado: '' }"
+        >Todas as Solicitações</a
+      >
     </li>
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">group</mat-icon>
@@ -27,7 +35,7 @@
     </li>
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">devices</mat-icon>
-      <a routerLink="/categorias">Equipamentos</a>
+      <a routerLink="/categorias">Categorias</a>
     </li>
     <li *ngIf="authService.isFuncionario()">
       <mat-icon class="mat-18">description</mat-icon>

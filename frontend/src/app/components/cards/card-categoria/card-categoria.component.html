@@ -1,18 +1,5 @@
-<div class="card-equipamento">
-  <div class="card-equipamento-info">
-    <p>{{ categoria.descricao }}</p>
+<app-card-base-template [menuItems]="getMenuItems()">
+  <div class="card-content">
+    <p> {{ data }} </p>
   </div>
-
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-</div>
-
-<mat-menu #menu="matMenu">
-  <button mat-icon-button (click)="editar.emit(categoria)" aria-label="Editar">
-    <mat-icon>edit</mat-icon>
-  </button>
-  <button mat-icon-button (click)="excluir.emit(categoria)" aria-label="Excluir">
-    <mat-icon>delete</mat-icon>
-  </button>
-</mat-menu>
+</app-card-base-template>

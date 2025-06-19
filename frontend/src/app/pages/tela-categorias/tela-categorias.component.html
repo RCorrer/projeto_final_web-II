@@ -27,16 +27,14 @@
           <p>Visualize todas as categorias de equipamentos cadastradas.</p>
         </div>
 
-        <ng-container
-          *ngIf="categorias$ | async as categorias; else loadingOrError"
-        >
+        <ng-container *ngIf="categorias$ | async as categorias; else loadingOrError">
           <ng-container *ngIf="categorias.length > 0; else vazio">
             <div class="cards-container">
               <app-card-categoria
                 *ngFor="let categoria of categorias"
-                [categoria]="categoria"
-                (editar)="abrirDialog(categoria)"
-                (excluir)="excluirCategoria(categoria)"
+                [data]="categoria"
+                (editar)="abrirDialog($event)"
+                (excluir)="excluirCategoria($event)"
               >
               </app-card-categoria>
             </div>
