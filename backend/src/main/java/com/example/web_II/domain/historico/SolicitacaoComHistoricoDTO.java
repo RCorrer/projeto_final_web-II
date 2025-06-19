@@ -2,6 +2,7 @@ package com.example.web_II.domain.historico;
 
 import com.example.web_II.domain.cliente.Cliente;
 import com.example.web_II.domain.cliente.EnviarClienteDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;

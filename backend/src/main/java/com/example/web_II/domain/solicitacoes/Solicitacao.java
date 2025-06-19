@@ -1,10 +1,14 @@
 package com.example.web_II.domain.solicitacoes;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class Solicitacao {
     private String fk_funcionario;
     private Float orcamento;
     private LocalDateTime data_hora;
+
 
     @OneToMany(mappedBy = "fkSolicitacao", fetch = FetchType.LAZY)
     private List<com.example.web_II.domain.historico.HistoricoAlteracao> historicoAlteracoes = new ArrayList<>();
