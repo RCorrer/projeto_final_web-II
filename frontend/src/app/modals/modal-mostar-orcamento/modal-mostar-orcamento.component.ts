@@ -1,15 +1,23 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
+import { SolicitacaoService } from "./../../services/solicitacao/solicitacao.service";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
 
 @Component({
-  selector: 'app-modal-mostar-orcamento',
+  selector: "app-modal-mostar-orcamento",
   imports: [CommonModule, MatButtonModule],
   templateUrl: './modal-mostar-orcamento.component.html',
   styleUrl: './modal-mostar-orcamento.component.css'
 })
-
-export class ModalMostarOrcamentoComponent {
+export class ModalMostarOrcamentoComponent implements OnChanges {
   @Input() isOpen = false;
   @Input() solicitacao: any;
 
@@ -18,6 +26,30 @@ export class ModalMostarOrcamentoComponent {
 
   mostrarRejeicao = false;
   mostrarAprovacao = false;
+
+  informacoesSolicitacao: SolicitacaoComHistoricoDTO | null = null;
+
+  constructor(private solicitacaoService: SolicitacaoService) {}
+
+  mostrarDetalhesSolicitacao(id: string): void {
+    this.informacoesSolicitacao = null;
+
+    this.solicitacaoService.fetchDetalhesSolicitacao(id).subscribe({
+      next: (dados) => {
+        this.informacoesSolicitacao = dados;
+        console.log("Dados: ", dados);
+      },
+      error: (erro) => {
+        console.error("Ocorreu um erro: ", erro);
+      },
+    });
+  }
+  // assim que o modal for aberto, buscará informações da solicitação
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.isOpen && this.solicitacao && this.solicitacao.id) {
+      this.mostrarDetalhesSolicitacao(this.solicitacao.id);
+    }
+  }
 
   close() {
     this.isOpen = false;
@@ -32,7 +64,7 @@ export class ModalMostarOrcamentoComponent {
   confirmarAprovacao() {
     this.alterarEstado.emit({
       id: this.solicitacao.id,
-      novoEstado: 'APROVADA'
+      novoEstado: "APROVADA",
     });
     this.mostrarAprovacao = false;
   }
@@ -40,20 +72,20 @@ export class ModalMostarOrcamentoComponent {
   recusarOrcamento() {
     this.alterarEstado.emit({
       id: this.solicitacao.id,
-      novoEstado: 'REJEITADA'
+      novoEstado: "REJEITADA",
     });
     this.close();
   }
 
-  mostarModalRejeitar(){
+  mostarModalRejeitar() {
     this.mostrarRejeicao = true;
   }
 
-  cancelarRejeicao(){
+  cancelarRejeicao() {
     this.mostrarRejeicao = false;
   }
 
-  confirmarRejeicao(){
+  confirmarRejeicao() {
     this.mostrarRejeicao = false;
     this.recusarOrcamento();
   }
