@@ -55,3 +55,10 @@ export interface EfetuarManutencaoDTO {
   descricaoManutencao?: string;
   orientacoesCliente?: string;
 }
+
+// Interface RedirecionarSolicitacaoDTO.java
+export interface RedirecionarSolicitacaoDTO {
+  idSolicitacao: string;
+  idFuncionarioOrigem: string;
+  idFuncionarioDestino: string;
+}

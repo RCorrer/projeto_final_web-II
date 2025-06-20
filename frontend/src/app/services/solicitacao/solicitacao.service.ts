@@ -9,7 +9,7 @@ import {
 import { tap, catchError, map } from "rxjs/operators";
 import { Solicitacao } from "../../models/Solicitacao.model";
 import { SolicitacaoFuncionarioBackendDTO } from "../../models/SolicitacaoFuncionarioBackendDTO.model";
-import { EfetuarManutencaoDTO, MudarEstadoDTO, OrcamentoDTO, SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
+import { EfetuarManutencaoDTO, MudarEstadoDTO, OrcamentoDTO, RedirecionarSolicitacaoDTO, SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
 
 interface criacaoPayload {
   idCliente: string;
@@ -269,6 +269,15 @@ export class SolicitacaoService {
       .pipe(
         tap(response => console.log('Resposta do backend (Manutenção Efetuada):', response)),
         catchError(this.handleError<string>('efetuarManutencao'))
+      );
+  }
+
+  redirecionarSolicitacao(dados: RedirecionarSolicitacaoDTO): Observable<string> {
+    console.log('SolicitacaoService: Enviando dados de redirecionamento:', dados);
+    return this.http.post(`${this.apiUrl}/solicitacao/redirecionarSolicitacao`, dados, { responseType: 'text' })
+      .pipe(
+        tap(response => console.log('Resposta do backend (Redirecionamento):', response)),
+        catchError(this.handleError<string>('redirecionarSolicitacao'))
       );
   }
 
