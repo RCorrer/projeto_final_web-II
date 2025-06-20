@@ -1,0 +1,23 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="fechar()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <h3>Registrar Conclusão da Manutenção</h3>
+    <p>Por favor, descreva o serviço realizado e forneça orientações ao cliente.</p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição da Manutenção Realizada</mat-label>
+      <textarea matInput rows="4" [(ngModel)]="descricaoManutencao" required></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Orientações para o Cliente</mat-label>
+        <textarea matInput rows="3" [(ngModel)]="orientacoesCliente" required></textarea>
+    </mat-form-field>
+
+    <div class="modal-acoes">
+      <button mat-stroked-button (click)="fechar()">Cancelar</button>
+      <button mat-raised-button color="primary" (click)="confirmar()" [disabled]="!descricaoManutencao || !orientacoesCliente">
+        Confirmar Manutenção
+      </button>
+    </div>
+  </div>
+</div>
