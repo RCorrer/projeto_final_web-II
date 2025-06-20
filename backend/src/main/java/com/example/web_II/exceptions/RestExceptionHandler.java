@@ -7,15 +7,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
-
+@RestControllerAdvice
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 
 // USUARIOS
+
+
+    @ExceptionHandler(LoginNotFoundException.class)
+    private ResponseEntity<RespostaPadraoDTO> loginHandler (LoginNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RespostaPadraoDTO(
+                HttpStatus.NOT_FOUND.toString(), ex.getMessage()
+        ));
+    }
 
     @ExceptionHandler(EmailJaCadastradoException.class)
     private ResponseEntity<RespostaPadraoDTO> emailJaCadastradoHandler(EmailJaCadastradoException exception){
@@ -38,6 +47,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 new RespostaPadraoDTO(HttpStatus.NOT_FOUND.toString(), ex.getMessage())
         );
     }
+
+    @ExceptionHandler(ClienteNaoEncontradoException.class)
+    private ResponseEntity<RespostaPadraoDTO> clienteNaoEncontradoHandler (ClienteNaoEncontradoException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new RespostaPadraoDTO(HttpStatus.NOT_FOUND.toString(), ex.getMessage())
+        );
+    }
+
 
 
 
