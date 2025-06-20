@@ -43,7 +43,7 @@ public class SolicitacoesService {
 
 
     public ResponseEntity<String> criarSolicitacao(AbrirSolicitacaoDTO data) {
-        Optional<Categoria> categoriaOpt = categoriaRepository.findById(data.categoria());
+        Optional<Categoria> categoriaOpt = categoriaRepository.findByDescricao(data.categoria());
         if (categoriaOpt.isEmpty() || !categoriaOpt.get().isAtiva()) {
             return ResponseEntity.badRequest().body("Categoria inválida ou inativa");
         }
@@ -51,7 +51,7 @@ public class SolicitacoesService {
         Solicitacao novaSolicitacao = new Solicitacao(
                 data.idCliente(),
                 data.descEquip(),
-                data.categoria(),
+                categoriaOpt.get().getId(),
                 data.descDefeito(),
                 "1"
         );
