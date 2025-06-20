@@ -45,6 +45,8 @@ public class SolicitacoesService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired FuncionarioRepository funcionarioRepository;
+
 
     public ResponseEntity<RespostaPadraoDTO> criarSolicitacao(AbrirSolicitacaoDTO data) {
         Optional<Categoria> categoriaOpt = categoriaRepository.findByDescricao(data.categoria());
@@ -101,7 +103,7 @@ public class SolicitacoesService {
 
     public ResponseEntity<List<SolicitacaoClienteDTO>> buscarSolicitacaoCliente(String cliente) {
         if (!clienteRepository.existsById(cliente)) {
-            return ResponseEntity.notFound().build();
+            throw new ClienteNaoEncontradoException();
         }
 
         List<Solicitacao> solicitacoes = solicitacaoRepository.findByFkCliente(cliente);
@@ -408,7 +410,7 @@ public class SolicitacoesService {
         Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findByIdWithHistorico(id);
 
         if (solicitacaoOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new SolicitacaoInexistente();
         }
 
         Solicitacao solicitacao = solicitacaoOpt.get();
@@ -479,6 +481,9 @@ public class SolicitacoesService {
     }
 
     public ResponseEntity<List<SolicitacaoFuncionarioDTO>> getSolicitacoesAbertasOuAlocadasAoFuncionario(String funcionarioId) {
+        Funcionario funcionario = funcionarioRepository.findById(funcionarioId)
+                .orElseThrow(FuncionarioNaoEncontradoException::new);
+
         List<Solicitacao> solicitacoes = solicitacaoRepository.findSolicitacoesAbertasOuAlocadasAoFuncionario(funcionarioId);
         List<SolicitacaoFuncionarioDTO> dtos = new ArrayList<>();
 
