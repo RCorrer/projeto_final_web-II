@@ -2,6 +2,7 @@ package com.example.web_II.controllers;
 
 import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.categoria.CategoriaDTO;
+import com.example.web_II.domain.geral.RespostaPadraoDTO;
 import com.example.web_II.repositories.CategoriaRepository;
 import com.example.web_II.services.CategoriaService;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ public class CategoriaController {
 
 
     @PostMapping("/categoria")
-    public ResponseEntity<String> addCategoria(@RequestBody @Valid CategoriaDTO data){
+    public ResponseEntity<RespostaPadraoDTO> addCategoria(@RequestBody @Valid CategoriaDTO data){
         return categoriaService.addCategoryResponse(data);
     }
 
@@ -38,12 +39,12 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/categoria/{descricao}")
-    public ResponseEntity<String> removeCategoria(@PathVariable String descricao){
+    public ResponseEntity<RespostaPadraoDTO> removeCategoria(@PathVariable String descricao){
         return categoriaService.deleteCategoryResponse(descricao);
     }
 
     @PutMapping("/categoria/{descricao}")
-    public ResponseEntity<String> editarCategoria(@PathVariable String descricao ,@RequestBody CategoriaDTO data){
+    public ResponseEntity<RespostaPadraoDTO> editarCategoria(@PathVariable String descricao ,@RequestBody CategoriaDTO data){
         return categoriaService.editarCategoria(descricao,data);
     }
 

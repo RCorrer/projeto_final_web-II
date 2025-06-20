@@ -2,6 +2,7 @@ package com.example.web_II.controllers;
 
 import com.example.web_II.domain.funcionarios.FuncionarioAtualizacaoDTO;
 import com.example.web_II.domain.funcionarios.FuncionarioListagemDTO;
+import com.example.web_II.domain.geral.RespostaPadraoDTO;
 import com.example.web_II.services.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ public class FuncionarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletarFuncionario(@PathVariable String id) {
+    public ResponseEntity<RespostaPadraoDTO> deletarFuncionario(@PathVariable String id) {
         return funcionarioService.deletarFuncionario(id);
     }
 

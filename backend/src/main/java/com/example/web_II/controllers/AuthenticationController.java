@@ -1,8 +1,10 @@
 package com.example.web_II.controllers;
 
 import com.example.web_II.domain.cliente.CadastroClienteDTO;
+import com.example.web_II.domain.geral.RespostaPadraoDTO;
 import com.example.web_II.domain.usuarios.AuthenticationDTO;
 import com.example.web_II.domain.funcionarios.CadastroFuncionarioDTO;
+import com.example.web_II.domain.usuarios.LoginResponseDTO;
 import com.example.web_II.exceptions.LoginNotFoundException;
 import com.example.web_II.services.AuthService;
 import jakarta.validation.Valid;
@@ -21,15 +23,14 @@ public class AuthenticationController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
         try {
             var response = authService.authenticate(data);
             return ResponseEntity.ok(response);
         } catch (LoginNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            throw new LoginNotFoundException();
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ex.getMessage());
+            throw new LoginNotFoundException();
         }
     }
 
@@ -41,7 +42,7 @@ public class AuthenticationController {
 
     @Transactional
     @PostMapping("/cadastro/cliente")
-    public ResponseEntity registerCliente(@RequestBody @Valid CadastroClienteDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> registerCliente(@RequestBody @Valid CadastroClienteDTO data) {
         return authService.registerCliente(data);
     }
 }
