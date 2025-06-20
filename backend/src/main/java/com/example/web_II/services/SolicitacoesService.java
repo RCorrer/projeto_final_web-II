@@ -272,8 +272,8 @@ public class SolicitacoesService {
                 funcionarioDestinoOpt.get().getUsuario().getNome());
     }
 
-    public ResponseEntity<String> marcarComoArrumada(MudarEstadoDTO data) {
-        return mudarEstado(data, "6", "ARRUMADA");
+    public ResponseEntity<String> marcarComoArrumada(MudarEstadoArrumadaDTO data) {
+        return mudarArrumada(data, "6", "ARRUMADA");
     }
 
     public ResponseEntity<String> marcarComoPaga(MudarEstadoDTO data) {
@@ -321,6 +321,38 @@ public class SolicitacoesService {
 
         return ResponseEntity.ok("Solicitação atualizada para " + nomeEstado + " com sucesso");
     }
+
+
+    private ResponseEntity<String> mudarArrumada(MudarEstadoArrumadaDTO data, String novoEstado, String nomeEstado) {
+        if (!solicitacaoRepository.existsById(data.idSolicitacao())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Solicitação não encontrada");
+        }
+
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(data.idSolicitacao());
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao recuperar solicitação");
+        }
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+        String estadoAnterior = solicitacao.getFk_estado();
+
+        solicitacao.setFk_estado(novoEstado);
+        solicitacao.setOrientacoes_cliente(data.orientacoes_cliente());
+        solicitacao.setDescricao_manutencao(data.descricao_manutencao());
+        solicitacaoRepository.save(solicitacao);
+
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                data.idSolicitacao(),
+                "Solicitação atualizada para " + nomeEstado,
+                estadoAnterior,
+                novoEstado
+        );
+        historicoAlteracaoRepository.save(historico);
+
+        return ResponseEntity.ok("Solicitação atualizada para " + nomeEstado + " com sucesso");
+    }
+
+
 
     public ResponseEntity<SolicitacaoComHistoricoDTO> getSolicitacaoComHistorico(String id) {
         Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findByIdWithHistorico(id);
@@ -383,6 +415,8 @@ public class SolicitacoesService {
                 solicitacao.getDescricao_equipamento(),
                 descricaoCategoria,
                 solicitacao.getDescricao_defeito(),
+                solicitacao.getOrientacoes_cliente(),
+                solicitacao.getDescricao_manutencao(),
                 solicitacao.getFk_estado(),
                 funcionarioNome,
                 DTOtemp,

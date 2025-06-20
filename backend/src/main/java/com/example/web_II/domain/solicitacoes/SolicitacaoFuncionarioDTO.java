@@ -17,10 +17,13 @@ public class SolicitacaoFuncionarioDTO {
     private String descricaoEquipamento;
     private String categoriaEquipamento;
     private String descricaoDefeito;
+    private String orientacoes_cliente;
+    private String descricao_manutencao;
+    private String nomeCliente;
     private String estado;
     private LocalDateTime dataHora;
     private Float orcamento;
-    private String nomeCliente;
+
 
     public SolicitacaoFuncionarioDTO(Solicitacao solicitacao, Cliente cliente) {
         this.id = solicitacao.getId();
@@ -28,6 +31,8 @@ public class SolicitacaoFuncionarioDTO {
         this.descricaoEquipamento = solicitacao.getDescricao_equipamento();
         this.categoriaEquipamento = solicitacao.getFkCategoriaEquipamento();
         this.descricaoDefeito = solicitacao.getDescricao_defeito();
+        this.orientacoes_cliente = solicitacao.getOrientacoes_cliente();
+        this.descricao_manutencao = solicitacao.getDescricao_manutencao();
         this.estado = solicitacao.getFk_estado();
         this.dataHora = solicitacao.getData_hora();
         this.orcamento = solicitacao.getOrcamento();

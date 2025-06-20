@@ -13,6 +13,8 @@ public record SolicitacaoComHistoricoDTO(
         String descricaoEquipamento,
         String categoriaEquipamento,
         String descricaoDefeito,
+        String orientacoes_cliente,
+        String descricao_manutencao,
         String estado,
         String funcionarioNome,
         EnviarClienteDTO cliente,

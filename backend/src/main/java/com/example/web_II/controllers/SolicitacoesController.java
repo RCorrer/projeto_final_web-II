@@ -64,7 +64,7 @@ public class SolicitacoesController {
     }
 
     @PostMapping("/solicitacao/atualizarEstado/arrumada")
-    public ResponseEntity<String> marcarComoArrumada(@RequestBody @Valid MudarEstadoDTO data) {
+    public ResponseEntity<String> marcarComoArrumada(@RequestBody @Valid MudarEstadoArrumadaDTO data) {
         return solicitacoesService.marcarComoArrumada(data);
     }
 

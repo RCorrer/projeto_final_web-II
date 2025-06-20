@@ -46,6 +46,9 @@ public class Solicitacao {
     @OneToMany(mappedBy = "fkSolicitacao", fetch = FetchType.LAZY)
     private List<com.example.web_II.domain.historico.HistoricoAlteracao> historicoAlteracoes = new ArrayList<>();
 
+    private String orientacoes_cliente;
+    private String descricao_manutencao;
+
     public Solicitacao(String cliente, String descEquipamento, String idCategoria, String descricaoDefeito, String idSituacao) {
         this.fkCliente = cliente;
         this.descricao_equipamento = descEquipamento;
