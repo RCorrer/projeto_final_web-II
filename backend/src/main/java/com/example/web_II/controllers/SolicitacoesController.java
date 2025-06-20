@@ -1,6 +1,7 @@
 package com.example.web_II.controllers;
 
 
+import com.example.web_II.domain.geral.RespostaPadraoDTO;
 import com.example.web_II.domain.historico.SolicitacaoComHistoricoDTO;
 import com.example.web_II.domain.solicitacoes.*;
 import com.example.web_II.repositories.SolicitacaoRepository;
@@ -23,7 +24,7 @@ public class SolicitacoesController {
 
 
     @PostMapping("/solicitacao/criar")
-    public ResponseEntity<String> criarSolicitacao(@RequestBody @Valid AbrirSolicitacaoDTO data){
+    public ResponseEntity<RespostaPadraoDTO> criarSolicitacao(@RequestBody @Valid AbrirSolicitacaoDTO data){
         return solicitacoesService.criarSolicitacao(data);
     }
 
@@ -39,47 +40,47 @@ public class SolicitacoesController {
     }
 
     @PostMapping("/solicitacao/atualizarEstado/orcado")
-    public ResponseEntity<String> atualizarEstado(@RequestBody @Valid OrcamentoDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> atualizarEstado(@RequestBody @Valid OrcamentoDTO data) {
         return solicitacoesService.orcamentoService(data);
     }
 
     @PostMapping("/solicitacao/atualizarEstado/aprovar")
-    public ResponseEntity<String> aprovarOrcamento(@RequestBody @Valid AprovarRejeitarDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> aprovarOrcamento(@RequestBody @Valid AprovarRejeitarDTO data) {
         return solicitacoesService.aprovarOrcamento(data);
     }
 
     @PostMapping("/solicitacao/atualizarEstado/rejeitar")
-    public ResponseEntity<String> rejeitarOrcamento(@RequestBody @Valid AprovarRejeitarDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> rejeitarOrcamento(@RequestBody @Valid AprovarRejeitarDTO data) {
         return solicitacoesService.rejeitarOrcamento(data);
     }
 
     @PostMapping("/solicitacao/capturarSolicitacao")
-    public ResponseEntity<String> atribuirFuncionario(@RequestBody @Valid AtribuirFuncionarioDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> atribuirFuncionario(@RequestBody @Valid AtribuirFuncionarioDTO data) {
         return solicitacoesService.atribuirFuncionario(data);
     }
 
     @PostMapping("/solicitacao/redirecionarSolicitacao")
-    public ResponseEntity<String> redirecionarSolicitacao(@RequestBody @Valid RedirecionarSolicitacaoDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> redirecionarSolicitacao(@RequestBody @Valid RedirecionarSolicitacaoDTO data) {
         return solicitacoesService.redirecionarSolicitacao(data);
     }
 
     @PostMapping("/solicitacao/atualizarEstado/arrumada")
-    public ResponseEntity<String> marcarComoArrumada(@RequestBody @Valid MudarEstadoArrumadaDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> marcarComoArrumada(@RequestBody @Valid MudarEstadoArrumadaDTO data) {
         return solicitacoesService.marcarComoArrumada(data);
     }
 
     @PostMapping("/solicitacao/atualizarEstado/paga")
-    public ResponseEntity<String> marcarComoPaga(@RequestBody @Valid MudarEstadoDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> marcarComoPaga(@RequestBody @Valid MudarEstadoDTO data) {
         return solicitacoesService.marcarComoPaga(data);
     }
 
     @PostMapping("/solicitacao/atualizarEstado/finalizada")
-    public ResponseEntity<String> marcarComoFinalizada(@RequestBody @Valid MudarEstadoDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> marcarComoFinalizada(@RequestBody @Valid MudarEstadoDTO data) {
         return solicitacoesService.marcarComoFinalizada(data);
     }
 
     @PostMapping("/solicitacao/atualizarEstado/entregue")
-    public ResponseEntity<String> marcarComoEntregue(@RequestBody @Valid MudarEstadoDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> marcarComoEntregue(@RequestBody @Valid MudarEstadoDTO data) {
         return solicitacoesService.marcarComoEntregue(data);
     }
 

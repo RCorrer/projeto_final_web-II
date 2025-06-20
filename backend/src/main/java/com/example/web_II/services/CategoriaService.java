@@ -2,7 +2,9 @@ package com.example.web_II.services;
 
 import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.categoria.CategoriaDTO;
+import com.example.web_II.domain.geral.RespostaPadraoDTO;
 import com.example.web_II.exceptions.CategoriaInexistenteException;
+import com.example.web_II.exceptions.CategoriaJaExisteException;
 import com.example.web_II.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,7 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    public ResponseEntity<String> addCategoryResponse(CategoriaDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> addCategoryResponse(CategoriaDTO data) {
         Optional<Categoria> categoriaExistente = categoriaRepository.findByDescricao(data.descricao());
 
         if (categoriaExistente.isPresent()) {
@@ -28,16 +30,18 @@ public class CategoriaService {
             if (!categoria.isAtiva()) {
                 categoria.setAtiva(true);
                 categoriaRepository.save(categoria);
-                return ResponseEntity.ok("Categoria " + data.descricao() + " reativada!");
+
+                RespostaPadraoDTO response = new RespostaPadraoDTO(HttpStatus.CREATED.toString(), "Categoria " + data.descricao() + " reativada");
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Categoria " + data.descricao() + " já existe!");
+                throw new CategoriaJaExisteException();
             }
         }
 
         Categoria novaCategoria = new Categoria(data.descricao());
         this.categoriaRepository.save(novaCategoria);
-        return ResponseEntity.ok("Categoria " + data.descricao() + " adicionada!");
+        RespostaPadraoDTO response = new RespostaPadraoDTO(HttpStatus.CREATED.toString(), "Categoria " + data.descricao() + " criada");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     public ResponseEntity<List<String>> listCategoryResponse() {
@@ -50,20 +54,21 @@ public class CategoriaService {
         return ResponseEntity.ok(descricoes);
     }
 
-    public ResponseEntity<String> deleteCategoryResponse(String descricao) {
+    public ResponseEntity<RespostaPadraoDTO> deleteCategoryResponse(String descricao) {
         Optional<Categoria> categoriaOpt = categoriaRepository.findByDescricao(descricao);
 
         if (categoriaOpt.isPresent()) {
             Categoria categoria = categoriaOpt.get();
             categoria.setAtiva(false);
             categoriaRepository.save(categoria);
-            return ResponseEntity.ok("Categoria " + descricao + " desativada com sucesso!");
+            RespostaPadraoDTO response = new RespostaPadraoDTO(HttpStatus.OK.toString(), "Categoria " + categoria.getDescricao() + " deletada!");
+            return ResponseEntity.ok(response);
         } else {
             throw new CategoriaInexistenteException();
         }
     }
 
-    public ResponseEntity<String> editarCategoria(String descricao, CategoriaDTO data) {
+    public ResponseEntity<RespostaPadraoDTO> editarCategoria(String descricao, CategoriaDTO data) {
         Optional<Categoria> categoriaOpt = categoriaRepository.findByDescricao(descricao);
 
         if (categoriaOpt.isPresent()) {
@@ -72,17 +77,18 @@ public class CategoriaService {
             Optional<Categoria> categoriaComNovaDescricao = categoriaRepository.findByDescricao(data.descricao());
             if (categoriaComNovaDescricao.isPresent() &&
                     !categoriaComNovaDescricao.get().getId().equals(categoria.getId())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Já existe uma categoria ativa com esta descrição");
+                throw new CategoriaJaExisteException();
             }
 
             String antigoNome = categoria.getDescricao();
             categoria.setDescricao(data.descricao());
             categoriaRepository.save(categoria);
 
-            return ResponseEntity.ok("Categoria Editada com sucesso!! \n" +
-                    "Antigo nome: " + antigoNome + "\n" +
-                    "Nome novo: " + data.descricao() + "\n");
+            return ResponseEntity.ok(
+                    new RespostaPadraoDTO(HttpStatus.OK.toString(),"Categoria Editada com sucesso!! \n" +
+                                                                             "Antigo nome: " + antigoNome + "\n" +
+                                                                             "Nome novo: " + data.descricao() + "\n")
+            );
         } else {
             throw new CategoriaInexistenteException();
         }

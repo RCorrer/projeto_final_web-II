@@ -3,7 +3,9 @@ package com.example.web_II.services;
 import com.example.web_II.domain.funcionarios.Funcionario;
 import com.example.web_II.domain.funcionarios.FuncionarioAtualizacaoDTO;
 import com.example.web_II.domain.funcionarios.FuncionarioListagemDTO;
+import com.example.web_II.domain.geral.RespostaPadraoDTO;
 import com.example.web_II.domain.usuarios.Usuario;
+import com.example.web_II.exceptions.FuncionarioNaoEncontradoException;
 import com.example.web_II.repositories.FuncionarioRepository;
 import com.example.web_II.repositories.SolicitacaoRepository;
 import com.example.web_II.repositories.UsuarioRepository;
@@ -42,7 +44,7 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public ResponseEntity<String> deletarFuncionario(String id) {
+    public ResponseEntity<RespostaPadraoDTO> deletarFuncionario(String id) {
         return funcionarioRepository.findById(id)
                 .map(funcionario -> {
                     solicitacaoRepository.updateFuncionarioToNull(funcionario.getId());
@@ -52,16 +54,16 @@ public class FuncionarioService {
                     funcionarioRepository.delete(funcionario);
                     usuarioRepository.delete(funcionario.getUsuario());
 
-                    return ResponseEntity.ok("Funcionário " + nomeFuncionario + " deletado com sucesso");
+                    return ResponseEntity.ok(new RespostaPadraoDTO(HttpStatus.OK.toString(),"Funionário deletado!!"));
                 })
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado"));
+                .orElseThrow(FuncionarioNaoEncontradoException::new);
     }
 
     @Transactional
     public ResponseEntity<FuncionarioListagemDTO> atualizarFuncionario(FuncionarioAtualizacaoDTO data) {
 
         Funcionario funcionario = funcionarioRepository.findById(data.id())
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+                .orElseThrow(FuncionarioNaoEncontradoException::new);
 
         Usuario usuario = funcionario.getUsuario();
         if (data.nome() != null) usuario.setNome(data.nome());
