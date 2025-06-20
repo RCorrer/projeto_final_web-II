@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, Observable, throwError } from "rxjs";
+import { BehaviorSubject, Observable, of, throwError } from "rxjs";
 import { Funcionario } from "../../models/funcionario.model";
 import { tap, catchError } from "rxjs/operators";
 
@@ -83,4 +83,17 @@ export class FuncionarioService {
   getFuncionarioById(id: string): Funcionario | undefined {
     return this.funcionariosSource.value.find((s) => s.id === id);
   }
+
+  fetchAllFuncionarios(): Observable<Funcionario[]> {
+    return this.http.get<Funcionario[]>(`${this.apiUrl}/funcionarios`)
+      .pipe(
+        tap(funcionarios => console.log(`[FuncionarioService] Foram encontrados ${funcionarios.length} funcionários.`)),
+        catchError(error => {
+          console.error('[FuncionarioService] Erro ao buscar todos os funcionários:', error);
+          return of([]);
+        })
+      );
+  }
+
 }
+
