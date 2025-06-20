@@ -1,16 +1,15 @@
 package com.example.web_II.services;
 
+import com.example.web_II.domain.categoria.Categoria;
 import com.example.web_II.domain.cliente.Cliente;
 import com.example.web_II.domain.cliente.EnviarClienteDTO;
+import com.example.web_II.domain.funcionarios.Funcionario;
 import com.example.web_II.domain.historico.HistoricoAlteracaoDTO;
 import com.example.web_II.domain.historico.SolicitacaoComHistoricoDTO;
 import com.example.web_II.domain.receita.Receita;
 import com.example.web_II.domain.solicitacoes.*;
 import com.example.web_II.domain.historico.HistoricoAlteracao;
-import com.example.web_II.repositories.ClienteRepository;
-import com.example.web_II.repositories.HistoricoAlteracaoRepository;
-import com.example.web_II.repositories.ReceitaRepository;
-import com.example.web_II.repositories.SolicitacaoRepository;
+import com.example.web_II.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +38,16 @@ public class SolicitacoesService {
     @Autowired
     private ReceitaRepository receitaRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
 
     public ResponseEntity<String> criarSolicitacao(AbrirSolicitacaoDTO data) {
+        Optional<Categoria> categoriaOpt = categoriaRepository.findById(data.categoria());
+        if (categoriaOpt.isEmpty() || !categoriaOpt.get().isAtiva()) {
+            return ResponseEntity.badRequest().body("Categoria inválida ou inativa");
+        }
+
         Solicitacao novaSolicitacao = new Solicitacao(
                 data.idCliente(),
                 data.descEquip(),
@@ -71,20 +78,30 @@ public class SolicitacoesService {
         return ResponseEntity.ok(solicitacaoBuscada.get().getId() + "\n" +
                 solicitacaoBuscada.get().getFkCliente() + "\n" +
                 solicitacaoBuscada.get().getDescricao_equipamento() + "\n" +
-                solicitacaoBuscada.get().getFk_categoria_equipamento() + "\n" +
+                solicitacaoBuscada.get().getFkCategoriaEquipamento() + "\n" + // Nome atualizado
                 solicitacaoBuscada.get().getDescricao_defeito() + "\n" +
                 solicitacaoBuscada.get().getFk_estado() + "\n" +
                 solicitacaoBuscada.get().getData_hora() + "\n" +
                 solicitacaoBuscada.get().getFk_funcionario());
     }
 
-    public ResponseEntity<List<Solicitacao>> buscarSolicitacaoCliente(String cliente){
-        if (!clienteRepository.existsById(cliente)){
+    public ResponseEntity<List<SolicitacaoClienteDTO>> buscarSolicitacaoCliente(String cliente) {
+        if (!clienteRepository.existsById(cliente)) {
             return ResponseEntity.notFound().build();
         }
-        List<Solicitacao> listaSoliciacoes = solicitacaoRepository.findByFkCliente(cliente);
 
-        return ResponseEntity.ok(listaSoliciacoes);
+        List<Solicitacao> solicitacoes = solicitacaoRepository.findByFkCliente(cliente);
+        List<SolicitacaoClienteDTO> response = new ArrayList<>();
+
+        for (Solicitacao solicitacao : solicitacoes) {
+            String descricaoCategoria = categoriaRepository.findById(solicitacao.getFkCategoriaEquipamento())
+                    .map(Categoria::getDescricao)
+                    .orElse("Categoria desconhecida");
+
+            response.add(SolicitacaoClienteDTO.fromEntity(solicitacao, descricaoCategoria));
+        }
+
+        return ResponseEntity.ok(response);
     }
 
     public ResponseEntity<String> orcamentoService(OrcamentoDTO data) {
@@ -191,21 +208,27 @@ public class SolicitacoesService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao recuperar solicitação");
         }
 
+        Optional<Funcionario> funcionarioOpt = funcionarioService.findById(data.idFuncionario());
+        if (funcionarioOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado");
+        }
+
         Solicitacao solicitacao = solicitacaoOpt.get();
         String estadoAnterior = solicitacao.getFk_estado();
 
-        solicitacao.setFk_funcionario(data.idFuncionario());
+        solicitacao.setFuncionario(funcionarioOpt.get());
         solicitacaoRepository.save(solicitacao);
 
         HistoricoAlteracao historico = new HistoricoAlteracao(
                 data.idSolicitacao(),
-                "Solicitação capturada pelo funcionário " + data.idFuncionario(),
+                "Solicitação capturada pelo funcionário " + funcionarioOpt.get().getUsuario().getNome(),
                 estadoAnterior,
                 solicitacao.getFk_estado()
         );
         historicoAlteracaoRepository.save(historico);
 
-        return ResponseEntity.ok("Solicitação capturada com sucesso pelo funcionário " + data.idFuncionario());
+        return ResponseEntity.ok("Solicitação capturada com sucesso pelo funcionário " +
+                funcionarioOpt.get().getUsuario().getNome());
     }
 
     public ResponseEntity<String> redirecionarSolicitacao(RedirecionarSolicitacaoDTO data) {
@@ -220,29 +243,37 @@ public class SolicitacoesService {
 
         Solicitacao solicitacao = solicitacaoOpt.get();
 
-        if (!data.idFuncionarioOrigem().equals(solicitacao.getFk_funcionario())) {
+        if (solicitacao.getFuncionario() == null || !data.idFuncionarioOrigem().equals(solicitacao.getFuncionario().getId())) {
             return ResponseEntity.badRequest().body("A solicitação não está atribuída ao funcionário de origem informado");
         }
 
-        String estadoAnterior = solicitacao.getFk_estado();
+        Optional<Funcionario> funcionarioDestinoOpt = funcionarioService.findById(data.idFuncionarioDestino());
+        if (funcionarioDestinoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário destino não encontrado");
+        }
 
-        solicitacao.setFk_funcionario(data.idFuncionarioDestino());
+        String estadoAnterior = solicitacao.getFk_estado();
+        String nomeFuncionarioOrigem = solicitacao.getFuncionario().getUsuario().getNome();
+
+        solicitacao.setFuncionario(funcionarioDestinoOpt.get());
         solicitacao.setFk_estado("5");
         solicitacaoRepository.save(solicitacao);
 
         HistoricoAlteracao historico = new HistoricoAlteracao(
                 data.idSolicitacao(),
-                "Solicitação redirecionada de " + data.idFuncionarioOrigem() + " para " + data.idFuncionarioDestino(),
+                "Solicitação redirecionada de " + nomeFuncionarioOrigem +
+                        " para " + funcionarioDestinoOpt.get().getUsuario().getNome(),
                 estadoAnterior,
                 "5"
         );
         historicoAlteracaoRepository.save(historico);
 
-        return ResponseEntity.ok("Solicitação redirecionada com sucesso para o funcionário " + data.idFuncionarioDestino());
+        return ResponseEntity.ok("Solicitação redirecionada com sucesso para o funcionário " +
+                funcionarioDestinoOpt.get().getUsuario().getNome());
     }
 
-    public ResponseEntity<String> marcarComoArrumada(MudarEstadoDTO data) {
-        return mudarEstado(data, "6", "ARRUMADA");
+    public ResponseEntity<String> marcarComoArrumada(MudarEstadoArrumadaDTO data) {
+        return mudarArrumada(data, "6", "ARRUMADA");
     }
 
     public ResponseEntity<String> marcarComoPaga(MudarEstadoDTO data) {
@@ -291,6 +322,38 @@ public class SolicitacoesService {
         return ResponseEntity.ok("Solicitação atualizada para " + nomeEstado + " com sucesso");
     }
 
+
+    private ResponseEntity<String> mudarArrumada(MudarEstadoArrumadaDTO data, String novoEstado, String nomeEstado) {
+        if (!solicitacaoRepository.existsById(data.idSolicitacao())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Solicitação não encontrada");
+        }
+
+        Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findById(data.idSolicitacao());
+        if (solicitacaoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao recuperar solicitação");
+        }
+
+        Solicitacao solicitacao = solicitacaoOpt.get();
+        String estadoAnterior = solicitacao.getFk_estado();
+
+        solicitacao.setFk_estado(novoEstado);
+        solicitacao.setOrientacoes_cliente(data.orientacoes_cliente());
+        solicitacao.setDescricao_manutencao(data.descricao_manutencao());
+        solicitacaoRepository.save(solicitacao);
+
+        HistoricoAlteracao historico = new HistoricoAlteracao(
+                data.idSolicitacao(),
+                "Solicitação atualizada para " + nomeEstado,
+                estadoAnterior,
+                novoEstado
+        );
+        historicoAlteracaoRepository.save(historico);
+
+        return ResponseEntity.ok("Solicitação atualizada para " + nomeEstado + " com sucesso");
+    }
+
+
+
     public ResponseEntity<SolicitacaoComHistoricoDTO> getSolicitacaoComHistorico(String id) {
         Optional<Solicitacao> solicitacaoOpt = solicitacaoRepository.findByIdWithHistorico(id);
 
@@ -300,33 +363,48 @@ public class SolicitacoesService {
 
         Solicitacao solicitacao = solicitacaoOpt.get();
 
+        String descricaoCategoria = categoriaRepository.findById(solicitacao.getFkCategoriaEquipamento())
+                .map(Categoria::getDescricao)
+                .orElse("Categoria desconhecida");
+
         String funcionarioNome = "Não atribuído";
-        Cliente clienteTemp = clienteRepository.findById(solicitacao.getFkCliente()).get();
-        EnviarClienteDTO DTOtemp = new EnviarClienteDTO(
-                                                            clienteTemp.getUsuario().getUsername(),
-                                                            clienteTemp.getCpf(),
-                                                            clienteTemp.getUsuario().getEmail(),
-                                                            clienteTemp.getTelefone(),
-                                                            clienteTemp.getEndereco().getCep(),
-                                                            clienteTemp.getEndereco().getLogradouro(),
-                                                            clienteTemp.getEndereco().getComplemento(),
-                                                            clienteTemp.getEndereco().getLocalidade(),
-                                                            clienteTemp.getEndereco().getUf()
-        );
-        if (solicitacao.getFk_funcionario() != null) {
-            funcionarioNome = funcionarioService.getNomeFuncionarioById(solicitacao.getFk_funcionario())
-                    .orElse("Funcionário não encontrado");
+        if (solicitacao.getFuncionario() != null) {
+            funcionarioNome = solicitacao.getFuncionario().getUsuario().getNome();
         }
 
-
+        Cliente clienteTemp = clienteRepository.findById(solicitacao.getFkCliente()).get();
+        EnviarClienteDTO DTOtemp = new EnviarClienteDTO(
+                clienteTemp.getUsuario().getUsername(),
+                clienteTemp.getCpf(),
+                clienteTemp.getUsuario().getEmail(),
+                clienteTemp.getTelefone(),
+                clienteTemp.getEndereco().getCep(),
+                clienteTemp.getEndereco().getLogradouro(),
+                clienteTemp.getEndereco().getComplemento(),
+                clienteTemp.getEndereco().getLocalidade(),
+                clienteTemp.getEndereco().getUf()
+        );
 
         List<HistoricoAlteracaoDTO> historicoDTOs = solicitacao.getHistoricoAlteracoes().stream()
                 .map(historico -> {
+                    String funcionarioRedirecionado = null;
+                    // Verifica se é um histórico de redirecionamento (estado novo = 5)
+                    if ("5".equals(historico.getEstadoNovo())) {
+                        String descricao = historico.getDescricao();
+                        // Extrai o nome do funcionário destino da descrição
+                        if (descricao.startsWith("Solicitação redirecionada de ")) {
+                            String[] partes = descricao.split(" para ");
+                            if (partes.length > 1) {
+                                funcionarioRedirecionado = partes[1];
+                            }
+                        }
+                    }
                     return new HistoricoAlteracaoDTO(
                             historico.getDescricao(),
                             historico.getEstadoAnterior(),
                             historico.getEstadoNovo(),
-                            historico.getDataHora()
+                            historico.getDataHora(),
+                            funcionarioRedirecionado
                     );
                 })
                 .collect(Collectors.toList());
@@ -335,8 +413,10 @@ public class SolicitacoesService {
                 solicitacao.getId(),
                 solicitacao.getNumeroOs(),
                 solicitacao.getDescricao_equipamento(),
-                solicitacao.getFk_categoria_equipamento(),
+                descricaoCategoria,
                 solicitacao.getDescricao_defeito(),
+                solicitacao.getOrientacoes_cliente(),
+                solicitacao.getDescricao_manutencao(),
                 solicitacao.getFk_estado(),
                 funcionarioNome,
                 DTOtemp,

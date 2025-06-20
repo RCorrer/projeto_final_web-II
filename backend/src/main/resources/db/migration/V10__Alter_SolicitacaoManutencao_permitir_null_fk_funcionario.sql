@@ -1,0 +1,1 @@
+ALTER TABLE SolicitacaoManutencao ALTER COLUMN fk_funcionario DROP NOT NULL;

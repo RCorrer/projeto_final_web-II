@@ -5,10 +5,12 @@ import com.example.web_II.domain.funcionarios.FuncionarioAtualizacaoDTO;
 import com.example.web_II.domain.funcionarios.FuncionarioListagemDTO;
 import com.example.web_II.domain.usuarios.Usuario;
 import com.example.web_II.repositories.FuncionarioRepository;
+import com.example.web_II.repositories.SolicitacaoRepository;
 import com.example.web_II.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class FuncionarioService {
     FuncionarioRepository funcionarioRepository;
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    SolicitacaoRepository solicitacaoRepository;
 
     public ResponseEntity<List<FuncionarioListagemDTO>> listarTodosFuncionarios() {
         return ResponseEntity.ok(funcionarioRepository.findAll().stream()
@@ -38,11 +42,19 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public void deletarFuncionario(String id) {
-        funcionarioRepository.findById(id).ifPresent(funcionario -> {
-            funcionarioRepository.delete(funcionario);
-            usuarioRepository.delete(funcionario.getUsuario());
-        });
+    public ResponseEntity<String> deletarFuncionario(String id) {
+        return funcionarioRepository.findById(id)
+                .map(funcionario -> {
+                    solicitacaoRepository.updateFuncionarioToNull(funcionario.getId());
+
+                    String nomeFuncionario = funcionario.getUsuario().getNome();
+
+                    funcionarioRepository.delete(funcionario);
+                    usuarioRepository.delete(funcionario.getUsuario());
+
+                    return ResponseEntity.ok("Funcionário " + nomeFuncionario + " deletado com sucesso");
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado"));
     }
 
     @Transactional
@@ -63,6 +75,10 @@ public class FuncionarioService {
         funcionarioRepository.save(funcionario);
 
         return ResponseEntity.ok(new FuncionarioListagemDTO(funcionario));
+    }
+
+    public Optional<Funcionario> findById(String id) {
+        return funcionarioRepository.findById(id);
     }
 
 

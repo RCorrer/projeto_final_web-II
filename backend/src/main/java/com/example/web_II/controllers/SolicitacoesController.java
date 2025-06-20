@@ -33,7 +33,8 @@ public class SolicitacoesController {
     }
 
     @GetMapping("/solicitacao/buscarCliente/{cliente}")
-    public ResponseEntity<List<Solicitacao>> buscarSolicitacaoCliente(@PathVariable String cliente){
+    public ResponseEntity<List<SolicitacaoClienteDTO>> buscarSolicitacaoCliente(
+            @PathVariable String cliente) {
         return solicitacoesService.buscarSolicitacaoCliente(cliente);
     }
 
@@ -63,7 +64,7 @@ public class SolicitacoesController {
     }
 
     @PostMapping("/solicitacao/atualizarEstado/arrumada")
-    public ResponseEntity<String> marcarComoArrumada(@RequestBody @Valid MudarEstadoDTO data) {
+    public ResponseEntity<String> marcarComoArrumada(@RequestBody @Valid MudarEstadoArrumadaDTO data) {
         return solicitacoesService.marcarComoArrumada(data);
     }
 

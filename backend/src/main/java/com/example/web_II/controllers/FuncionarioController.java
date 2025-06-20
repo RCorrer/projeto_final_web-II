@@ -25,8 +25,8 @@ public class FuncionarioController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletarFuncionario(@PathVariable String id) {
-        funcionarioService.deletarFuncionario(id);
+    public ResponseEntity<String> deletarFuncionario(@PathVariable String id) {
+        return funcionarioService.deletarFuncionario(id);
     }
 
     @PutMapping
