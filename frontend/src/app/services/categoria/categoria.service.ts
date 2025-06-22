@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
 import { Categoria } from "./../../models/categoria.model";
+import { RespostaApi } from "../../models/respostaApi.model";
 import { environment } from "../../../environments/environment";
+import { Injectable } from "@angular/core";
 import {
   BehaviorSubject,
   Observable,
@@ -55,7 +56,9 @@ export class CategoriaService {
     );
   }
 
-  adicionarCategoria(categoria: Omit<Categoria, "id">): Observable<string> {
+  adicionarCategoria(
+    categoria: Omit<Categoria, "id">
+  ): Observable<RespostaApi> {
     const url = `${this.baseUrl}`;
     console.log(
       "CategoriaService: adicionarCategoria - Enviando POST para:",
@@ -63,7 +66,7 @@ export class CategoriaService {
       "Payload:",
       categoria
     );
-    return this.http.post(url, categoria, { responseType: "text" }).pipe(
+    return this.http.post<RespostaApi>(url, categoria).pipe(
       tap((response) =>
         console.log(
           "CategoriaService: adicionarCategoria - Resposta:",
@@ -71,12 +74,13 @@ export class CategoriaService {
         )
       ),
       catchError(
-        this.handleError<string>(
+        this.handleError<RespostaApi>(
           `adicionarCategoria ${JSON.stringify(categoria)}`
         )
       )
     );
   }
+
   private handleError<T>(operation = "operation", result?: T) {
     return (error: HttpErrorResponse): Observable<T> => {
       console.error(
@@ -111,7 +115,7 @@ export class CategoriaService {
   atualizarCategoria(
     descricaoAntiga: string,
     novaDescricao: string
-  ): Observable<string> {
+  ): Observable<RespostaApi> {
     const url = `${this.baseUrl}/${encodeURIComponent(descricaoAntiga)}`;
     const payload = { descricao: novaDescricao };
     console.log(
@@ -120,7 +124,7 @@ export class CategoriaService {
       "Payload:",
       payload
     );
-    return this.http.put(url, payload, { responseType: "text" }).pipe(
+    return this.http.put<RespostaApi>(url, payload).pipe(
       tap((response) =>
         console.log(
           "CategoriaService: atualizarCategoria - Resposta:",
@@ -128,7 +132,7 @@ export class CategoriaService {
         )
       ),
       catchError(
-        this.handleError<string>(`atualizarCategoria ${descricaoAntiga}`)
+        this.handleError<RespostaApi>(`atualizarCategoria ${descricaoAntiga}`)
       )
     );
   }
