@@ -8,7 +8,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { CommonModule } from "@angular/common";
 import { AuthService } from "../../services/auth/auth.service";
-import { RespostaApi } from "../../models/respostaApi.model";
+import { MatDialog } from "@angular/material/dialog";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
 
 interface LoginResponse {
   token: string;
@@ -41,7 +42,8 @@ export class LoginComponent implements AfterViewInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {
     this.loginForm = this.fb.group({
       login: ["", [Validators.required]],
@@ -102,14 +104,10 @@ export class LoginComponent implements AfterViewInit {
           }
         },
         error: (error) => {
-          console.error("Erro no login:", error);
-          // O backend está enviando um corpo com `cod` e `mensagem`
-          if (error.status === 404 && error.error?.mensagem) {
-            // aqui você pode abrir seu modal passando error.error.mensagem
-            alert(`Erro: ${error.error.mensagem}`);
-          } else {
-            alert("Erro inesperado no login. Tente novamente mais tarde.");
-          }
+          const mensagem = error?.error?.mensagem || "Erro ao fazer login. Verifique suas credenciais.";
+          this.dialog.open(ModalErroComponent, {
+            data: {mensagem},
+          });
         },
       });
     }
