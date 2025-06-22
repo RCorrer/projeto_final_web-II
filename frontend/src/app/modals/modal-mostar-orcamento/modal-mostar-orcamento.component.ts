@@ -12,10 +12,11 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
 import { FormsModule } from "@angular/forms";
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: "app-modal-mostar-orcamento",
-  imports: [CommonModule, MatButtonModule, MatFormFieldModule, FormsModule],
+  imports: [CommonModule, MatButtonModule, MatFormFieldModule, FormsModule, MatInputModule],
   templateUrl: "./modal-mostar-orcamento.component.html",
   styleUrl: "./modal-mostar-orcamento.component.css",
 })
@@ -85,22 +86,6 @@ export class ModalMostarOrcamentoComponent implements OnChanges {
     this.close();
   }
 
-  confirmarAprovacao() {
-    this.alterarEstado.emit({
-      id: this.solicitacao.id,
-      novoEstado: "APROVADA",
-    });
-    this.mostrarAprovacao = false;
-  }
-
-  recusarOrcamento() {
-    this.alterarEstado.emit({
-      id: this.solicitacao.id,
-      novoEstado: "REJEITADA",
-    });
-    this.close();
-  }
-
   mostarModalRejeitar() {
     this.mostrarRejeicao = true;
   }
@@ -110,16 +95,20 @@ export class ModalMostarOrcamentoComponent implements OnChanges {
   }
 
   confirmarRejeicao() {
+    if (!this.motivoRejeicao || this.motivoRejeicao.trim() === "") {
+      return;
+    }
+
     const body = {
       id: this.solicitacao.id,
-      motivo: this.motivoRejeicao || ".",
+      motivo: this.motivoRejeicao,
     };
 
     this.solicitacaoService.rejeitarSolicitacao(body).subscribe({
       next: () => {
         this.alterarEstado.emit({
           id: this.solicitacao.id,
-          novoEstado: "4", // Estado "REJEITADA"
+          novoEstado: "4",
         });
         this.mostrarRejeicao = false;
         this.close();
