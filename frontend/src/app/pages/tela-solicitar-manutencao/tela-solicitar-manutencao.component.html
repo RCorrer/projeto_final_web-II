@@ -13,10 +13,10 @@
 
                     <label>Escolha a categoria do Equipamento</label>
                     <mat-form-field appearance="outline">
-                        <mat-select placeholder="Categoria do Equipamento" [(ngModel)]="data.categoria" name="categoria"
-                            required>
-                            <mat-option value="Mouse">Mouse</mat-option>
-                            <mat-option value="Notebook">Notebook</mat-option>
+                        <mat-select [(ngModel)]="data.categoria" name="categoria" placeholder="Categoria" required>
+                            <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+                                {{ categoria }}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
 

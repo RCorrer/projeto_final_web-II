@@ -26,7 +26,7 @@
     Visualizar
   </button>
   
-  <button *ngIf="solicitacao.estado === '2'" mat-button color="primary" (click)="abrirModal()" (click)="abrirModal()">Aprovar/Rejeitar</button>
+  <button *ngIf="solicitacao.estado === '2'" mat-button color="primary" (click)="abrirModal()">Aprovar/Rejeitar</button>
   <button *ngIf="solicitacao.estado === '4'" mat-button color="primary" (click)="modalResgatarServico()">Resgatar Serviço</button>
   <button *ngIf="solicitacao.estado === '6'" mat-button color="primary" [routerLink]="['/pagamento', solicitacao.id]">Pagar Serviço</button>
 </div>

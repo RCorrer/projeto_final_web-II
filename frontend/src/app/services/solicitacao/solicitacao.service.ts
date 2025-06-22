@@ -295,6 +295,31 @@ export class SolicitacaoService {
       );
   }
 
+  aprovarSolicitacao(payload: { id: string; motivo: string }): Observable<string> {
+  console.log("Aprovando solicitação:", payload);
+  return this.http.post<string>(
+    `${this.apiUrl}/solicitacao/atualizarEstado/aprovar`,
+    payload,
+    { responseType: 'text' as 'json' }
+  ).pipe(
+    tap(res => console.log("Resposta da aprovação:", res)),
+    catchError(this.handleError<string>('aprovarSolicitacao'))
+  );
+}
+
+rejeitarSolicitacao(payload: { id: string; motivo: string }): Observable<string> {
+  console.log("Rejeitando solicitação:", payload);
+  return this.http.post<string>(
+    `${this.apiUrl}/solicitacao/atualizarEstado/rejeitar`,
+    payload,
+    { responseType: 'text' as 'json' }
+  ).pipe(
+    tap(res => console.log("Resposta da rejeição:", res)),
+    catchError(this.handleError<string>('rejeitarSolicitacao'))
+  );
+}
+
+
   getSolicitacoes(): Solicitacao[] {
     return this.solicitacoesFuncionarioSource.getValue();
   }
