@@ -13,6 +13,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { RespostaApi } from "../../models/respostaApi.model";
 
 interface dadosCEP {
   cep: string;
@@ -162,9 +163,7 @@ export class CadastroComponent implements AfterViewInit {
     };
 
     this.http
-      .post(`${this.apiUrl}/cadastro/cliente`, payload, {
-        responseType: "text",
-      })
+      .post<RespostaApi>(`${this.apiUrl}/cadastro/cliente`, payload)
       .subscribe({
         next: (res) => {
           console.log("✅ Cadastro realizado:", res);

@@ -10,6 +10,7 @@ import { tap, catchError, map } from "rxjs/operators";
 import { Solicitacao } from "../../models/Solicitacao.model";
 import { SolicitacaoFuncionarioBackendDTO } from "../../models/SolicitacaoFuncionarioBackendDTO.model";
 import { EfetuarManutencaoDTO, MudarEstadoDTO, OrcamentoDTO, RedirecionarSolicitacaoDTO, SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
+import { RespostaApi } from "../../models/respostaApi.model";
 
 interface criacaoPayload {
   idCliente: string;
@@ -219,10 +220,8 @@ export class SolicitacaoService {
     };
   }
 
-  adicionarSolicitacao(payload: criacaoPayload): Observable<string> {
-    return this.http.post(`${this.apiUrl}/solicitacao/criar`, payload, {
-      responseType: "text",
-    })
+  adicionarSolicitacao(payload: criacaoPayload): Observable<RespostaApi> {
+    return this.http.post<RespostaApi>(`${this.apiUrl}/solicitacao/criar`, payload)
     .pipe(
       tap(() => this.fetchSolicitacoesPorClienteId(payload.idCliente)),
       catchError((error) => {
@@ -251,71 +250,71 @@ export class SolicitacaoService {
     );
   }
 
-  enviarOrcamento(dadosOrcamento: OrcamentoDTO): Observable<string> {
+  enviarOrcamento(dadosOrcamento: OrcamentoDTO): Observable<RespostaApi> {
     console.log('SolicitacaoService: Enviando orçamento para o backend:', dadosOrcamento);
-    return this.http.post<string>(`${this.apiUrl}/solicitacao/atualizarEstado/orcado`, dadosOrcamento, { responseType: 'text' as 'json' })
+    return this.http.post<RespostaApi>(`${this.apiUrl}/solicitacao/atualizarEstado/orcado`, dadosOrcamento)
       .pipe(
         tap(response => {
           console.log('Resposta do backend (Orçamento):', response);
         }),
-        catchError(this.handleError<string>('submeterOrcamento'))
+        catchError(this.handleError<RespostaApi>('submeterOrcamento'))
       );
   }
 
-  efetuarManutencao(dadosManutencao: EfetuarManutencaoDTO): Observable<string> {
+  efetuarManutencao(dadosManutencao: EfetuarManutencaoDTO): Observable<RespostaApi> {
     console.log('SolicitacaoService: Enviando dados da manutenção:', dadosManutencao);
     const endpoint = `${this.apiUrl}/solicitacao/atualizarEstado/arrumada`;
-    return this.http.post(endpoint, dadosManutencao, { responseType: 'text' })
+    return this.http.post<RespostaApi>(endpoint, dadosManutencao)
       .pipe(
         tap(response => console.log('Resposta do backend (Manutenção Efetuada):', response)),
-        catchError(this.handleError<string>('efetuarManutencao'))
+        catchError(this.handleError<RespostaApi>('efetuarManutencao'))
       );
   }
 
-  redirecionarSolicitacao(dados: RedirecionarSolicitacaoDTO): Observable<string> {
+  redirecionarSolicitacao(dados: RedirecionarSolicitacaoDTO): Observable<RespostaApi> {
     console.log('SolicitacaoService: Enviando dados de redirecionamento:', dados);
-    return this.http.post(`${this.apiUrl}/solicitacao/redirecionarSolicitacao`, dados, { responseType: 'text' })
+    return this.http.post<RespostaApi>(`${this.apiUrl}/solicitacao/redirecionarSolicitacao`, dados)
       .pipe(
         tap(response => console.log('Resposta do backend (Redirecionamento):', response)),
-        catchError(this.handleError<string>('redirecionarSolicitacao'))
+        catchError(this.handleError<RespostaApi>('redirecionarSolicitacao'))
       );
   }
 
-  finalizarSolicitacao(solicitacaoId: string): Observable<string> {
+  finalizarSolicitacao(solicitacaoId: string): Observable<RespostaApi> {
     const dto: MudarEstadoDTO = { idSolicitacao: solicitacaoId };
     
     console.log(`SolicitacaoService: Marcando OS ${solicitacaoId} como FINALIZADA.`);
     
-    return this.http.post<string>(`${this.apiUrl}/solicitacao/atualizarEstado/finalizada`, dto, { responseType: 'text' as 'json' })
+    return this.http.post<RespostaApi>(`${this.apiUrl}/solicitacao/atualizarEstado/finalizada`, dto)
       .pipe(
         tap(response => {
           console.log('Resposta do backend (Finalizada):', response);
         }),
-        catchError(this.handleError<string>('marcarComoFinalizada'))
+        catchError(this.handleError<RespostaApi>('marcarComoFinalizada'))
       );
   }
 
-  aprovarSolicitacao(payload: { id: string; motivo: string }): Observable<string> {
+  aprovarSolicitacao(payload: { id: string; motivo: string }): Observable<RespostaApi> {
   console.log("Aprovando solicitação:", payload);
-  return this.http.post<string>(
+  return this.http.post<RespostaApi>(
     `${this.apiUrl}/solicitacao/atualizarEstado/aprovar`,
     payload,
     { responseType: 'text' as 'json' }
   ).pipe(
     tap(res => console.log("Resposta da aprovação:", res)),
-    catchError(this.handleError<string>('aprovarSolicitacao'))
+    catchError(this.handleError<RespostaApi>('aprovarSolicitacao'))
   );
 }
 
-rejeitarSolicitacao(payload: { id: string; motivo: string }): Observable<string> {
+rejeitarSolicitacao(payload: { id: string; motivo: string }): Observable<RespostaApi> {
   console.log("Rejeitando solicitação:", payload);
-  return this.http.post<string>(
+  return this.http.post<RespostaApi>(
     `${this.apiUrl}/solicitacao/atualizarEstado/rejeitar`,
     payload,
     { responseType: 'text' as 'json' }
   ).pipe(
     tap(res => console.log("Resposta da rejeição:", res)),
-    catchError(this.handleError<string>('rejeitarSolicitacao'))
+    catchError(this.handleError<RespostaApi>('rejeitarSolicitacao'))
   );
 }
 

@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable, of, throwError } from "rxjs";
 import { Funcionario } from "../../models/funcionario.model";
 import { tap, catchError } from "rxjs/operators";
+import { RespostaApi } from "../../models/respostaApi.model";
 
 interface funcionarioPayload {
   nome: string;
@@ -35,11 +36,9 @@ export class FuncionarioService {
       });
   }
 
-  adicionarFuncionario(payload: funcionarioPayload): Observable<string> {
+  adicionarFuncionario(payload: funcionarioPayload): Observable<RespostaApi> {
     return this.http
-      .post(`${this.apiUrl}/cadastro/funcionario`, payload, {
-        responseType: "text",
-      })
+      .post<RespostaApi>(`${this.apiUrl}/cadastro/funcionario`, payload)
       .pipe(
         tap(() => this.carregarFuncionarios()),
         catchError((error) => {

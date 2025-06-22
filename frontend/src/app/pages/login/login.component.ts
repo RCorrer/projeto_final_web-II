@@ -6,35 +6,46 @@ import { MatButtonModule } from "@angular/material/button";
 import { RouterLink, Router } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from "@angular/common";
 import { AuthService } from "../../services/auth/auth.service";
+import { RespostaApi } from "../../models/respostaApi.model";
 
 interface LoginResponse {
   token: string;
   nome: string;
   id: string;
-  role: 'FUNCIONARIO' | 'CLIENTE';
+  role: "FUNCIONARIO" | "CLIENTE";
   mensagem: string;
   idRole: string;
 }
 
 @Component({
   selector: "app-login",
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterLink,
+    ReactiveFormsModule,
+  ],
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.css",
 })
-
 export class LoginComponent implements AfterViewInit {
-
   private audio = new Audio("bipbip-sound.mp3");
   loginForm: FormGroup;
   private readonly url = "http://localhost:8080/login";
 
-  constructor(private fb: FormBuilder, private http:HttpClient, private router: Router, private authService: AuthService) {
-    this.loginForm = this.fb.group ({
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router,
+    private authService: AuthService
+  ) {
+    this.loginForm = this.fb.group({
       login: ["", [Validators.required]],
-      password: ["", [Validators.required]]
+      password: ["", [Validators.required]],
     });
   }
 
@@ -81,7 +92,7 @@ export class LoginComponent implements AfterViewInit {
             id: data.id,
             role: data.role,
             idRole: data.idRole,
-            mensagem: data.mensagem
+            mensagem: data.mensagem,
           });
 
           if (data.role === "FUNCIONARIO") {
@@ -90,9 +101,17 @@ export class LoginComponent implements AfterViewInit {
             this.router.navigate(["/home-cliente"]);
           }
         },
-        error: (error) => console.error("Login failed", error),
+        error: (error) => {
+          console.error("Erro no login:", error);
+          // O backend está enviando um corpo com `cod` e `mensagem`
+          if (error.status === 404 && error.error?.mensagem) {
+            // aqui você pode abrir seu modal passando error.error.mensagem
+            alert(`Erro: ${error.error.mensagem}`);
+          } else {
+            alert("Erro inesperado no login. Tente novamente mais tarde.");
+          }
+        },
       });
     }
   }
 }
-
