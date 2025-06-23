@@ -1,10 +1,12 @@
 package com.example.web_II.services;
 
+import com.example.web_II.domain.funcionarios.DeletarDTO;
 import com.example.web_II.domain.funcionarios.Funcionario;
 import com.example.web_II.domain.funcionarios.FuncionarioAtualizacaoDTO;
 import com.example.web_II.domain.funcionarios.FuncionarioListagemDTO;
 import com.example.web_II.domain.geral.RespostaPadraoDTO;
 import com.example.web_II.domain.usuarios.Usuario;
+import com.example.web_II.exceptions.FuncionarioAutodeleteException;
 import com.example.web_II.exceptions.FuncionarioNaoEncontradoException;
 import com.example.web_II.repositories.FuncionarioRepository;
 import com.example.web_II.repositories.SolicitacaoRepository;
@@ -44,9 +46,13 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public ResponseEntity<RespostaPadraoDTO> deletarFuncionario(String id) {
+    public ResponseEntity<RespostaPadraoDTO> deletarFuncionario(String id, DeletarDTO idAtual) {
         return funcionarioRepository.findById(id)
                 .map(funcionario -> {
+
+                    if (id.equals(idAtual.idAtual()))
+                        throw new FuncionarioAutodeleteException();
+
                     solicitacaoRepository.updateFuncionarioToNull(funcionario.getId());
 
                     String nomeFuncionario = funcionario.getUsuario().getNome();

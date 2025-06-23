@@ -55,7 +55,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-
+    @ExceptionHandler(FuncionarioAutodeleteException.class)
+    private ResponseEntity<RespostaPadraoDTO> funcionarioAutodeleteHandler (FuncionarioAutodeleteException ex){
+        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(new RespostaPadraoDTO(
+                HttpStatus.PRECONDITION_FAILED.toString(), ex.getMessage())
+        );
+    }
 
 
     //CATEGORIAS
