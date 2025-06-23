@@ -1,0 +1,59 @@
+.background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+}
+
+.content {
+    position: relative;
+    width: 100%;
+    max-width: 30vw;
+    /* no máximo 30% da tela */
+    background-color: white;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 150px;
+}
+
+mat-dialog-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    font-size: 24px;
+    color: var(--color-rejeitada);
+    cursor: pointer;
+}
+
+mat-dialog-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+}
+
+mat-dialog-content p {
+    font-size: 16px;
+    margin: 0;
+    padding: 0 1rem;
+    color: var(--color-rejeitada);
+    font-weight: 600;
+}

@@ -37,8 +37,21 @@
         </div>
 
         <div class="visualizar-footer">
-            <button id="btnEfetua" mat-button (click)="efetuarManutencao()">Efetuar Manutenção</button>
-            <button id="btnRedireciona" mat-stroked-button (click)="redirecionarManutencao()">Redirecionar</button>
+            
+            <button id="btnEfetua" mat-button (click)="abrirModalManutencao()">Efetuar Manutenção</button>
+            <app-modal-efetuar-manutencao
+            [isOpen]="modalManutencaoAberto"
+            (closed)="fecharModalManutencao()"
+            (confirmado)="onManutencaoConfirmada($event)">
+            </app-modal-efetuar-manutencao>
+
+            <button id="btnRedireciona" mat-stroked-button (click)="abrirModalRedirecionar()">Redirecionar</button>
+            <app-modal-redirecionar 
+            [isOpen]="modalRedirecionarAberto" 
+            (closed)="fecharModalRedirecionar()" 
+            (confirmado)="onRedirecionamentoConfirmado($event)">
+            </app-modal-redirecionar>
+            
         </div>
     </div>
 </div>

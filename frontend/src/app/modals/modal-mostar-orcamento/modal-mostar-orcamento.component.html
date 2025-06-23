@@ -1,73 +1,50 @@
 <div class="modal-overlay" *ngIf="isOpen" (click)="close()">
-  <div class="modal" (click)="$event.stopPropagation()">
+  <div class="modal" [ngClass]="{ 'modal-confirmacao': mostrarRejeicao }" (click)="$event.stopPropagation()">
     <div class="top">
       <a (click)="close()">X</a>
     </div>
 
-    <div class="content">
+    <!-- Modal principal: mostrar detalhes -->
+    <div class="content" *ngIf="!mostrarRejeicao">
       <h1>Aprovar orçamento</h1>
 
       <h3>Descrição do Equipamento</h3>
-      <p> {{ informacoesSolicitacao?.descricaoEquipamento }} </p>
+      <p>{{ informacoesSolicitacao?.descricaoEquipamento }}</p>
 
       <h3>Categoria do Equipamento</h3>
-      <p> {{ informacoesSolicitacao?.categoriaEquipamento }} </p>
+      <p>{{ informacoesSolicitacao?.categoriaEquipamento }}</p>
 
       <h3>Descrição do defeito</h3>
-      <p>
-        {{ informacoesSolicitacao?.descricaoDefeito }}
-      </p>
+      <p>{{ informacoesSolicitacao?.descricaoDefeito }}</p>
 
       <h2>Valor do orçamento</h2>
-      <p id="valor">{{ informacoesSolicitacao?.orcamento | currency: 'BRL' }} </p>
+      <p id="valor">{{ informacoesSolicitacao?.orcamento | currency: 'BRL' }}</p>
 
       <div class="buttons">
-        <button id="aceitar" mat-button (click)="aceitarOrcamento()">
-          Aceitar
-        </button>
-
-        <button
-          id="rejeitar"
-          mat-stroked-button
-          (click)="mostarModalRejeitar()"
-        >
-          Recusar
-        </button>
+        <button id="aceitar" mat-button (click)="aceitarOrcamento()">Aceitar</button>
+        <button id="rejeitar" mat-stroked-button (click)="mostarModalRejeitar()">Recusar</button>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="modal-overlay" *ngIf="mostrarRejeicao" (click)="cancelarRejeicao()">
-  <div class="modal-confirmacao" (click)="$event.stopPropagation()">
-    <h4>Você tem certeza que deseja recusar o orçamento?</h4>
-    <div class="btnsRejeitar">
-      <button id="btnRejeitar" mat-stroked-button (click)="confirmarRejeicao()">
-        Sim
-      </button>
-      <button id="btnCancelar" mat-button (click)="cancelarRejeicao()">
-        Não
-      </button>
-    </div>
-  </div>
-</div>
+    <!-- Modal de confirmação de rejeição -->
+    <div class="content" *ngIf="mostrarRejeicao">
+      <h3 id="title-confirmacao">Você tem certeza que deseja recusar o orçamento?</h3>
 
-<div
-  class="modal-overlay"
-  *ngIf="mostrarAprovacao"
-  (click)="confirmarAprovacao()"
->
-  <div class="modal-confirmacao" (click)="$event.stopPropagation()">
-    <h4>Serviço Aprovado no Valor {{ informacoesSolicitacao?.orcamento | currency: 'BRL' }}</h4>
-    <div class="btnsRejeitar">
-      <button
-        id="btnOk"
-        mat-button
-        (click)="confirmarAprovacao()"
-        routerLink="/home-cliente"
-      >
-        Ok
-      </button>
+      <mat-form-field appearance="outline" class="motivo-field">
+        <textarea
+          class="motivo"
+          matInput
+          placeholder="Motivo da rejeição"
+          [(ngModel)]="motivoRejeicao"
+          rows="4"
+          required
+        ></textarea>
+      </mat-form-field>
+
+      <div class="btnsRejeitar">
+        <button mat-stroked-button id="btnRejeitar" (click)="confirmarRejeicao()">Sim</button>
+        <button mat-button id="btnCancelar" (click)="cancelarRejeicao()">Não</button>
+      </div>
     </div>
   </div>
 </div>

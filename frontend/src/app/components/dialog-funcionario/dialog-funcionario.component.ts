@@ -1,10 +1,8 @@
-// dialog-funcionario.component.ts
-import { Component, Inject, ViewEncapsulation } from "@angular/core";
+import { Component, Inject, ViewEncapsulation, ViewChild } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormsModule, NgForm } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { materialImports } from "../../material-imports";
-import { ViewChild } from "@angular/core";
 import { FuncionarioService } from "../../services/funcionario/funcionario.service";
 
 @Component({
@@ -30,36 +28,33 @@ export class DialogFuncionarioComponent {
       senha?: string;
     },
     private funcionarioService: FuncionarioService
-  ) {
-    console.log("Dados do DialogFuncionarioComponent:", data);
-  }
+  ) {}
 
   salvar() {
-  // Log dos dados recebidos do formulário
-  console.log("📝 Dados enviados no formulário:");
-  console.log("Nome:", this.data.nome);
-  console.log("Email:", this.data.email);
-  console.log("Senha:", this.data.senha);
-  console.log("Nascimento:", this.data.nascimento);
+    const funcionario = {
+      nome: this.data.nome,
+      email: this.data.email,
+      senha: this.data.senha ?? "",
+      dataNascimento: this.data.nascimento,
+    };
 
-  const funcionario = {
-    nome: this.data.nome,
-    email: this.data.email,
-    senha: this.data.senha ?? "",
-    dataNascimento: this.data.nascimento,
-  };
-
-  console.log("🔧 Objeto final enviado ao backend:", funcionario);
-
-  this.funcionarioService.adicionarFuncionario(funcionario).subscribe({
-    next: () => {
-      console.log("✅ Funcionário adicionado com sucesso");
-      this.dialogRef.close(true);
-    },
-    error: (error) => {
-      console.error("❌ Erro ao adicionar funcionário:", error);
+    if (this.data.id) {
+      this.funcionarioService
+        .atualizarFuncionario(this.data.id, {
+          nome: funcionario.nome,
+          email: funcionario.email,
+          senha: funcionario.senha,
+          nascimento: funcionario.dataNascimento,
+        })
+        .subscribe({
+          next: () => this.dialogRef.close(true),
+          error: (err) => console.error("Erro ao atualizar:", err),
+        });
+    } else {
+      this.funcionarioService.adicionarFuncionario(funcionario).subscribe({
+        next: () => this.dialogRef.close(true),
+        error: (err) => console.error("Erro ao adicionar:", err),
+      });
     }
-  });
-}
-
+  }
 }

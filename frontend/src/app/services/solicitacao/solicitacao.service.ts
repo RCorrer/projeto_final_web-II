@@ -1,4 +1,3 @@
-
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of, throwError } from "rxjs";
 import {
@@ -9,7 +8,14 @@ import {
 import { tap, catchError, map } from "rxjs/operators";
 import { Solicitacao } from "../../models/Solicitacao.model";
 import { SolicitacaoFuncionarioBackendDTO } from "../../models/SolicitacaoFuncionarioBackendDTO.model";
-import { EfetuarManutencaoDTO, MudarEstadoDTO, OrcamentoDTO, SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
+import {
+  EfetuarManutencaoDTO,
+  MudarEstadoDTO,
+  OrcamentoDTO,
+  RedirecionarSolicitacaoDTO,
+  SolicitacaoComHistoricoDTO,
+} from "../../models/solicitacao-dto.model";
+import { RespostaApi } from "../../models/respostaApi.model";
 
 interface criacaoPayload {
   idCliente: string;
@@ -72,6 +78,7 @@ export class SolicitacaoService {
       this.solicitacoesClienteSource.next([]);
       return of([]);
     }
+
     console.log(
       `SolicitacaoService: Buscando solicitações para clienteId: ${clienteId}`
     );
@@ -134,36 +141,27 @@ export class SolicitacaoService {
 
   // Helper para transformar os dados do backend (DTOs diversos) para o modelo Solicitacao do Frontend
   private mapListaDoBackend(solicitacoesOuDTOs: any[]): Solicitacao[] {
-    if (!solicitacoesOuDTOs || !Array.isArray(solicitacoesOuDTOs)) {
-      console.warn(
-        "mapListaDoBackend: dados recebidos não são um array ou são nulos/undefined",
-        solicitacoesOuDTOs
-      );
+    if (!Array.isArray(solicitacoesOuDTOs)) {
+      console.warn("mapListaDoBackend: dados inválidos", solicitacoesOuDTOs);
       return [];
     }
+
     return solicitacoesOuDTOs.map((sBackend) => {
-      const dataHoraOriginal =
-        sBackend.dataHora || sBackend.data_hora || sBackend.data;
+      const dataHora = sBackend.dataHora || sBackend.data_hora || sBackend.data;
       let dataFormatada = "";
       let horaFormatada = "";
 
-      if (dataHoraOriginal && typeof dataHoraOriginal === "string") {
-        const dateObj = new Date(dataHoraOriginal.replace(" ", "T"));
-        if (!isNaN(dateObj.getTime())) {
-          dataFormatada = dateObj.toISOString().split("T")[0];
-          horaFormatada = dateObj.toTimeString().split(" ")[0].substring(0, 5);
+      if (typeof dataHora === "string") {
+        const date = new Date(dataHora);
+        if (!isNaN(date.getTime())) {
+          dataFormatada = date.toISOString().split("T")[0];
+          horaFormatada = date.toTimeString().split(" ")[0].substring(0, 5);
         } else {
-          console.warn(
-            `Formato de data/hora não reconhecido: '${dataHoraOriginal}' para OS ID ${sBackend.id}`
-          );
+          console.warn(`Data inválida: ${dataHora}`);
         }
-      } else if (dataHoraOriginal instanceof Date) {
-        const dateObj = dataHoraOriginal;
-        dataFormatada = dateObj.toISOString().split("T")[0];
-        horaFormatada = dateObj.toTimeString().split(" ")[0].substring(0, 5);
       }
 
-      const solicitacaoFront: Solicitacao = {
+      return {
         id: String(sBackend.id),
         numeroOs: sBackend.numeroOs,
         data: dataFormatada,
@@ -173,24 +171,23 @@ export class SolicitacaoService {
           sBackend.descricao_equipamento ||
           "N/A",
         categoria:
+          sBackend.fkCategoriaEquipamento ||
           sBackend.categoriaEquipamento ||
-          sBackend.fk_categoria_equipamento ||
           "N/A",
         defeito:
           sBackend.descricaoDefeito || sBackend.descricao_defeito || "N/A",
-        estado: String(sBackend.estado || sBackend.fk_estado || ""),
+        estado: String(sBackend.fkEstado || sBackend.estado || ""),
         orcamento:
           sBackend.orcamento !== undefined
             ? parseFloat(sBackend.orcamento)
             : undefined,
-        idCliente: String(sBackend.idCliente || sBackend.fkCliente || ""),
+        idCliente: String(sBackend.fkCliente || sBackend.idCliente || ""),
         fk_funcionario: sBackend.fk_funcionario
           ? String(sBackend.fk_funcionario)
           : null,
-        cliente: sBackend.nomeCliente,
+        cliente: sBackend.nomeCliente || undefined,
         redirecionadoPara: sBackend.redirecionadoPara || null,
       };
-      return solicitacaoFront;
     });
   }
 
@@ -219,17 +216,16 @@ export class SolicitacaoService {
     };
   }
 
-  adicionarSolicitacao(payload: criacaoPayload): Observable<string> {
-    return this.http.post(`${this.apiUrl}/solicitacao/criar`, payload, {
-      responseType: "text",
-    })
-    .pipe(
-      tap(() => this.fetchSolicitacoesPorClienteId(payload.idCliente)),
-      catchError((error) => {
-        console.error("Erro ao adicionar solicitação:", error);
-        return throwError(() => error);
-      })
-    );
+  adicionarSolicitacao(payload: criacaoPayload): Observable<RespostaApi> {
+    return this.http
+      .post<RespostaApi>(`${this.apiUrl}/solicitacao/criar`, payload)
+      .pipe(
+        tap(() => this.fetchSolicitacoesPorClienteId(payload.idCliente)),
+        catchError((error) => {
+          console.error("Erro ao adicionar solicitação:", error);
+          return throwError(() => error);
+        })
+      );
   }
 
   atualizarSolicitacao(id: string, novoEstado: string): Observable<any> {
@@ -251,38 +247,131 @@ export class SolicitacaoService {
     );
   }
 
-  enviarOrcamento(dadosOrcamento: OrcamentoDTO): Observable<string> {
-    console.log('SolicitacaoService: Enviando orçamento para o backend:', dadosOrcamento);
-    return this.http.post<string>(`${this.apiUrl}/solicitacao/atualizarEstado/orcado`, dadosOrcamento, { responseType: 'text' as 'json' })
+  enviarOrcamento(dadosOrcamento: OrcamentoDTO): Observable<RespostaApi> {
+    console.log(
+      "SolicitacaoService: Enviando orçamento para o backend:",
+      dadosOrcamento
+    );
+    return this.http
+      .post<RespostaApi>(
+        `${this.apiUrl}/solicitacao/atualizarEstado/orcado`,
+        dadosOrcamento
+      )
       .pipe(
-        tap(response => {
-          console.log('Resposta do backend (Orçamento):', response);
+        tap((response) => {
+          console.log("Resposta do backend (Orçamento):", response);
         }),
-        catchError(this.handleError<string>('submeterOrcamento'))
+        catchError(this.handleError<RespostaApi>("submeterOrcamento"))
       );
   }
 
-  efetuarManutencao(dadosManutencao: EfetuarManutencaoDTO): Observable<string> {
-    console.log('SolicitacaoService: Enviando dados da manutenção:', dadosManutencao);
+  efetuarManutencao(
+    dadosManutencao: EfetuarManutencaoDTO
+  ): Observable<RespostaApi> {
+    console.log(
+      "SolicitacaoService: Enviando dados da manutenção:",
+      dadosManutencao
+    );
     const endpoint = `${this.apiUrl}/solicitacao/atualizarEstado/arrumada`;
-    return this.http.post(endpoint, dadosManutencao, { responseType: 'text' })
+    return this.http.post<RespostaApi>(endpoint, dadosManutencao).pipe(
+      tap((response) =>
+        console.log("Resposta do backend (Manutenção Efetuada):", response)
+      ),
+      catchError(this.handleError<RespostaApi>("efetuarManutencao"))
+    );
+  }
+
+  redirecionarSolicitacao(
+    dados: RedirecionarSolicitacaoDTO
+  ): Observable<RespostaApi> {
+    console.log(
+      "SolicitacaoService: Enviando dados de redirecionamento:",
+      dados
+    );
+    return this.http
+      .post<RespostaApi>(
+        `${this.apiUrl}/solicitacao/redirecionarSolicitacao`,
+        dados
+      )
       .pipe(
-        tap(response => console.log('Resposta do backend (Manutenção Efetuada):', response)),
-        catchError(this.handleError<string>('efetuarManutencao'))
+        tap((response) =>
+          console.log("Resposta do backend (Redirecionamento):", response)
+        ),
+        catchError(this.handleError<RespostaApi>("redirecionarSolicitacao"))
       );
   }
 
-  finalizarSolicitacao(solicitacaoId: string): Observable<string> {
+  finalizarSolicitacao(solicitacaoId: string): Observable<RespostaApi> {
     const dto: MudarEstadoDTO = { idSolicitacao: solicitacaoId };
-    
-    console.log(`SolicitacaoService: Marcando OS ${solicitacaoId} como FINALIZADA.`);
-    
-    return this.http.post<string>(`${this.apiUrl}/solicitacao/atualizarEstado/finalizada`, dto, { responseType: 'text' as 'json' })
+
+    console.log(
+      `SolicitacaoService: Marcando OS ${solicitacaoId} como FINALIZADA.`
+    );
+
+    return this.http
+      .post<RespostaApi>(
+        `${this.apiUrl}/solicitacao/atualizarEstado/finalizada`,
+        dto
+      )
       .pipe(
-        tap(response => {
-          console.log('Resposta do backend (Finalizada):', response);
+        tap((response) => {
+          console.log("Resposta do backend (Finalizada):", response);
         }),
-        catchError(this.handleError<string>('marcarComoFinalizada'))
+        catchError(this.handleError<RespostaApi>("marcarComoFinalizada"))
+      );
+  }
+
+  aprovarSolicitacao(payload: {
+    id: string;
+    motivo: string;
+  }): Observable<RespostaApi> {
+    console.log("Aprovando solicitação:", payload);
+    return this.http
+      .post<RespostaApi>(
+        `${this.apiUrl}/solicitacao/atualizarEstado/aprovar`,
+        payload,
+        { responseType: "text" as "json" }
+      )
+      .pipe(
+        tap((res) => console.log("Resposta da aprovação:", res)),
+        catchError(this.handleError<RespostaApi>("aprovarSolicitacao"))
+      );
+  }
+
+  rejeitarSolicitacao(payload: {
+    id: string;
+    motivo: string;
+  }): Observable<RespostaApi> {
+    console.log("Rejeitando solicitação:", payload);
+    return this.http
+      .post<RespostaApi>(
+        `${this.apiUrl}/solicitacao/atualizarEstado/rejeitar`,
+        payload,
+        { responseType: "text" as "json" }
+      )
+      .pipe(
+        tap((res) => console.log("Resposta da rejeição:", res)),
+        catchError(this.handleError<RespostaApi>("rejeitarSolicitacao"))
+      );
+  }
+
+  pagarSolicitacao(solicitacaoId: string): Observable<RespostaApi> {
+    const dto: MudarEstadoDTO = { idSolicitacao: solicitacaoId };
+
+    console.log(
+      `SolicitacaoService: Marcando OS ${solicitacaoId} como PAGA.`
+    );
+
+    return this.http
+      .post<RespostaApi>(
+        `${this.apiUrl}/solicitacao/atualizarEstado/paga`,
+        dto
+      )
+      .pipe(
+        tap((response) => {
+          console.log("Resposta do backend (Paga):", response);
+        }),
+        catchError(this.handleError<RespostaApi>("marcarComoFinalizada"))
       );
   }
 

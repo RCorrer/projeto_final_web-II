@@ -251,6 +251,12 @@
     background-color: #1a36c7;
 }
 
+.button-container button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transition: ease-in-out 0.5s;
+}
+
 .cadastro-form::-webkit-scrollbar {
     width: 8px;
 }

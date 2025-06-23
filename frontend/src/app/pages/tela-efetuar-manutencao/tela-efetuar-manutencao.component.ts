@@ -1,3 +1,5 @@
+import { ModalEfetuarManutencaoComponent } from './../../modals/modal-efetuar-manutencao/modal-efetuar-manutencao.component';
+import { ModalRedirecionarComponent } from './../../modals/modal-redirecionar/modal-redirecionar.component';
 import { Component, Input, OnInit } from '@angular/core';
 import { materialImports } from '../../material-imports';
 import { MatInputModule } from '@angular/material/input';
@@ -6,26 +8,29 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
-import { SolicitacaoComHistoricoDTO, EfetuarManutencaoDTO } from '../../models/solicitacao-dto.model';
+import { SolicitacaoComHistoricoDTO, EfetuarManutencaoDTO, RedirecionarSolicitacaoDTO } from '../../models/solicitacao-dto.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService } from '../../services/auth/auth.service';
+import { ManutencaoConfirmadaEvent } from '../../modals/modal-efetuar-manutencao/modal-efetuar-manutencao.component';
 
 @Component({
   selector: 'app-tela-efetuar-manutencao',
   standalone: true,
-  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, MatButtonModule, RouterLink, MatProgressSpinnerModule],
+  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, MatButtonModule, RouterLink, MatProgressSpinnerModule, ModalEfetuarManutencaoComponent, ModalRedirecionarComponent],
   templateUrl: './tela-efetuar-manutencao.component.html',
   styleUrl: './tela-efetuar-manutencao.component.css'
 })
 export class TelaEfetuarManutencaoComponent implements OnInit {
+  modalManutencaoAberto = false;
+  modalRedirecionarAberto = false;
   solicitacao!: SolicitacaoComHistoricoDTO;
   isLoaded = false;
-  descricaoManutencao: string = '';
-  orientacoesCliente: string = '';
 
   constructor(
     private solicitacaoService: SolicitacaoService, 
     private router: Router, 
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -59,35 +64,72 @@ export class TelaEfetuarManutencaoComponent implements OnInit {
     });
   }
 
-  efetuarManutencao() {
+  abrirModalManutencao() {
+    this.modalManutencaoAberto = true;
+  }
+
+  fecharModalManutencao() {
+    this.modalManutencaoAberto = false;
+  }
+
+  onManutencaoConfirmada(evento: ManutencaoConfirmadaEvent) {
     if (!this.solicitacao?.id) {
       console.error('Erro: Solicitação ou ID da solicitação inválido.');
+      this.fecharModalManutencao();
       return;
     }
 
-    // if (!this.solicitacao || !this.descricaoManutencao || !this.orientacoesCliente) {
-    //   console.error("Por favor, preencha todos os campos da manutenção.");
-    //   return;
-    // }
-
-    const dadosManutencao: EfetuarManutencaoDTO = {
+    const dadosParaBackend: any = {
       idSolicitacao: this.solicitacao.id,
-      descricaoManutencao: this.descricaoManutencao || "Manutenção padrão realizada.", // placeholder
-      orientacoesCliente: this.orientacoesCliente || "Nenhuma orientação específica." // placeholder
+      descricao_manutencao: evento.descricaoManutencao,
+      orientacoes_cliente: evento.orientacoesCliente
     };
 
-    this.solicitacaoService.efetuarManutencao(dadosManutencao).subscribe({
+    this.solicitacaoService.efetuarManutencao(dadosParaBackend).subscribe({
       next: (response) => {
         console.log("Manutenção concluída com sucesso!", response);
+        this.fecharModalManutencao();
         this.router.navigate(['/home']);
       },
       error: (err) => {
         console.error('Erro ao concluir a manutenção:', err);
+        this.fecharModalManutencao();
       }
     });
   }
 
-  redirecionarManutencao() {
-    console.log('TODO: Implementar navegação para a tela de redirecionamento para a OS:', this.solicitacao.id);
+  abrirModalRedirecionar() {
+    this.modalRedirecionarAberto = true;
+  }
+
+  fecharModalRedirecionar() {
+    this.modalRedirecionarAberto = false;
+  }
+
+  onRedirecionamentoConfirmado(idFuncionarioDestino: string) {
+    const idFuncionarioOrigem = this.authService.getIdRole();
+
+    if (!this.solicitacao || !idFuncionarioOrigem) {
+      console.error("Não é possível redirecionar: dados da solicitação ou do funcionário de origem ausentes.");
+      return;
+    }
+
+    const dadosRedirecionamento: RedirecionarSolicitacaoDTO = {
+      idSolicitacao: this.solicitacao.id,
+      idFuncionarioOrigem: idFuncionarioOrigem,
+      idFuncionarioDestino: idFuncionarioDestino
+    };
+
+    this.solicitacaoService.redirecionarSolicitacao(dadosRedirecionamento).subscribe({
+      next: response => {
+        console.log("Redirecionamento bem-sucedido:", response);
+        this.fecharModalRedirecionar();
+        this.router.navigate(['/home']);
+      },
+      error: err => {
+        console.error("Erro no redirecionamento:", err);
+        this.fecharModalRedirecionar();
+      }
+    });
   }
 }

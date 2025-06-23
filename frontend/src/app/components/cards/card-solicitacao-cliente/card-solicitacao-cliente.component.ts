@@ -1,21 +1,27 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
-import { ModalMostarOrcamentoComponent } from '../../../modals/modal-mostar-orcamento/modal-mostar-orcamento.component';
-import { SolicitacaoService } from '../../../services/solicitacao/solicitacao.service';
-import { DataFormatadaPipe } from '../../../shared/data-formatada.pipe';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { RouterModule } from "@angular/router";
+import { ModalMostarOrcamentoComponent } from "../../../modals/modal-mostar-orcamento/modal-mostar-orcamento.component";
+import { SolicitacaoService } from "../../../services/solicitacao/solicitacao.service";
+import { DataFormatadaPipe } from "../../../shared/data-formatada.pipe";
 import { HoraFormatadaPipe } from "../../../shared/hora-formatada.pipe";
-import { Solicitacao } from '../../../models/Solicitacao.model';
+import { Solicitacao } from "../../../models/Solicitacao.model";
 
 @Component({
-  selector: 'app-card-solicitacao-cliente',
+  selector: "app-card-solicitacao-cliente",
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ModalMostarOrcamentoComponent, RouterModule, DataFormatadaPipe, HoraFormatadaPipe],
-  templateUrl: './card-solicitacao-cliente.component.html',
-  styleUrl: './card-solicitacao-cliente.component.css'
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    ModalMostarOrcamentoComponent,
+    RouterModule,
+    DataFormatadaPipe,
+    HoraFormatadaPipe,
+  ],
+  templateUrl: "./card-solicitacao-cliente.component.html",
+  styleUrl: "./card-solicitacao-cliente.component.css",
 })
-
 export class CardSolicitacaoClienteComponent {
   @Input() solicitacao!: Solicitacao;
 
@@ -23,7 +29,10 @@ export class CardSolicitacaoClienteComponent {
   @Output() mostrarOrcamento = new EventEmitter<string>();
   @Output() resgatarServico = new EventEmitter<string>();
   @Output() pagarServico = new EventEmitter<string>();
-  @Output() alterarEstado = new EventEmitter<{ id: string, novoEstado: string }>();
+  @Output() alterarEstado = new EventEmitter<{
+    id: string;
+    novoEstado: string;
+  }>();
 
   modalAberto = false;
   mostrarResgate = false;
@@ -51,7 +60,7 @@ export class CardSolicitacaoClienteComponent {
     this.mostrarResgate = false;
     this.alterarEstado.emit({
       id: this.solicitacao.id,
-      novoEstado: '3'
+      novoEstado: "3",
     });
   }
 
@@ -59,26 +68,35 @@ export class CardSolicitacaoClienteComponent {
     this.mostrarAprovacao = false;
   }
 
-  onAlterarEstado(evento: { id: string, novoEstado: string }) {
+  onAlterarEstado(evento: { id: string; novoEstado: string }) {
     this.alterarEstado.emit(evento);
     this.fecharModal();
-    if(evento.novoEstado === '3') { 
+    if (evento.novoEstado === "3") {
       this.mostrarAprovacao = true;
     }
   }
 
   getEstadoDisplay(estadoId: string): string {
     const mapaDeEstados: { [key: string]: string } = {
-      '1': 'ABERTA',
-      '2': 'ORÇADA',
-      '3': 'APROVADA',
-      '4': 'REJEITADA',
-      '5': 'REDIRECIONADA',
-      '6': 'ARRUMADA',
-      '7': 'PAGA',
-      '8': 'FINALIZADA',
-      '9': 'ENTREGADA'
+      "1": "ABERTA",
+      "2": "ORÇADA",
+      "3": "APROVADA",
+      "4": "REJEITADA",
+      "5": "REDIRECIONADA",
+      "6": "ARRUMADA",
+      "7": "PAGA",
+      "8": "FINALIZADA",
+      "9": "ENTREGADA",
     };
     return mapaDeEstados[estadoId] || estadoId;
+  }
+
+  getCssClasseEstado(estadoId: string): string {
+    const display = this.getEstadoDisplay(estadoId).toLowerCase();
+    return this.removerAcentos(display);
+  }
+
+  removerAcentos(texto: string): string {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 }
