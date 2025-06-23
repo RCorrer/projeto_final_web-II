@@ -47,6 +47,7 @@ public class FuncionarioService {
     public ResponseEntity<RespostaPadraoDTO> deletarFuncionario(String id) {
         return funcionarioRepository.findById(id)
                 .map(funcionario -> {
+                
                     solicitacaoRepository.updateFuncionarioToNull(funcionario.getId());
 
                     String nomeFuncionario = funcionario.getUsuario().getNome();
