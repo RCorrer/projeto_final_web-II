@@ -121,6 +121,10 @@ public class AuthService {
 
         Cliente novoCliente = new Cliente(data.cpf(), data.telefone(), novoEndereco, novoUsuario);
 
+        if (clienteRepository.findByCpf(novoCliente.getCpf()) != null){
+            throw new CpfJaCadastradoException();
+        }
+
         enderecoRepository.save(novoEndereco);
         usuarioRepository.save(novoUsuario);
         clienteRepository.save(novoCliente);
