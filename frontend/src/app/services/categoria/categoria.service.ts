@@ -12,6 +12,8 @@ import {
   retry,
 } from "rxjs";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Injectable({
   providedIn: "root",
@@ -19,7 +21,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 export class CategoriaService {
   private baseUrl = `${environment.apiURL}/categoria`;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private dialog: MatDialog) {
     console.log(
       "CategoriaService: Construtor chamado. Base URL:",
       this.baseUrl
@@ -73,11 +75,15 @@ export class CategoriaService {
           response
         )
       ),
-      catchError(
-        this.handleError<RespostaApi>(
-          `adicionarCategoria ${JSON.stringify(categoria)}`
-        )
-      )
+      catchError((error) => {
+        const mensagem =
+          error?.error?.mensagem ||
+          "Erro ao adicionar. Verifique os dados e tente novamente.";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
+        return throwError(() => error);
+      })
     );
   }
 
@@ -98,6 +104,7 @@ export class CategoriaService {
       return of(result as T);
     };
   }
+
   removerCategoria(descricao: string): Observable<any> {
     const url = `${this.baseUrl}/${encodeURIComponent(descricao)}`;
     console.log("CategoriaService: removerCategoria", url);
@@ -108,7 +115,15 @@ export class CategoriaService {
           response
         );
       }),
-      catchError(this.handleError<string>(`excluir categoria: `, descricao))
+      catchError((error) => {
+        const mensagem =
+          error?.error?.mensagem ||
+          "Erro ao remover. Verifique os dados e tente novamente.";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
+        return throwError(() => error);
+      })
     );
   }
 
@@ -131,9 +146,15 @@ export class CategoriaService {
           response
         )
       ),
-      catchError(
-        this.handleError<RespostaApi>(`atualizarCategoria ${descricaoAntiga}`)
-      )
+      catchError((error) => {
+        const mensagem =
+          error?.error?.mensagem ||
+          "Erro ao editar. Verifique os dados e tente novamente.";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
+        return throwError(() => error);
+      })
     );
   }
 }
