@@ -11,6 +11,7 @@ import com.example.web_II.domain.usuarios.LoginResponseDTO;
 import com.example.web_II.domain.usuarios.Usuario;
 import com.example.web_II.domain.usuarios.UsuarioRole;
 import com.example.web_II.exceptions.EmailJaCadastradoException;
+import com.example.web_II.exceptions.CpfJaCadastradoException;
 import com.example.web_II.exceptions.LoginNotFoundException;
 import com.example.web_II.infra.security.TokenService;
 import com.example.web_II.repositories.ClienteRepository;
@@ -121,9 +122,8 @@ public class AuthService {
 
         Cliente novoCliente = new Cliente(data.cpf(), data.telefone(), novoEndereco, novoUsuario);
 
-        if (clienteRepository.findByCpf(novoCliente.getCpf()) != null){
+        if (clienteRepository.findByCpf(novoCliente.getCpf()) != null)
             throw new CpfJaCadastradoException();
-        }
 
         enderecoRepository.save(novoEndereco);
         usuarioRepository.save(novoUsuario);
