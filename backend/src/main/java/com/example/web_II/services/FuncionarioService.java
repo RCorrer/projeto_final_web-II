@@ -52,7 +52,7 @@ public class FuncionarioService {
 
                     if (id.equals(idAtual.idAtual()))
                         throw new FuncionarioAutodeleteException();
-
+                  
                     solicitacaoRepository.updateFuncionarioToNull(funcionario.getId());
 
                     String nomeFuncionario = funcionario.getUsuario().getNome();

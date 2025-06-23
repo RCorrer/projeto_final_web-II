@@ -9,6 +9,7 @@ import { MatOption, MatSelect } from "@angular/material/select";
 import { Router, RouterLink } from "@angular/router";
 import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
 import { AuthService } from "../../services/auth/auth.service";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-tela-solicitar-manutencao",
@@ -29,7 +30,7 @@ export class TelaSolicitarManutencaoComponent implements OnInit {
   categorias: string[] = [];
   mostrarRejeicao = false;
 
-  readonly apiUrl = "http://localhost:8080";
+  readonly apiUrl = `${environment.apiURL}/categoria`;
 
   data = {
     idCliente: "",
@@ -50,7 +51,7 @@ export class TelaSolicitarManutencaoComponent implements OnInit {
   }
 
   carregarCategorias() {
-    this.http.get<string[]>(`${this.apiUrl}/categoria`).subscribe({
+    this.http.get<string[]>(this.apiUrl).subscribe({
       next: (res) => {
         this.categorias = res;
         console.log("Categorias carregadas:", this.categorias);
