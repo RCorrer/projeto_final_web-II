@@ -79,10 +79,10 @@ export class TelaEfetuarManutencaoComponent implements OnInit {
       return;
     }
 
-    const dadosParaBackend: EfetuarManutencaoDTO = {
+    const dadosParaBackend: any = {
       idSolicitacao: this.solicitacao.id,
-      descricaoManutencao: evento.descricaoManutencao,
-      orientacoesCliente: evento.orientacoesCliente
+      descricao_manutencao: evento.descricaoManutencao,
+      orientacoes_cliente: evento.orientacoesCliente
     };
 
     this.solicitacaoService.efetuarManutencao(dadosParaBackend).subscribe({

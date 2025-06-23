@@ -355,6 +355,26 @@ export class SolicitacaoService {
       );
   }
 
+  pagarSolicitacao(solicitacaoId: string): Observable<RespostaApi> {
+    const dto: MudarEstadoDTO = { idSolicitacao: solicitacaoId };
+
+    console.log(
+      `SolicitacaoService: Marcando OS ${solicitacaoId} como PAGA.`
+    );
+
+    return this.http
+      .post<RespostaApi>(
+        `${this.apiUrl}/solicitacao/atualizarEstado/paga`,
+        dto
+      )
+      .pipe(
+        tap((response) => {
+          console.log("Resposta do backend (Paga):", response);
+        }),
+        catchError(this.handleError<RespostaApi>("marcarComoFinalizada"))
+      );
+  }
+
   getSolicitacoes(): Solicitacao[] {
     return this.solicitacoesFuncionarioSource.getValue();
   }

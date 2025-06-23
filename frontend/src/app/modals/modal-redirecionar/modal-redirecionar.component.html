@@ -12,8 +12,8 @@
     </mat-form-field>
 
     <div class="modal-acoes">
-      <button mat-stroked-button (click)="fechar()">Cancelar</button>
-      <button mat-raised-button color="primary" (click)="confirmar()" [disabled]="!funcionarioDestinoId">Confirmar</button>
+      <button id="cancelar" mat-stroked-button (click)="fechar()">Cancelar</button>
+      <button id="aceitar" mat-raised-button color="primary" (click)="confirmar()" [disabled]="!funcionarioDestinoId">Confirmar</button>
     </div>
   </div>
 </div>
