@@ -1,5 +1,6 @@
 package com.example.web_II.controllers;
 
+import com.example.web_II.domain.funcionarios.DeletarDTO;
 import com.example.web_II.domain.funcionarios.FuncionarioAtualizacaoDTO;
 import com.example.web_II.domain.funcionarios.FuncionarioListagemDTO;
 import com.example.web_II.domain.geral.RespostaPadraoDTO;
@@ -39,8 +40,8 @@ public class FuncionarioController {
                     content = @Content(schema = @Schema(implementation = RespostaPadraoDTO.class)))
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<RespostaPadraoDTO> deletarFuncionario(@PathVariable String id) {
-        return funcionarioService.deletarFuncionario(id);
+    public ResponseEntity<RespostaPadraoDTO> deletarFuncionario(@PathVariable String id, @RequestBody DeletarDTO idAtual) {
+        return funcionarioService.deletarFuncionario(id,idAtual);
     }
 
 
