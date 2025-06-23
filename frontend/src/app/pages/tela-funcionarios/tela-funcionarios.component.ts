@@ -47,23 +47,14 @@ export class TelaFuncionariosComponent implements OnInit {
             titulo: "Novo Funcionário",
             nome: "",
             email: "",
-            dataNascimento: "",
+            nascimento: "",
             senha: "",
           },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (result.id) {
-          this.funcionarioService
-            .atualizarFuncionario(result.id, result)
-            .subscribe();
-        } else {
-          this.funcionarioService.adicionarFuncionario(result).subscribe({
-            next: () => console.log("Funcionário adicionado com sucesso"),
-            error: (err) => console.error("Erro ao adicionar:", err),
-          });
-        }
+    dialogRef.afterClosed().subscribe((foiSalvo) => {
+      if (foiSalvo) {
+        console.log("Funcionário salvo com sucesso");
       }
     });
   }
