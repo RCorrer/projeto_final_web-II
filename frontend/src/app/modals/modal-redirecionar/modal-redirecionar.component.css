@@ -2,13 +2,18 @@
 
 /* A camada de fundo semi-transparente que cobre a tela inteira */
 .modal-overlay {
-    position: fixed; /* Fica fixo na tela, mesmo com rolagem */
+    position: fixed;
+    /* Fica fixo na tela, mesmo com rolagem */
     top: 0;
     left: 0;
-    width: 100vw; /* 100% da largura da tela */
-    height: 100vh; /* 100% da altura da tela */
-    background-color: rgba(0, 0, 0, 0.6); /* Cor preta com 60% de opacidade */
-    z-index: 1000; /* Garante que fique sobre todo o conteúdo da página */
+    width: 100vw;
+    /* 100% da largura da tela */
+    height: 100vh;
+    /* 100% da altura da tela */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Cor preta com 60% de opacidade */
+    z-index: 1000;
+    /* Garante que fique sobre todo o conteúdo da página */
 
     /* Centraliza a janela do modal no meio da tela */
     display: flex;
@@ -25,8 +30,10 @@
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    max-width: 500px; /* Largura máxima do modal */
-    width: 90%; /* Em telas pequenas, ocupa 90% da largura */
+    max-width: 500px;
+    /* Largura máxima do modal */
+    width: 90%;
+    /* Em telas pequenas, ocupa 90% da largura */
     text-align: left;
 }
 
@@ -48,11 +55,23 @@
 /* Estilo para os botões de ação no final do modal */
 .modal-acoes {
     display: flex;
-    justify-content: flex-end; /* Alinha os botões à direita */
-    gap: 1rem; /* Espaço entre os botões */
+    justify-content: flex-end;
+    /* Alinha os botões à direita */
+    gap: 1rem;
+    /* Espaço entre os botões */
     margin-top: 1.5rem;
     border-top: 1px solid #eee;
     padding-top: 1rem;
+}
+
+#cancelar {
+    border-color: var(--color-rejeitada);
+    color: var(--color-rejeitada);
+}
+
+#aceitar {
+    background-color: var(--color-finalizada);
+    color: white;
 }
 
 /* Animação de entrada */
@@ -60,6 +79,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
