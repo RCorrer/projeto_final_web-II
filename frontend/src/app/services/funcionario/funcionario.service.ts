@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of, throwError } from "rxjs";
 import { Funcionario } from "../../models/funcionario.model";
 import { tap, catchError } from "rxjs/operators";
 import { RespostaApi } from "../../models/respostaApi.model";
+import { environment } from "../../../environments/environment";
 
 interface funcionarioPayload {
   nome: string;
@@ -18,7 +19,7 @@ interface funcionarioPayload {
 export class FuncionarioService {
   private funcionariosSource = new BehaviorSubject<Funcionario[]>([]);
   funcionarios$ = this.funcionariosSource.asObservable();
-  private apiUrl = "http://localhost:8080";
+  private apiUrl = environment + "/funcionarios";
 
   constructor(private http: HttpClient) {
     this.carregarFuncionarios();
@@ -26,13 +27,13 @@ export class FuncionarioService {
 
   private carregarFuncionarios() {
     this.http
-      .get<Funcionario[]>(`${this.apiUrl}/funcionarios`)
+      .get<Funcionario[]>(this.apiUrl)
       .pipe(
         tap((response) => console.log("Funcionários carregados:", response))
       )
       .subscribe({
         next: (funcionarios) => this.funcionariosSource.next(funcionarios),
-        error: (err) => console.error("Erro ao carregar funcionários:", err),
+        error: (error) => console.error("Erro ao carregar funcionários:", err),
       });
   }
 

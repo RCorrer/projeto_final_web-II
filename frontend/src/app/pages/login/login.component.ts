@@ -10,6 +10,7 @@ import { CommonModule } from "@angular/common";
 import { AuthService } from "../../services/auth/auth.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { environment } from "../../../environments/environment";
 
 interface LoginResponse {
   token: string;
@@ -36,7 +37,7 @@ interface LoginResponse {
 export class LoginComponent implements AfterViewInit {
   private audio = new Audio("bipbip-sound.mp3");
   loginForm: FormGroup;
-  private readonly url = "http://localhost:8080/login";
+  private readonly url = environment.apiURL + "/login";
 
   constructor(
     private fb: FormBuilder,

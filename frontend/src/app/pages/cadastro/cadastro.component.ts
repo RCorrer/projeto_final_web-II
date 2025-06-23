@@ -13,7 +13,10 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatDialog } from "@angular/material/dialog";
 import { RespostaApi } from "../../models/respostaApi.model";
+import { environment } from "../../../environments/environment";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
 
 interface dadosCEP {
   cep: string;
@@ -53,12 +56,13 @@ export class CadastroComponent implements AfterViewInit {
   private atualizandoCPF = false;
   carregando = false;
 
-  readonly apiUrl = "http://localhost:8080";
+  readonly apiUrl = environment.apiURL + "/cadastro/cliente";
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.cadastroForm = this.fb.group({
       nomeCompleto: ["", Validators.required],
@@ -163,19 +167,22 @@ export class CadastroComponent implements AfterViewInit {
     };
 
     this.http
-      .post<RespostaApi>(`${this.apiUrl}/cadastro/cliente`, payload)
+      .post<RespostaApi>(this.apiUrl, payload)
       .subscribe({
         next: (res) => {
-          console.log("✅ Cadastro realizado:", res);
-          // Delay antes de redirecionar
-          setTimeout(() => {
+          if (res) {
             this.carregando = false;
             this.router.navigate(["/"]);
-          }, 1500); // 1,5 segundos de espera
+          }
         },
-        error: (err) => {
-          console.error("❌ Erro ao cadastrar:", err);
+        error: (error) => {
           this.carregando = false;
+          const mensagem =
+            error?.error?.mensagem ||
+            "Erro ao cadastrar. Verifique os dados e tente novamente.";
+          this.dialog.open(ModalErroComponent, {
+            data: { mensagem },
+          });
         },
       });
   }
