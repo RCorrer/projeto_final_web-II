@@ -47,6 +47,7 @@ export interface MudarEstadoDTO {
 // Interface OrcamentoDTO.java
 export interface OrcamentoDTO {
   id: string;
+  ifFuncionario: string;
   valor: number;
 }
 

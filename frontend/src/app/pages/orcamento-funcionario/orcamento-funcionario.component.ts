@@ -93,8 +93,16 @@ export class OrcamentoFuncionarioComponent implements OnInit{
         return;
     }
 
+    const ifFuncionario = this.authService.getIdRole();
+
+    if (!ifFuncionario) {
+      console.error("ID do funcionário não encontrado.");
+      return;
+    }
+
     const orcamentoData: OrcamentoDTO = {
       id: this.solicitacao.id,
+      ifFuncionario: ifFuncionario,
       valor: valorNumerico,
     };
 
