@@ -131,6 +131,9 @@ public class SolicitacoesService {
             throw new FalhaPegarSolicitacao();
         }
 
+        AtribuirFuncionarioDTO atribuirFuncioario = new AtribuirFuncionarioDTO(data.id(),data.ifFuncionario());
+
+        atribuirFuncionario(atribuirFuncioario);
         Solicitacao solicitacao = solicitacaoOpt.get();
 
         String estadoAnterior = solicitacao.getFk_estado();
@@ -242,7 +245,7 @@ public class SolicitacoesService {
 
         Solicitacao solicitacao = solicitacaoOpt.get();
         String estadoAnterior = solicitacao.getFk_estado();
-        if (!Objects.equals(estadoAnterior, "3")){
+        if (!Objects.equals(estadoAnterior, "1" )&& (!Objects.equals(estadoAnterior,"3"))){
             throw new SolicitacaoAtualizarInvalido();
         }
 
