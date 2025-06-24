@@ -2,12 +2,16 @@ import { Component, Input } from "@angular/core";
 import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
 import { Router, RouterLink, ActivatedRoute } from "@angular/router";
 import { CommonModule, DatePipe } from "@angular/common";
-import { SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
+import {
+  HistoricoAlteracaoDTO,
+  SolicitacaoComHistoricoDTO,
+} from "../../models/solicitacao-dto.model";
 
 interface Etapa {
   nome: string;
   estado: "completo" | "ativo" | "incompleto";
   dataHora?: string;
+  funcionarioNome?: string;
 }
 
 @Component({
@@ -18,6 +22,8 @@ interface Etapa {
 })
 export class TelaVisualizarComponent {
   @Input() solicitacao!: SolicitacaoComHistoricoDTO;
+  @Input() funcionario!: HistoricoAlteracaoDTO;
+
   isLoaded = false;
 
   etapas: Etapa[] = [];
@@ -82,33 +88,32 @@ export class TelaVisualizarComponent {
 
   private atualizarEtapas(): void {
     const estadoAtual = this.solicitacao.estado;
-    const historicoIds = this.solicitacao.historico.map((h) => h.estadoNovo);
+    const historico = this.solicitacao.historico;
+    const historicoIds = historico.map((h) => h.estadoNovo);
     const temRejeitada = historicoIds.includes(this.etapaRejeitada);
 
     const mapaDeDatas = new Map<string, string>();
-    this.solicitacao.historico.forEach((h) => {
+    const mapaDeFuncionarios = new Map<string, string>();
+
+    historico.forEach((h) => {
       mapaDeDatas.set(h.estadoNovo, h.dataHora);
+
+      if (["2", "6", "8"].includes(h.estadoNovo)) {
+        if (h.estadoNovo === "6") {
+          mapaDeFuncionarios.set(
+            "6",
+            h.funcionarioRedirecionado || this.solicitacao.funcionarioNome
+          );
+        } else {
+          mapaDeFuncionarios.set(
+            h.estadoNovo,
+            this.solicitacao.funcionarioNome
+          );
+        }
+      }
     });
 
     this.etapas = [];
-
-    for (let i = 0; i < this.etapasNormais.length; i++) {
-      const etapaNome = this.etapasNormais[i];
-
-      if (etapaNome === "3" && temRejeitada) {
-        this.etapas.push({
-          nome: this.mapaDeEstados[this.etapaRejeitada],
-          estado: estadoAtual === "REJEITADA" ? "ativo" : "completo",
-          dataHora: mapaDeDatas.get(etapaNome),
-        });
-      }
-
-      this.etapas.push({
-        nome: this.mapaDeEstados[etapaNome],
-        estado: this.getEstadoEtapa(etapaNome, estadoAtual, i),
-        dataHora: mapaDeDatas.get(etapaNome),
-      });
-    }
 
     if (estadoAtual === this.etapaRejeitada) {
       const etapasAteRejeicao: Etapa[] = [];
@@ -118,19 +123,45 @@ export class TelaVisualizarComponent {
         nome: this.mapaDeEstados["1"],
         estado: "completo",
       });
+
       if (orcou) {
         etapasAteRejeicao.push({
           nome: this.mapaDeEstados["2"],
           estado: "completo",
+          funcionarioNome: mapaDeFuncionarios.get("2") ?? undefined,
+          dataHora: mapaDeDatas.get("2") ?? undefined,
         });
       }
+
       etapasAteRejeicao.push({
         nome: this.mapaDeEstados[this.etapaRejeitada],
         estado: "ativo",
+        dataHora: mapaDeDatas.get("4") ?? undefined,
       });
+
       this.etapas = etapasAteRejeicao;
-    } else {
-      this.etapas = this.etapas;
+      return;
+    }
+
+    // Caso contrário, etapas normais
+    for (let i = 0; i < this.etapasNormais.length; i++) {
+      const etapaNome = this.etapasNormais[i];
+
+      // Se foi rejeitada logo após orçada
+      if (etapaNome === "3" && temRejeitada) {
+        this.etapas.push({
+          nome: this.mapaDeEstados[this.etapaRejeitada],
+          estado: estadoAtual === "REJEITADA" ? "ativo" : "completo",
+          dataHora: mapaDeDatas.get("4"),
+        });
+      }
+
+      this.etapas.push({
+        nome: this.mapaDeEstados[etapaNome],
+        estado: this.getEstadoEtapa(etapaNome, estadoAtual, i),
+        dataHora: mapaDeDatas.get(etapaNome),
+        funcionarioNome: mapaDeFuncionarios.get(etapaNome),
+      });
     }
   }
 

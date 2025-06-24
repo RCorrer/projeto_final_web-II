@@ -20,6 +20,7 @@ export interface HistoricoAlteracaoDTO {
   estadoAnterior: string;
   estadoNovo: string;
   dataHora: string;
+  funcionarioRedirecionado?: string
 }
 
 // Interface principal, refletindo o back SolicitacaoComHistoricoDTO.java

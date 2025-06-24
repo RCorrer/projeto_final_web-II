@@ -14,22 +14,22 @@
       <div class="visualizar-left">
         <p>
           <strong>Descrição do equipamento</strong><br />{{
-            solicitacao.descricaoEquipamento || "N/A"
+          solicitacao.descricaoEquipamento || "N/A"
           }}
         </p>
         <p>
           <strong>Categoria do equipamento</strong><br />{{
-            solicitacao.categoriaEquipamento || "N/A"
+          solicitacao.categoriaEquipamento || "N/A"
           }}
         </p>
         <p>
           <strong>Descrição do problema</strong><br />{{
-            solicitacao.descricaoDefeito || "N/A"
+          solicitacao.descricaoDefeito || "N/A"
           }}
         </p>
         <p>
           <strong>Data/Hora</strong><br />{{
-            (solicitacao.dataHora | date : "dd/MM/yyyy HH:mm") || "N/A"
+          (solicitacao.dataHora | date : "dd/MM/yyyy HH:mm") || "N/A"
           }}
         </p>
       </div>
@@ -39,7 +39,7 @@
         <div class="visualizar-contato">
           <p>
             <strong>Cliente</strong><br />{{
-              solicitacao.cliente.nome || "N/A"
+            solicitacao.cliente.nome || "N/A"
             }}
           </p>
           <p>
@@ -47,12 +47,12 @@
           </p>
           <p>
             <strong>E-mail</strong><br />{{
-              solicitacao.cliente.email || "N/A"
+            solicitacao.cliente.email || "N/A"
             }}
           </p>
           <p>
             <strong>Telefone</strong><br />{{
-              solicitacao.cliente.telefone || "N/A"
+            solicitacao.cliente.telefone || "N/A"
             }}
           </p>
         </div>
@@ -63,17 +63,17 @@
           </p>
           <p>
             <strong>Logradouro</strong><br />{{
-              solicitacao.cliente.logradouro || "N/A"
+            solicitacao.cliente.logradouro || "N/A"
             }}
           </p>
           <p>
             <strong>Complemento</strong><br />{{
-              solicitacao.cliente.complemento || "N/A"
+            solicitacao.cliente.complemento || "N/A"
             }}
           </p>
           <p>
             <strong>Cidade</strong><br />{{
-              solicitacao.cliente.localidade || "N/A"
+            solicitacao.cliente.localidade || "N/A"
             }}
           </p>
           <p>
@@ -85,44 +85,28 @@
 
     <div class="visualizar-bottom">
       <div class="passos">
-        <div
-          class="stepper"
-          [class.tres-etapas]="etapas.length === 3"
-          [class.rejeitado]="solicitacao.estado === 'REJEITADA'"
-        >
-          <div
-            *ngFor="let etapa of etapas; let i = index"
-            class="step"
-            [class.rejeitado]="
+        <div class="stepper" [class.tres-etapas]="etapas.length === 3"
+          [class.rejeitado]="solicitacao.estado === 'REJEITADA'">
+          <div *ngFor="let etapa of etapas; let i = index" class="step" [class.rejeitado]="
               solicitacao.estado === 'REJEITADA' && etapa.estado === 'completo'
-            "
-          >
-            <div
-              class="step-connector"
-              *ngIf="i !== 0"
-              [class.completo]="
+            ">
+            <div class="step-connector" *ngIf="i !== 0" [class.completo]="
                 etapa.estado === 'completo' || etapa.estado === 'ativo'
-              "
-              [class.rejeitado]="solicitacao.estado === 'REJEITADA'"
-            ></div>
+              " [class.rejeitado]="solicitacao.estado === 'REJEITADA'"></div>
 
-            <div
-              class="step-circle"
-              [class.completo]="etapa.estado === 'completo'"
-              [class.ativo]="etapa.estado === 'ativo'"
-              [class.rejeitado]="
+            <div class="step-circle" [class.completo]="etapa.estado === 'completo'"
+              [class.ativo]="etapa.estado === 'ativo'" [class.rejeitado]="
                 etapa.nome === 'REJEITADA' ||
                 (solicitacao.estado === 'REJEITADA' &&
                   etapa.estado === 'completo')
-              "
-            >
-              <span
-                *ngIf="etapa.estado === 'completo' || etapa.estado === 'ativo'"
-                >✓</span
-              >
+              ">
+              <span *ngIf="etapa.estado === 'completo' || etapa.estado === 'ativo'">✓</span>
             </div>
 
             <div class="step-label">{{ etapa.nome }}</div>
+            <div class="step-funcionario" *ngIf="etapa.funcionarioNome">
+              {{ etapa.funcionarioNome }}
+            </div>
             <div class="step-date" *ngIf="etapa.dataHora">
               <p>{{ etapa.dataHora | date : "dd/MM/yyyy" }}</p>
               <p>{{ etapa.dataHora | date : "HH:mm" }}</p>
