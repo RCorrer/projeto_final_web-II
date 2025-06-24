@@ -148,7 +148,7 @@ public class SolicitacoesService {
 
         HistoricoAlteracao historico = new HistoricoAlteracao(
                 data.id(),
-                "Orçamento de R$ " + data.valor() + " registrado por" + solicitacao.getFuncionario().getUsuario().getNome(),
+                "Orçamento de R$ " + data.valor() + " registrado por " + solicitacao.getFuncionario().getUsuario().getNome(),
                 estadoAnterior,
                 "2"
         );
@@ -452,10 +452,14 @@ public class SolicitacoesService {
                             if (partes.length > 1) {
                                 funcionarioRedirecionado = partes[1];
                             }
-                        } else if (descricao.startsWith("Orçamento aprovado de")){
-                            String[] partes = descricao.split("por");
-                            if (partes.length > 1){
-                                funcionarioRedirecionado = partes[1];
+                        }
+                    } else if ("2".equals(historico.getEstadoNovo())){
+                        String descricao = historico.getDescricao();
+                        if (descricao.startsWith("Orçamento de")) {
+                            String[] partes = descricao.split(" registrado por ");
+                            if (partes.length > 1) {
+                                funcionarioRedirecionado = partes[1].trim();
+
                             }
                         }
                     }
