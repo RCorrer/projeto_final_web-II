@@ -37,28 +37,20 @@ export class OrcamentoFuncionarioComponent implements OnInit{
       const idDaRota: string = params['id']; 
 
       if (!idDaRota) {
-        console.error("orcamento-funcionario: ID da solicitação não encontrado na rota!");
         this.isLoaded = true;
         return;
       }
       
-      this.isLoaded = false; // Inicia o carregamento
+      this.isLoaded = false;
       this.solicitacaoService.fetchDetalhesSolicitacao(idDaRota).subscribe({
         next: (dados) => {
           if (dados) {
-            this.solicitacao = dados;
-            
+            this.solicitacao = dados;            
             this.solicitacao.idFormatado = 'OS-' + String(this.solicitacao.numeroOs).padStart(4, '0');
             
-            // Se já houver um orçamento, preenche o campo de input com o valor formatado
             if (this.solicitacao.orcamento && this.solicitacao.orcamento > 0) {
               this.valorOrcamento = this.currencyPipe.transform(this.solicitacao.orcamento, "BRL", "symbol", "1.2-2") || "";
             }
-
-          } else {
-            console.error(`orcamento-funcionario: Solicitação com ID ${idDaRota} não foi encontrada no backend.`);
-            // Adicionar lógica para lidar com solicitação não encontrada, como redirecionar
-            // this.router.navigate(['/pagina-nao-encontrada']);
           }
         },
         error: (err) => {
@@ -66,7 +58,7 @@ export class OrcamentoFuncionarioComponent implements OnInit{
           this.isLoaded = true;
         },
         complete: () => {
-          this.isLoaded = true; // Finaliza o carregamento após sucesso
+          this.isLoaded = true;
         }
       });
     });
@@ -99,8 +91,7 @@ export class OrcamentoFuncionarioComponent implements OnInit{
     };
 
     this.solicitacaoService.enviarOrcamento(orcamentoData).subscribe({
-      next: (response) => {
-        console.log("Orçamento enviado com sucesso!", response);
+      next: () => {
         this.router.navigate(['/home']);
       },
       error: (err) => {

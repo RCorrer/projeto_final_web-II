@@ -32,7 +32,7 @@ export class DataFormatadaPipe implements PipeTransform {
       return 'Data inválida';
     }
 
-    const dia = dateObj.getDate().toString().padStart(2, '0');
+    const dia = (dateObj.getDate() +1).toString().padStart(2, '0');
     const mes = (dateObj.getMonth() + 1).toString().padStart(2, '0');
     const ano = dateObj.getFullYear();
 

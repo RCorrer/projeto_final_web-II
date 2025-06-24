@@ -38,7 +38,6 @@ export class TelaEfetuarManutencaoComponent implements OnInit {
       const idDaRota: string = params['id']; 
 
       if (!idDaRota) {
-        console.error("tela-efetuar-manutencao: ID da solicitação não encontrado na rota!");
         this.isLoaded = true;
         return;
       }
@@ -49,8 +48,6 @@ export class TelaEfetuarManutencaoComponent implements OnInit {
           if (dados) {
             this.solicitacao = dados;
             this.solicitacao.idFormatado = 'OS-' + String(this.solicitacao.numeroOs).padStart(4, '0');
-          } else {
-            console.error(`tela-efetuar-manutencao: Solicitação com ID ${idDaRota} não foi encontrada.`);
           }
         },
         error: (err) => {
@@ -74,7 +71,6 @@ export class TelaEfetuarManutencaoComponent implements OnInit {
 
   onManutencaoConfirmada(evento: ManutencaoConfirmadaEvent) {
     if (!this.solicitacao?.id) {
-      console.error('Erro: Solicitação ou ID da solicitação inválido.');
       this.fecharModalManutencao();
       return;
     }
@@ -86,8 +82,7 @@ export class TelaEfetuarManutencaoComponent implements OnInit {
     };
 
     this.solicitacaoService.efetuarManutencao(dadosParaBackend).subscribe({
-      next: (response) => {
-        console.log("Manutenção concluída com sucesso!", response);
+      next: () => {
         this.fecharModalManutencao();
         this.router.navigate(['/home']);
       },
@@ -121,8 +116,7 @@ export class TelaEfetuarManutencaoComponent implements OnInit {
     };
 
     this.solicitacaoService.redirecionarSolicitacao(dadosRedirecionamento).subscribe({
-      next: response => {
-        console.log("Redirecionamento bem-sucedido:", response);
+      next: () => {
         this.fecharModalRedirecionar();
         this.router.navigate(['/home']);
       },

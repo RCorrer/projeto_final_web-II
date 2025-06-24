@@ -63,7 +63,6 @@ export class CardSolicitacaoComponent implements OnInit, OnChanges {
       case '8':
         return 'var(--color-finalizada)';
       default:
-        console.warn(`CardSolicitacaoComponent: Estado desconhecido '${estadoId}' para getColor.`);
         return 'gray';
     }
   }
@@ -76,20 +75,9 @@ realizarAcao(acao: 'finalizar' | 'orcamento' | 'manutencao'): void {
     
     switch (acao) {
       case 'finalizar':
-        console.log(`CardSolicitacao: Emitindo evento 'finalizarAcao' para a OS ID: ${this.solicitacao.id}`);
         this.finalizarAcao.emit(this.solicitacao.id);
         break;
-      
-      // As ações de navegação podem ser tratadas com routerLink diretamente no HTML
-      // ou podem emitir um evento se houver lógica adicional no componente pai.
-      // Exemplo se você quisesse emitir em vez de usar routerLink:
-      // case 'orcamento':
-      //   this.orcamentoAcao.emit(this.solicitacao.id);
-      //   break;
-      // case 'manutencao':
-      //   this.manutencaoAcao.emit(this.solicitacao.id);
-      //   break;
-        
+
       default:
         console.warn(`CardSolicitacao: Ação desconhecida '${acao}'`);
     }

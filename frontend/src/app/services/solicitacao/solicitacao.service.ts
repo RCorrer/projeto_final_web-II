@@ -117,7 +117,9 @@ export class SolicitacaoService {
 
   private mapListaDoBackend(lista: any[]): Solicitacao[] {
     return Array.isArray(lista) ? lista.map((s) => {
-      const data = new Date(s.dataHora || s.data || s.data_hora);
+      const dataHoraOriginal = new Date(s.dataHora || s.data || s.data_hora);
+      const data = new Date(dataHoraOriginal);
+      data.setHours(data.getHours() + 3);
       return {
         id: String(s.id),
         numeroOs: s.numeroOs,

@@ -65,19 +65,16 @@ export class DashboardFuncionarioComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.filtroStatus = params["estado"] ?? '1';
-      this.carregarDadosDoBackend(); // Chama o método de busca principal
+      this.carregarDadosDoBackend();
     });
 
     this.filtroForm.valueChanges.subscribe(() => {
       this.aplicarFiltrosEOrdenar();
     });
-
-    // A subscrição permanente ao Observable do serviço foi REMOVIDA daqui.
   }
 
   carregarDadosDoBackend(): void {
     if (!this.authService.isFuncionario() || !this.funcionarioLogadoId) {
-      console.warn("Usuário não é funcionário ou ID não encontrado.");
       return;
     }
 
@@ -85,17 +82,13 @@ export class DashboardFuncionarioComponent implements OnInit {
     this.solicitacaoService.fetchSolicitacoesDashboard(this.funcionarioLogadoId)
       .subscribe({
         next: (listaDoServico) => {
-          // AQUI ESTÁ A LÓGICA CENTRALIZADA:
-          // 1. Substitui a lista base com os novos dados do backend.
           this.todasSolicitacoesBase = listaDoServico;
-          // 2. Aplica os filtros sobre esta nova lista.
           this.aplicarFiltrosEOrdenar();
-          console.log('DashboardFuncionario: Dados carregados e filtros aplicados.');
         },
         error: (err) => {
           console.error('DashboardFuncionario: Erro ao buscar solicitações:', err);
           this.todasSolicitacoesBase = [];
-          this.aplicarFiltrosEOrdenar(); // Limpa a exibição em caso de erro
+          this.aplicarFiltrosEOrdenar();
         },
         complete: () => {
           this.isLoading = false;
@@ -151,12 +144,8 @@ export class DashboardFuncionarioComponent implements OnInit {
     if (!solicitacaoId) return;
 
     this.solicitacaoService.finalizarSolicitacao(solicitacaoId).subscribe({
-      next: (response) => {
-        console.log(`Resposta ao finalizar OS ${solicitacaoId}:`, response);
-        this.carregarDadosDoBackend(); // Recarrega os dados para refletir a mudança
-      },
-      error: (err) => {
-        console.error(`Erro ao finalizar a OS ${solicitacaoId}:`, err);
+      next: () => {
+        this.carregarDadosDoBackend(); 
       }
     });
   }

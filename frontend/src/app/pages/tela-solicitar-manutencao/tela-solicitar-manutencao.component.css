@@ -20,8 +20,8 @@
 .content h1 {
     align-self: center;
     font-size: 2rem;
-    margin-bottom: 20px;
-    margin-top: 80px;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
     color: var(--color-primary);
 }
 
@@ -51,9 +51,9 @@ mat-hint {
     align-self: center;
     display: flex;
     flex-direction: row;
-    gap: 30px;
+    gap: 24px;
     align-items: center;
-    margin-top: 48px;
+    margin-top: 12px;
 }
 
 #cancelar {

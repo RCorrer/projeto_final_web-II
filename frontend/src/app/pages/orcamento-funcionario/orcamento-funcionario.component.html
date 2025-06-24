@@ -24,7 +24,12 @@
                     id="orcamento-button" 
                     mat-button
                     color="primary"
-                    (click)="enviarOrcamento()" >
+                    (click)="enviarOrcamento()"
+                    [disabled]="!valorOrcamento || valorOrcamento.trim() === ''"
+                    [ngClass]="{
+                      'orcamento-button-ativo': valorOrcamento.trim(),
+                      'orcamento-button-desativado': !valorOrcamento
+                    }" >
                     Enviar
                 </button>
             </div>
