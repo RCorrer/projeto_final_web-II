@@ -148,7 +148,7 @@ public class SolicitacoesService {
 
         HistoricoAlteracao historico = new HistoricoAlteracao(
                 data.id(),
-                "Orçamento de R$ " + data.valor() + " registrado",
+                "Orçamento de R$ " + data.valor() + " registrado por" + solicitacao.getFuncionario().getUsuario().getNome(),
                 estadoAnterior,
                 "2"
         );
@@ -447,9 +447,14 @@ public class SolicitacoesService {
                     if ("5".equals(historico.getEstadoNovo())) {
                         String descricao = historico.getDescricao();
                         // Extrai o nome do funcionário destino da descrição
-                        if (descricao.startsWith("Solicitação redirecionada de ")) {
+                        if (descricao.startsWith("Solicitação redirecionada de ")){
                             String[] partes = descricao.split(" para ");
                             if (partes.length > 1) {
+                                funcionarioRedirecionado = partes[1];
+                            }
+                        } else if (descricao.startsWith("Orçamento aprovado de")){
+                            String[] partes = descricao.split("por");
+                            if (partes.length > 1){
                                 funcionarioRedirecionado = partes[1];
                             }
                         }
