@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import {
   RelatorioPorCategoria,
   RelatorioPorDia,
-} from "../../models/relatorio/relatorio.model";
+} from "../../models/relatorio.model";
 import { environment } from "../../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -28,12 +28,9 @@ export class RelatorioService {
   ): Observable<RelatorioPorDia[]> {
     let params = new HttpParams();
 
-    // ✨ CORREÇÃO 1: Usa os nomes corretos ('dataInicio', 'dataFim').
-    // ✨ CORREÇÃO 2: Envia uma string vazia se a data for nula/undefined.
     params = params.set("dataInicio", dataInicial || "");
     params = params.set("dataFim", dataFinal || "");
 
-    // Inclui o parâmetro de categoria apenas se ele for fornecido
     if (categoria) {
       params = params.set("categoria", categoria);
     }

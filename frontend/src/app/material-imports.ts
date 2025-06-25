@@ -14,6 +14,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatTableModule } from "@angular/material/table";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
 
 export const materialImports = [
   MatCardModule,
@@ -32,5 +34,8 @@ export const materialImports = [
   MatInputModule,
   MatSelectModule,
   MatDialogModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatTableModule,
+  MatButtonToggleModule,
+  ReactiveFormsModule
 ];

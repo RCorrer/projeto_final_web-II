@@ -2,8 +2,67 @@
   margin-top: 24px;
 }
 
+.filtros-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.filtro-data {
+  flex-grow: 1;
+}
+
+.filtro-data mat-form-field {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-row:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+:host ::ng-deep .mat-button-toggle-group {
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+:host ::ng-deep .mat-header-cell,
+:host ::ng-deep .mat-cell,
+:host ::ng-deep .mat-footer-cell {
+  border-bottom-width: 0;
+}
+
+.mat-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.align-right {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.align-center {
+  text-align: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .total-row {
+  font-weight: bold;
+  background-color: #f1f3f5;
+}
+
 table {
   width: 100%;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border-radius: 8px;
 }
 
 .align-right {
@@ -15,7 +74,22 @@ table {
   text-align: center;
 }
 
-/* Deixa a linha do total com uma aparência mais destacada */
+.filtros-container {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.filtro-data {
+  flex-grow: 1;
+}
+
+.filtro-data mat-form-field {
+  width: 100%;
+}
+
 .total-row {
   font-weight: bold;
 }

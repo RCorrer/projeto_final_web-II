@@ -1,119 +1,225 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { materialImports } from "../../material-imports";
-import { RelatorioPorCategoria } from "../../models/relatorio/relatorio.model";
+import {
+  RelatorioPorCategoria,
+  RelatorioPorDia,
+} from "../../models/relatorio.model";
 import { RelatorioService } from "../../services/relatorio/relatorio.service";
-import { MatTableModule } from "@angular/material/table";
-
-// Importações para o PDF
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import {
+  MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
+} from "@angular/material/core";
 
 @Component({
   selector: "app-tela-relatorio",
   standalone: true,
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    ReactiveFormsModule,
-    MatTableModule,
-    ...materialImports,
+  imports: [CommonModule, NavbarComponent, ...materialImports],
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
   ],
   templateUrl: "./tela-relatorio.component.html",
   styleUrl: "./tela-relatorio.component.css",
 })
 export class TelaRelatorioComponent implements OnInit {
-  // Define quais colunas e em que ordem a tabela deve exibi-las
-  displayedColumns: string[] = [
+  tipoRelatorio: "porData" | "porCategoria" = "porData";
+  filtroForm!: FormGroup;
+
+  relatorioPorCategoria: RelatorioPorCategoria[] = [];
+  totalCategoria = 0;
+  displayedColumnsCategoria: string[] = [
     "categoria",
     "quantidadeServicos",
     "receitaTotal",
   ];
 
-  // Propriedades para armazenar os dados do relatório
-  totalCategoria = 0;
-  relatorioPorCategoria: RelatorioPorCategoria[] = [];
+  relatorioDia: RelatorioPorDia[] = [];
+  totalPeriodo = 0;
+  displayedColumnsData: string[] = ["dia", "receitaTotal"];
 
-  constructor(private relatorioService: RelatorioService) {}
+  constructor(
+    private fb: FormBuilder,
+    private relatorioService: RelatorioService
+  ) {}
 
   ngOnInit(): void {
-    this.carregarRelatorioPorCategoria();
+    const hoje = new Date();
+    const umMesAtras = new Date();
+    umMesAtras.setMonth(hoje.getMonth() - 1);
+
+    this.filtroForm = this.fb.group({
+      start: [umMesAtras],
+      end: [hoje],
+    });
+
+    this.ouvirFiltro();
+    this.atualizarRelatorio();
+  }
+
+  ouvirFiltro(): void {
+    this.filtroForm.valueChanges
+      .pipe(debounceTime(400), distinctUntilChanged())
+      .subscribe(() => {
+        if (this.tipoRelatorio === "porData") {
+          this.carregarRelatorioPorDia();
+        }
+      });
+  }
+
+  atualizarRelatorio(): void {
+    if (this.tipoRelatorio === "porCategoria") {
+      this.filtroForm.disable({ emitEvent: false });
+      this.carregarRelatorioPorCategoria();
+    } else {
+      this.filtroForm.enable({ emitEvent: false });
+      this.carregarRelatorioPorDia();
+    }
+  }
+
+  carregarRelatorioPorDia(): void {
+    const { start, end } = this.filtroForm.value;
+    const dataInicial = start
+      ? new Date(start).toISOString().split("T")[0]
+      : undefined;
+    const dataFinal = end
+      ? new Date(end).toISOString().split("T")[0]
+      : undefined;
+
+    this.relatorioService
+      .getRelatorioPorPeriodo(dataInicial, dataFinal)
+      .subscribe({
+        next: (data) => {
+          this.relatorioDia = data;
+          this.totalPeriodo = data.reduce(
+            (acc, item) => acc + item.receitaTotal,
+            0
+          );
+        },
+        error: (err) =>
+          console.error("Erro ao carregar relatório por dia:", err),
+      });
   }
 
   carregarRelatorioPorCategoria(): void {
     this.relatorioService.getRelatorioPorCategoria().subscribe({
       next: (data) => {
-        console.log("Dados de Categoria Recebidos:", data);
-        // Atribui os dados recebidos à propriedade do componente
         this.relatorioPorCategoria = data;
-        // Calcula o total
         this.totalCategoria = data.reduce(
           (acc, item) => acc + item.receitaTotal,
           0
         );
       },
-      error: (err) => {
-        console.error("Erro ao carregar relatório por categoria:", err);
-      },
+      error: (err) =>
+        console.error("Erro ao carregar relatório por categoria:", err),
+    });
+  }
+
+  formatarData(dataStr: string): string {
+    const data = new Date(dataStr + "T00:00:00-03:00");
+    return data.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
     });
   }
 
   gerarPDF(): void {
     const doc = new jsPDF();
-
-    const formatCurrency = (value: number) => {
-      return new Intl.NumberFormat("pt-BR", {
+    const formatCurrency = (value: number) =>
+      new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
       }).format(value);
-    };
 
-    doc.setFontSize(24);
-    doc.text("Relatório de Receita por Categoria", 14, 20);
-
-    autoTable(doc, {
-      startY: 30,
-
-      headStyles: {
-        fillColor: "#2f48e0",
-        fontStyle: "bold",
-        textColor: "#ffffff",
-      },
-      head: [["Categoria", "Qtd. Serviços", "Receita Total"]],
-      // Usa os dados da propriedade 'relatorioPorCategoria' para criar o corpo
-      body: this.relatorioPorCategoria.map((item) => [
-        item.categoria,
-        item.quantidadeServicos.toString(),
-        formatCurrency(item.receitaTotal),
-      ]),
-      footStyles: {
-        fillColor: "#2f48e0",
-        fontStyle: "bold",
-        textColor: "#ffffff",
-      },
-      // Usa o 'totalCategoria' para o rodapé
-      foot: [
-        [
-          {
-            content: "Total Geral",
-            colSpan: 2,
-            styles: { fontStyle: "bold" as const },
-          },
-          {
-            content: formatCurrency(this.totalCategoria),
-            styles: {
-              halign: "right",
-              fontStyle: "bold" as const,
-            },
-          },
+    if (this.tipoRelatorio === "porData") {
+      doc.text("Relatório de Receita por Período", 14, 20);
+      autoTable(doc, {
+        startY: 30,
+        headStyles: {
+          fillColor: "#8080ff",
+          textColor: "#ffffff",
+          fontStyle: "bold",
+        },
+        head: [
+          [
+            { content: "Data", styles: { halign: "left" } },
+            { content: "Receita Total do Dia", styles: { halign: "right" } },
+          ],
         ],
-      ],
-      columnStyles: { 2: { halign: "right" } },
-      showFoot: "lastPage",
-    });
+        body: this.relatorioDia.map((item) => [
+          this.formatarData(item.dia),
+          formatCurrency(item.receitaTotal),
+        ]),
+        foot: [
+          [
+            {
+              content: "Total do Período",
+              styles: { halign: "left", fontStyle: "bold" as const },
+            },
+            {
+              content: formatCurrency(this.totalPeriodo),
+              styles: { halign: "right", fontStyle: "bold" as const },
+            },
+          ],
+        ],
+        footStyles: {
+          fillColor: "#8080ff",
+          textColor: "#ffffff",
+          fontStyle: "bold",
+        },
+        columnStyles: { 1: { halign: "right" } },
+        showFoot: "lastPage",
+      });
+    } else {
+      doc.text("Relatório de Receita por Categoria", 14, 20);
+      autoTable(doc, {
+        startY: 30,
+        headStyles: {
+          fillColor: "#8080ff",
+          textColor: "#ffffff",
+          fontStyle: "bold",
+        },
+        head: [
+          [
+            { content: "Categoria", styles: { halign: "left" } },
+            { content: "Quantidade de Serviços", styles: { halign: "center" } },
+            { content: "Receita Total", styles: { halign: "right" } },
+          ],
+        ],
+        body: this.relatorioPorCategoria.map((item) => [
+          item.categoria,
+          item.quantidadeServicos.toString(),
+          formatCurrency(item.receitaTotal),
+        ]),
+        foot: [
+          [
+            {
+              content: "Total",
+              colSpan: 2,
+              styles: { halign: "left" },
+            },
+            {
+              content: formatCurrency(this.totalCategoria),
+              styles: { halign: "right" },
+            },
+          ],
+        ],
+        footStyles: {
+          fillColor: "#8080ff",
+          textColor: "#ffffff",
+          fontStyle: "bold",
+        },
+        columnStyles: { 1: { halign: "center" }, 2: { halign: "right" } },
+        showFoot: "lastPage",
+      });
+    }
 
-    doc.save(`relatorio_por_categoria.pdf`);
+    doc.save(`relatorio_${this.tipoRelatorio}.pdf`);
   }
 }
