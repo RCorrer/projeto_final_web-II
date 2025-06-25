@@ -90,12 +90,37 @@ export class OrcamentoFuncionarioComponent implements OnInit {
     });
   }
 
-  formatarMoeda() {
-    let valor = this.valorOrcamento.replace(/\D/g, "");
-    let valorFormatado = (Number(valor) / 100).toFixed(2);
+  formatarMoeda(): void {
+    const apenasNumeros = this.valorOrcamento.replace(/\D/g, "");
+
+    const valorFormatado = (Number(apenasNumeros) / 100).toFixed(2);
+
     this.valorOrcamento =
       this.currencyPipe.transform(valorFormatado, "BRL", "symbol", "1.2-2") ||
       "";
+  }
+
+  permitirSomenteNumeros(event: KeyboardEvent): void {
+    const teclasPermitidas = [
+      "Backspace",
+      "Tab",
+      "ArrowLeft",
+      "ArrowRight",
+      "Delete",
+    ];
+
+    if (
+      teclasPermitidas.includes(event.key) ||
+      (event.ctrlKey && ["a", "c", "v", "x"].includes(event.key.toLowerCase()))
+    ) {
+      return;
+    }
+
+    const ehNumero = /^[0-9]$/.test(event.key);
+
+    if (!ehNumero) {
+      event.preventDefault();
+    }
   }
 
   enviarOrcamento() {
@@ -107,9 +132,8 @@ export class OrcamentoFuncionarioComponent implements OnInit {
       return;
     }
 
-    const valorNumerico = parseFloat(
-      this.valorOrcamento.replace(/[^0-9,]/g, "").replace(",", ".")
-    );
+    const valorNumerico =
+      parseFloat(this.valorOrcamento.replace(/\D/g, "")) / 100;
 
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
       const mensagem = "Valor do orçamento inválido.";
@@ -136,7 +160,7 @@ export class OrcamentoFuncionarioComponent implements OnInit {
     };
 
     this.solicitacaoService.enviarOrcamento(orcamentoData).subscribe({
-      next: (response) => {
+      next: () => {
         this.router.navigate(["/home"]);
       },
     });

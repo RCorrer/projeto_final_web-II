@@ -12,22 +12,19 @@
         <p><strong>Descrição do problema</strong><br>{{ solicitacao.descricaoDefeito }}</p>
 
         <div class="orcamento-input">
-            <label>Defina o orçamento:</label>
-            <input id="valor" matInput type="text" placeholder="Valor em R$" [(ngModel)]="valorOrcamento" (input)="formatarMoeda()" />
+          <label>Defina o orçamento:</label>
+          <input id="valor" matInput type="text" placeholder="Valor em R$" [(ngModel)]="valorOrcamento"
+            (input)="formatarMoeda()" (keydown)="permitirSomenteNumeros($event)" />
         </div>
         <div class="botoes">
-            <div class="cancelar-button">
-                <button id="cancelar-button" mat-stroked-button routerLink="/home">Cancelar</button>
-            </div>
-            <div class="orcamento-button">
-                <button
-                    id="orcamento-button" 
-                    mat-button
-                    color="primary"
-                    (click)="enviarOrcamento()" >
-                    Enviar
-                </button>
-            </div>
+          <div class="cancelar-button">
+            <button id="cancelar-button" mat-stroked-button routerLink="/home">Cancelar</button>
+          </div>
+          <div class="orcamento-button">
+            <button id="orcamento-button" mat-button color="primary" (click)="enviarOrcamento()">
+              Enviar
+            </button>
+          </div>
         </div>
       </div>
 
@@ -52,12 +49,12 @@
   </div>
 
   <div *ngIf="!isLoaded" class="loading-indicator">
-      <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
-      <p>Carregando detalhes da solicitação...</p>
+    <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+    <p>Carregando detalhes da solicitação...</p>
   </div>
 
   <div *ngIf="isLoaded && !solicitacao" class="error-indicator">
-      <p>Não foi possível carregar os dados da solicitação.</p>
+    <p>Não foi possível carregar os dados da solicitação.</p>
   </div>
 
 </div>

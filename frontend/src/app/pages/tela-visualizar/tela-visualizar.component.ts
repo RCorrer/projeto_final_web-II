@@ -70,7 +70,7 @@ export class TelaVisualizarComponent {
 
             this.extrairMotivoRejeicao();
 
-            this.estado = Number(this.solicitacao.estado); // <- NOVO: define o valor para o template
+            this.estado = Number(this.solicitacao.estado);
 
             this.solicitacao.idFormatado =
               "OS-" + String(this.solicitacao.numeroOs).padStart(4, "0");
