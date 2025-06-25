@@ -9,26 +9,28 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule, provideNativeDateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../services/auth/auth.service";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"; // Para o spinner
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
   selector: "app-dashboard-funcionario",
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ...materialImports, 
+    ...materialImports,
     CardSolicitacaoComponent,
     NavbarComponent,
     MatNativeDateModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     provideNativeDateAdapter({
       parse: { dateInput: "DD/MM/YYYY" },
       display: {
         dateInput: "DD/MM/YYYY",
-        monthYearLabel: "MMMM yyyy",
+        monthYearLabel: "MMMM<x_bin_715>",
         dateA11yLabel: "LL",
-        monthYearA11yLabel: "MMMM yyyy",
+        monthYearA11yLabel: "MMMM<x_bin_715>",
       },
     }),
     { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
@@ -62,51 +64,43 @@ export class DashboardFuncionarioComponent implements OnInit {
     this.funcionarioLogadoId = this.authService.getIdRole();
 
     this.route.queryParams.subscribe(params => {
-      if (params["estado"] !== undefined) {
-        this.filtroStatus = params["estado"] === '' ? '' : params["estado"]; 
-      } else {
-        this.filtroStatus = '1';
-      }
-      this.carregarSolicitacoesIniciais();
+      this.filtroStatus = params["estado"] ?? '1';
+      this.carregarDadosDoBackend(); // Chama o método de busca principal
     });
 
     this.filtroForm.valueChanges.subscribe(() => {
       this.aplicarFiltrosEOrdenar();
     });
 
-    // Inscreve-se no Observable do serviço para receber a lista de solicitações do funcionário
-    this.solicitacaoService.solicitacoesFuncionario$.subscribe(listaDoServico => {
-      this.todasSolicitacoesBase = listaDoServico;
-      this.aplicarFiltrosEOrdenar();
-    });
+    // A subscrição permanente ao Observable do serviço foi REMOVIDA daqui.
   }
 
-  carregarSolicitacoesIniciais(): void {
-    if (this.authService.isFuncionario() && this.funcionarioLogadoId) {
-      this.isLoading = true;
-      this.todasSolicitacoesBase = [];
-      this.aplicarFiltrosEOrdenar();
-
-      this.solicitacaoService.fetchSolicitacoesDashboard(this.funcionarioLogadoId)
-        .subscribe({
-          next: () => {
-            console.log('DashboardFuncionario: Chamada para fetchSolicitacoesDashboard completada.');
-          },
-          error: (err) => {
-            console.error('DashboardFuncionario: Erro ao buscar solicitações para funcionário:', err);
-            this.isLoading = false;
-            this.todasSolicitacoesBase = [];
-            this.aplicarFiltrosEOrdenar();
-          },
-          complete: () => {
-          }
-        });
-    } else {
-      console.warn("DashboardFuncionario: Usuário não é funcionário ou ID do funcionário não encontrado.");
-      this.isLoading = false;
-      this.todasSolicitacoesBase = [];
-      this.aplicarFiltrosEOrdenar();
+  carregarDadosDoBackend(): void {
+    if (!this.authService.isFuncionario() || !this.funcionarioLogadoId) {
+      console.warn("Usuário não é funcionário ou ID não encontrado.");
+      return;
     }
+
+    this.isLoading = true;
+    this.solicitacaoService.fetchSolicitacoesDashboard(this.funcionarioLogadoId)
+      .subscribe({
+        next: (listaDoServico) => {
+          // AQUI ESTÁ A LÓGICA CENTRALIZADA:
+          // 1. Substitui a lista base com os novos dados do backend.
+          this.todasSolicitacoesBase = listaDoServico;
+          // 2. Aplica os filtros sobre esta nova lista.
+          this.aplicarFiltrosEOrdenar();
+          console.log('DashboardFuncionario: Dados carregados e filtros aplicados.');
+        },
+        error: (err) => {
+          console.error('DashboardFuncionario: Erro ao buscar solicitações:', err);
+          this.todasSolicitacoesBase = [];
+          this.aplicarFiltrosEOrdenar(); // Limpa a exibição em caso de erro
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      });
   }
   
   onFiltroStatusChange(): void {
@@ -114,7 +108,6 @@ export class DashboardFuncionarioComponent implements OnInit {
   }
 
   aplicarFiltrosEOrdenar(): void {
-    this.isLoading = true;
     let resultadoFiltrado = [...this.todasSolicitacoesBase];
 
     if (this.filtroStatus && this.filtroStatus !== '') {
@@ -124,20 +117,18 @@ export class DashboardFuncionarioComponent implements OnInit {
     const { tipoFiltroData, start, end } = this.filtroForm.value;
 
     if (tipoFiltroData === 'HOJE') {
-      const hoje = new Date(); 
+      const hoje = new Date();
       hoje.setHours(0, 0, 0, 0);
       resultadoFiltrado = resultadoFiltrado.filter(s => {
-        if (!s.data) return false; // Se não houver data, não incluir
-        // Adiciona T00:00:00 para garantir que a comparação de datas não seja afetada por fuso ou hora
-        const dataSolicitacao = new Date(s.data + 'T00:00:00'); 
+        if (!s.data) return false;
+        const dataSolicitacao = new Date(s.data + 'T00:00:00');
         return dataSolicitacao.getTime() === hoje.getTime();
       });
     } else if (tipoFiltroData === 'PERIODO' && start && end) {
       const dataInicio = new Date(start);
-      dataInicio.setHours(0,0,0,0); // Normaliza para o início do dia
+      dataInicio.setHours(0,0,0,0);
       const dataFim = new Date(end);
-      dataFim.setHours(23,59,59,999); // Normaliza para o fim do dia
-
+      dataFim.setHours(23,59,59,999);
       resultadoFiltrado = resultadoFiltrado.filter(s => {
         if (!s.data) return false;
         const dataSolicitacao = new Date(s.data + 'T00:00:00');
@@ -150,12 +141,23 @@ export class DashboardFuncionarioComponent implements OnInit {
         const dataHoraB = new Date(`${b.data}T${b.hora}`);
         return dataHoraA.getTime() - dataHoraB.getTime();
     });
-    
-    console.log('DashboardFuncionario: Solicitações para exibição:', this.solicitacoesParaExibicao);
-    this.isLoading = false;
   }
 
   get solicitacoesFiltradas(): Solicitacao[] {
     return this.solicitacoesParaExibicao;
+  }
+
+  handleFinalizarSolicitacao(solicitacaoId: string): void {
+    if (!solicitacaoId) return;
+
+    this.solicitacaoService.finalizarSolicitacao(solicitacaoId).subscribe({
+      next: (response) => {
+        console.log(`Resposta ao finalizar OS ${solicitacaoId}:`, response);
+        this.carregarDadosDoBackend(); // Recarrega os dados para refletir a mudança
+      },
+      error: (err) => {
+        console.error(`Erro ao finalizar a OS ${solicitacaoId}:`, err);
+      }
+    });
   }
 }

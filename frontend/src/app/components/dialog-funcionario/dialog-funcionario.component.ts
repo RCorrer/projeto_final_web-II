@@ -1,10 +1,9 @@
-// dialog-funcionario.component.ts
-import { Component, Inject, ViewEncapsulation } from "@angular/core";
+import { Component, Inject, ViewEncapsulation, ViewChild } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormsModule, NgForm } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { materialImports } from "../../material-imports";
-import { ViewChild } from "@angular/core";
+import { FuncionarioService } from "../../services/funcionario/funcionario.service";
 
 @Component({
   selector: "app-dialog-funcionario",
@@ -22,18 +21,40 @@ export class DialogFuncionarioComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       titulo: string;
+      id?: string;
       nome: string;
       email: string;
-      senha: string;
-      dataNascimento: string;
-    }
-  ) {
-    console.log("Dados do DialogFuncionarioComponent:", data);
-  }
+      nascimento: string;
+      senha?: string;
+    },
+    private funcionarioService: FuncionarioService
+  ) {}
 
   salvar() {
-    if (this.form.valid) {
-      this.dialogRef.close(this.data);
+    const funcionario = {
+      nome: this.data.nome,
+      email: this.data.email,
+      senha: this.data.senha ?? "",
+      dataNascimento: this.data.nascimento,
+    };
+
+    if (this.data.id) {
+      this.funcionarioService
+        .atualizarFuncionario(this.data.id, {
+          nome: funcionario.nome,
+          email: funcionario.email,
+          senha: funcionario.senha,
+          nascimento: funcionario.dataNascimento,
+        })
+        .subscribe({
+          next: () => this.dialogRef.close(true),
+          error: (err) => console.error("Erro ao atualizar:", err),
+        });
+    } else {
+      this.funcionarioService.adicionarFuncionario(funcionario).subscribe({
+        next: () => this.dialogRef.close(true),
+        error: (err) => console.error("Erro ao adicionar:", err),
+      });
     }
   }
 }

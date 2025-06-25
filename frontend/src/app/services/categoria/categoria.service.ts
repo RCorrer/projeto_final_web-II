@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
 import { Categoria } from "./../../models/categoria.model";
+import { RespostaApi } from "../../models/respostaApi.model";
 import { environment } from "../../../environments/environment";
+import { Injectable } from "@angular/core";
 import {
   BehaviorSubject,
   Observable,
@@ -11,6 +12,8 @@ import {
   retry,
 } from "rxjs";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Injectable({
   providedIn: "root",
@@ -18,7 +21,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 export class CategoriaService {
   private baseUrl = `${environment.apiURL}/categoria`;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private dialog: MatDialog) {
     console.log(
       "CategoriaService: Construtor chamado. Base URL:",
       this.baseUrl
@@ -55,7 +58,9 @@ export class CategoriaService {
     );
   }
 
-  adicionarCategoria(categoria: Omit<Categoria, "id">): Observable<string> {
+  adicionarCategoria(
+    categoria: Omit<Categoria, "id">
+  ): Observable<RespostaApi> {
     const url = `${this.baseUrl}`;
     console.log(
       "CategoriaService: adicionarCategoria - Enviando POST para:",
@@ -63,20 +68,25 @@ export class CategoriaService {
       "Payload:",
       categoria
     );
-    return this.http.post(url, categoria, { responseType: "text" }).pipe(
+    return this.http.post<RespostaApi>(url, categoria).pipe(
       tap((response) =>
         console.log(
           "CategoriaService: adicionarCategoria - Resposta:",
           response
         )
       ),
-      catchError(
-        this.handleError<string>(
-          `adicionarCategoria ${JSON.stringify(categoria)}`
-        )
-      )
+      catchError((error) => {
+        const mensagem =
+          error?.error?.mensagem ||
+          "Erro ao adicionar. Verifique os dados e tente novamente.";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
+        return throwError(() => error);
+      })
     );
   }
+
   private handleError<T>(operation = "operation", result?: T) {
     return (error: HttpErrorResponse): Observable<T> => {
       console.error(
@@ -94,6 +104,7 @@ export class CategoriaService {
       return of(result as T);
     };
   }
+
   removerCategoria(descricao: string): Observable<any> {
     const url = `${this.baseUrl}/${encodeURIComponent(descricao)}`;
     console.log("CategoriaService: removerCategoria", url);
@@ -104,14 +115,22 @@ export class CategoriaService {
           response
         );
       }),
-      catchError(this.handleError<string>(`excluir categoria: `, descricao))
+      catchError((error) => {
+        const mensagem =
+          error?.error?.mensagem ||
+          "Erro ao remover. Verifique os dados e tente novamente.";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
+        return throwError(() => error);
+      })
     );
   }
 
   atualizarCategoria(
     descricaoAntiga: string,
     novaDescricao: string
-  ): Observable<string> {
+  ): Observable<RespostaApi> {
     const url = `${this.baseUrl}/${encodeURIComponent(descricaoAntiga)}`;
     const payload = { descricao: novaDescricao };
     console.log(
@@ -120,16 +139,22 @@ export class CategoriaService {
       "Payload:",
       payload
     );
-    return this.http.put(url, payload, { responseType: "text" }).pipe(
+    return this.http.put<RespostaApi>(url, payload).pipe(
       tap((response) =>
         console.log(
           "CategoriaService: atualizarCategoria - Resposta:",
           response
         )
       ),
-      catchError(
-        this.handleError<string>(`atualizarCategoria ${descricaoAntiga}`)
-      )
+      catchError((error) => {
+        const mensagem =
+          error?.error?.mensagem ||
+          "Erro ao editar. Verifique os dados e tente novamente.";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
+        return throwError(() => error);
+      })
     );
   }
 }

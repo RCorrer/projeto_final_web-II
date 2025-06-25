@@ -1,91 +1,135 @@
-import { Component, Input } from '@angular/core';
-import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { ModalEfetuarManutencaoComponent } from './../../modals/modal-efetuar-manutencao/modal-efetuar-manutencao.component';
+import { ModalRedirecionarComponent } from './../../modals/modal-redirecionar/modal-redirecionar.component';
+import { Component, Input, OnInit } from '@angular/core';
+import { materialImports } from '../../material-imports';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
+import { SolicitacaoComHistoricoDTO, EfetuarManutencaoDTO, RedirecionarSolicitacaoDTO } from '../../models/solicitacao-dto.model';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService } from '../../services/auth/auth.service';
+import { ManutencaoConfirmadaEvent } from '../../modals/modal-efetuar-manutencao/modal-efetuar-manutencao.component';
 
 @Component({
-  selector: 'app-tela-visualizar',
-  imports: [CommonModule, RouterLink, MatButtonModule],
+  selector: 'app-tela-efetuar-manutencao',
+  standalone: true,
+  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, MatButtonModule, RouterLink, MatProgressSpinnerModule, ModalEfetuarManutencaoComponent, ModalRedirecionarComponent],
   templateUrl: './tela-efetuar-manutencao.component.html',
   styleUrl: './tela-efetuar-manutencao.component.css'
 })
-export class TelaEfetuarManutencaoComponent {
-  @Input() solicitacao: any;
+export class TelaEfetuarManutencaoComponent implements OnInit {
+  modalManutencaoAberto = false;
+  modalRedirecionarAberto = false;
+  solicitacao!: SolicitacaoComHistoricoDTO;
   isLoaded = false;
 
-  constructor (private solicitacaoService: SolicitacaoService,private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private solicitacaoService: SolicitacaoService, 
+    private router: Router, 
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      const idDaRota: string = params['id'];
+      const idDaRota: string = params['id']; 
 
       if (!idDaRota) {
         console.error("tela-efetuar-manutencao: ID da solicitação não encontrado na rota!");
         this.isLoaded = true;
         return;
       }
-
-      const solicitacaoExistente = this.solicitacaoService.getSolicitacaoById(idDaRota);
-
-      if (solicitacaoExistente) {
-        this.solicitacao = this.mergeWithDefault(solicitacaoExistente);
-      } else {
-        console.warn(`tela-efetuar-manutencao: solicitação com ID ${idDaRota} não encontrada.`);
-        this.solicitacao = this.mergeWithDefault({ id: idDaRota, estado: 'DESCONHECIDO' }); 
-      }
       
-      setTimeout(() => {
-        this.isLoaded = true;
-      }, 100);
+      this.isLoaded = false;
+      this.solicitacaoService.fetchDetalhesSolicitacao(idDaRota).subscribe({
+        next: (dados) => {
+          if (dados) {
+            this.solicitacao = dados;
+            this.solicitacao.idFormatado = 'OS-' + String(this.solicitacao.numeroOs).padStart(4, '0');
+          } else {
+            console.error(`tela-efetuar-manutencao: Solicitação com ID ${idDaRota} não foi encontrada.`);
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao buscar detalhes da solicitação:', err);
+          this.isLoaded = true;
+        },
+        complete: () => {
+          this.isLoaded = true;
+        }
+      });
     });
   }
 
-  private mergeWithDefault(solicitacao: any): any {
-    const cliente = typeof solicitacao.cliente === 'string' 
-      ? { nome: solicitacao.cliente }
-      : solicitacao.cliente || {};
-  
-    const endereco = cliente.endereco || {};
-    
-    return {
-      id: solicitacao.id || 0,
-      idFormatado: 'OS-' + (solicitacao.id || 0).toString().padStart(6, '0'),
-      equipamento: solicitacao.equipamento || 'Teclado DELL KB216 USB',
-      categoria: solicitacao.categoria || 'Periférico',
-      problema: solicitacao.defeito || solicitacao.problema || 'N/A',
-      cliente: {
-        nome: cliente.nome || 'Joana Joaquina',
-        cpf: cliente.cpf || '000.000.000-00',
-        email: cliente.email || 'joana@gmail.com',
-        telefone: cliente.telefone || '(00) 00000-0000',
-        endereco: {
-          cep: endereco.cep || '00000-000',
-          logradouro: endereco.logradouro || 'Rua dos bobos',
-          complemento: endereco.complemento || 'N/A',
-          cidade: endereco.cidade || 'Bobolópolis',
-          estado: endereco.estado || 'Bobolândia'
-        }
-      },
-      estado: solicitacao.estado === 'ORCADA' ? 'ORÇADA' : solicitacao.estado || 'ABERTA',
-      dataHora: solicitacao.dataHora || new Date().toISOString()
+  abrirModalManutencao() {
+    this.modalManutencaoAberto = true;
+  }
+
+  fecharModalManutencao() {
+    this.modalManutencaoAberto = false;
+  }
+
+  onManutencaoConfirmada(evento: ManutencaoConfirmadaEvent) {
+    if (!this.solicitacao?.id) {
+      console.error('Erro: Solicitação ou ID da solicitação inválido.');
+      this.fecharModalManutencao();
+      return;
+    }
+
+    const dadosParaBackend: any = {
+      idSolicitacao: this.solicitacao.id,
+      descricao_manutencao: evento.descricaoManutencao,
+      orientacoes_cliente: evento.orientacoesCliente
     };
+
+    this.solicitacaoService.efetuarManutencao(dadosParaBackend).subscribe({
+      next: (response) => {
+        console.log("Manutenção concluída com sucesso!", response);
+        this.fecharModalManutencao();
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        console.error('Erro ao concluir a manutenção:', err);
+        this.fecharModalManutencao();
+      }
+    });
   }
 
-  efetuarManutencao() {
-    this.solicitacaoService.atualizarSolicitacao(this.solicitacao.id, 'ARRUMADA')
-      .subscribe({
-        next: () => {
-          this.solicitacao.estado = 'ARRUMADA';
-          this.router.navigate(['/home']);
-        },
-        error: (error) => {
-          console.error('Erro ao atualizar a solicitação:', error);
-        }
-      });
+  abrirModalRedirecionar() {
+    this.modalRedirecionarAberto = true;
   }
 
-  redirecionarManutencao() {
+  fecharModalRedirecionar() {
+    this.modalRedirecionarAberto = false;
+  }
 
+  onRedirecionamentoConfirmado(idFuncionarioDestino: string) {
+    const idFuncionarioOrigem = this.authService.getIdRole();
+
+    if (!this.solicitacao || !idFuncionarioOrigem) {
+      console.error("Não é possível redirecionar: dados da solicitação ou do funcionário de origem ausentes.");
+      return;
+    }
+
+    const dadosRedirecionamento: RedirecionarSolicitacaoDTO = {
+      idSolicitacao: this.solicitacao.id,
+      idFuncionarioOrigem: idFuncionarioOrigem,
+      idFuncionarioDestino: idFuncionarioDestino
+    };
+
+    this.solicitacaoService.redirecionarSolicitacao(dadosRedirecionamento).subscribe({
+      next: response => {
+        console.log("Redirecionamento bem-sucedido:", response);
+        this.fecharModalRedirecionar();
+        this.router.navigate(['/home']);
+      },
+      error: err => {
+        console.error("Erro no redirecionamento:", err);
+        this.fecharModalRedirecionar();
+      }
+    });
   }
 }

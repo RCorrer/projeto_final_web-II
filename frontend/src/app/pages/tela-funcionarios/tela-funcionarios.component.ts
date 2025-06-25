@@ -24,74 +24,54 @@ import { DialogConfirmComponent } from "../../components/dialog/dialog.component
 export class TelaFuncionariosComponent implements OnInit {
   funcionarios: Funcionario[] = [];
 
-  private dialog = inject(MatDialog);
-  private funcionarioService = inject(FuncionarioService);
+  constructor(
+    private funcionarioService: FuncionarioService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    this.funcionarioService.funcionarios$.subscribe((funcionarios) => {
-      this.funcionarios = funcionarios;
-    });
+    this.funcionarioService.funcionarios$.subscribe(
+      (funcionarios) => (this.funcionarios = funcionarios)
+    );
   }
 
-  abrirDialog(funcionarioEditando?: Funcionario) {
+  abrirDialog(funcionario?: Funcionario): void {
     const dialogRef = this.dialog.open(DialogFuncionarioComponent, {
-      data: {
-        titulo: funcionarioEditando ? "Editar Funcionário" : "Novo Funcionário",
-        nome: funcionarioEditando?.usuario?.nome || "",
-        email: funcionarioEditando?.usuario?.email || "",
-        senha: "",
-        dataNascimento: funcionarioEditando?.dataNascimento || "2000-01-01",
-      },
+      width: "500px",
+      data: funcionario
+        ? {
+            ...funcionario,
+            titulo: "Editar Funcionário",
+          }
+        : {
+            titulo: "Novo Funcionário",
+            nome: "",
+            email: "",
+            nascimento: "",
+            senha: "",
+          },
     });
 
-    dialogRef.afterClosed().subscribe((dadosFuncionario) => {
-      if (dadosFuncionario) {
-        if (funcionarioEditando) {
-          this.funcionarioService
-            .atualizarFuncionario(funcionarioEditando.id, {
-              nome: dadosFuncionario.nome,
-              email: dadosFuncionario.email,
-              senha: dadosFuncionario.senha,
-              dataNascimento: dadosFuncionario.dataNascimento,
-            })
-            .subscribe();
-        } else {
-          this.funcionarioService
-            .adicionarFuncionario({
-              dataNascimento: dadosFuncionario.dataNascimento,
-              senha: dadosFuncionario.senha,
-              usuario: {
-                id: "0",
-                nome: dadosFuncionario.nome,
-                email: dadosFuncionario.email,
-              },
-            })
-            .subscribe();
-        }
+    dialogRef.afterClosed().subscribe((foiSalvo) => {
+      if (foiSalvo) {
+        console.log("Funcionário salvo com sucesso");
       }
     });
   }
 
-  excluirFuncionario(funcionario: Funcionario) {
-    console.log("Funcionário recebido para exclusão:", funcionario); // Verifique o objeto completo
-
-    if (!funcionario?.id) {
-      console.error("Funcionário sem ID válido", funcionario);
-      return;
-    }
-
+  excluirFuncionario(funcionario: Funcionario): void {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
-        titulo: "Confirmação",
-        mensagem: `Deseja realmente excluir ${funcionario.usuario.nome}?`,
+        titulo: "Confirmar Exclusão",
+        mensagem: `Tem certeza que deseja excluir ${funcionario.nome}?`,
       },
     });
 
     dialogRef.afterClosed().subscribe((confirmado) => {
       if (confirmado) {
         this.funcionarioService.removerFuncionario(funcionario.id).subscribe({
-          next: () => console.log(`Funcionário ${funcionario.id} excluído`),
-          error: (err) => console.error("Erro:", err),
+          next: () => console.log("Funcionário excluído com sucesso"),
+          error: (err) => console.error("Erro ao excluir:", err),
         });
       }
     });

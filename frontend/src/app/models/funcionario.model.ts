@@ -1,8 +1,9 @@
-import { Usuario } from "./usuario.model";
-
 export interface Funcionario {
-    id: number;
-    dataNascimento: string;
-    senha: string;
-    usuario: Usuario;
+  id: string;
+  usuarioId: string;
+  nome: string;
+  email: string;
+  nascimento: string;
+  senha?: string;
+  role?: string;
 }

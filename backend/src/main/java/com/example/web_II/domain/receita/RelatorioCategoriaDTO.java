@@ -5,7 +5,6 @@ public record RelatorioCategoriaDTO(
         double receitaTotal,
         long quantidadeServicos
 ) {
-    // Adicione um construtor explícito se necessário
     public RelatorioCategoriaDTO(String categoria, Double receitaTotal, Long quantidadeServicos) {
         this(categoria,
                 receitaTotal != null ? receitaTotal : 0.0,

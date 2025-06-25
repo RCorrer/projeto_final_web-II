@@ -1,8 +1,20 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, Observable, throwError } from "rxjs";
-import { Funcionario } from "../../models/funcionario.model";
+import { BehaviorSubject, Observable, of, throwError } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
+import { Funcionario } from "../../models/funcionario.model";
+import { RespostaApi } from "../../models/respostaApi.model";
+import { environment } from "../../../environments/environment";
+import { MatDialog } from "@angular/material/dialog";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { Router } from "@angular/router";
+
+interface FuncionarioPayload {
+  nome: string;
+  email: string;
+  senha: string;
+  dataNascimento: string;
+}
 
 @Injectable({
   providedIn: "root",
@@ -10,107 +22,104 @@ import { tap, catchError } from "rxjs/operators";
 export class FuncionarioService {
   private funcionariosSource = new BehaviorSubject<Funcionario[]>([]);
   funcionarios$ = this.funcionariosSource.asObservable();
-  private apiUrl = "http://localhost:8080";
 
-  constructor(private http: HttpClient) {
+  private apiUrl = `${environment.apiURL}/funcionarios`;
+
+  constructor(
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private router: Router
+  ) {
     this.carregarFuncionarios();
   }
 
   private carregarFuncionarios() {
-    this.http.get<any>(`${this.apiUrl}/funcionarios`).subscribe({
-      next: (response) => {
-        const funcionarios = response.content.map((item: any) =>
-          this.mapToFuncionario(item)
-        );
+    this.http.get<Funcionario[]>(this.apiUrl).subscribe({
+      next: (funcionarios) => {
+        console.log("Funcionários carregados:", funcionarios);
         this.funcionariosSource.next(funcionarios);
       },
-      error: (err) => console.error("Erro ao carregar funcionários", err),
+      error: (error) => {
+        const mensagem =
+          error?.error?.mensagem ||
+          "Erro ao carregar os funcionários. Tente novamente mais tarde.";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
+      },
     });
   }
 
-  private mapToFuncionario(item: any): Funcionario {
-    return {
-      id: item.id || 0,
-      dataNascimento: item.nascimento || item.dataNascimento || "",
-      senha: "",
-      usuario: {
-        id: (item.id || 0).toString(),
-        nome: item.nome || item.usuario?.nome || "",
-        email: item.email || item.usuario?.email || "",
-      },
-    };
-  }
-
-  adicionarFuncionario(funcionario: Omit<Funcionario, "id">): Observable<any> {
-    const payload = {
-      name: funcionario.usuario.nome,
-      login: funcionario.usuario.email,
-      password: funcionario.senha,
-      dataNascimento: funcionario.dataNascimento,
-    };
-
+  adicionarFuncionario(payload: FuncionarioPayload): Observable<RespostaApi> {
     return this.http
-      .post(`${this.apiUrl}/cadastro/funcionario`, payload, {
-        responseType: "text",
-      })
-      .pipe(tap(() => this.carregarFuncionarios()));
+      .post<RespostaApi>(`${environment.apiURL}/cadastro/funcionario`, payload)
+      .pipe(
+        tap(() => this.carregarFuncionarios()),
+        catchError((error) => {
+          const mensagem =
+            error?.error?.mensagem ||
+            "Erro ao adicionar. Verifique os dados e tente novamente.";
+          this.dialog.open(ModalErroComponent, {
+            data: { mensagem },
+          });
+          return throwError(() => error);
+        })
+      );
   }
 
-  removerFuncionario(id: number): Observable<any> {
-    console.log("ID recebido no service:", id, "Tipo:", typeof id);
+  atualizarFuncionario(
+    id: string,
+    dados: Partial<Funcionario>
+  ): Observable<Funcionario> {
+    const payload = {
+      id: id,
+      nome: dados.nome,
+      email: dados.email,
+      senha: dados.senha,
+      nascimento: dados.nascimento,
+      role: "FUNCIONARIO",
+    };
 
-    if (!id || id === 0) {
-      console.error("ID inválido para exclusão");
-      return throwError(() => new Error("ID inválido"));
-    }
-
-    return this.http.delete(`${this.apiUrl}/funcionarios/${id}`).pipe(
-      tap(() => {
-        console.log("Lista antes da exclusão:", this.funcionariosSource.value);
-        const funcionariosAtualizados = this.funcionariosSource.value.filter(
-          (e) => e.id !== id
-        );
-        console.log("Lista após exclusão:", funcionariosAtualizados);
-        this.funcionariosSource.next(funcionariosAtualizados);
-      }),
+    return this.http.put<Funcionario>(`${this.apiUrl}`, payload).pipe(
+      tap(() => this.carregarFuncionarios()),
       catchError((error) => {
-        console.error("Erro completo:", error);
-        this.carregarFuncionarios();
-        return throwError(() => error);
+        const mensagem =
+          error?.error?.mensagem || "Erro ao atualizar o funcionário.";
+        this.dialog.open(ModalErroComponent, { data: { mensagem } });
+        return of();
       })
     );
   }
 
-  getFuncionario(): Funcionario[] {
+  removerFuncionario(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => this.carregarFuncionarios()),
+      catchError((error) => {
+        const mensagem =
+          error?.error?.mensagem || "Erro ao remover o funcionário.";
+        this.dialog.open(ModalErroComponent, { data: { mensagem } });
+        return of();
+      })
+    );
+  }
+
+  getFuncionarios(): Funcionario[] {
     return this.funcionariosSource.value;
   }
 
-  atualizarFuncionario(
-    id: number,
-    dadosAtualizados: {
-      nome: string;
-      email: string;
-      senha: string;
-      dataNascimento: string;
-    }
-  ): Observable<any> {
-    const payload = {
-      name: dadosAtualizados.nome,
-      login: dadosAtualizados.email,
-      password: dadosAtualizados.senha,
-      dataNascimento: dadosAtualizados.dataNascimento,
-    };
-
-    return this.http
-      .put(`${this.apiUrl}/${id}`, payload)
-      .pipe(tap(() => this.carregarFuncionarios()));
+  getFuncionarioById(id: string): Funcionario | undefined {
+    return this.funcionariosSource.value.find((f) => f.id === id);
   }
 
-  getFuncionarios() {
-    return this.funcionariosSource.value;
-  }
-
-  getFuncionarioById(id: number): any {
-    return this.funcionariosSource.value.find((s) => s.id === id);
+  fetchAllFuncionarios(): Observable<Funcionario[]> {
+    return this.http.get<Funcionario[]>(`${this.apiUrl}`).pipe(
+      catchError((error) => {
+        console.error(
+          "[FuncionarioService] Erro ao buscar todos os funcionários:",
+          error
+        );
+        return of([]);
+      })
+    );
   }
 }

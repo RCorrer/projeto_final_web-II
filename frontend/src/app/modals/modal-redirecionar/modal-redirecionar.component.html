@@ -1,0 +1,19 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="fechar()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <h3>Redirecionar Manutenção</h3>
+    <p>Selecione um funcionário para assumir esta solicitação.</p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Redirecionar Para</mat-label>
+      <mat-select [(ngModel)]="funcionarioDestinoId">
+        <mat-option *ngFor="let func of funcionariosDisponiveis" [value]="func.id">
+          {{ func.nome }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="modal-acoes">
+      <button id="cancelar" mat-stroked-button (click)="fechar()">Cancelar</button>
+      <button id="aceitar" mat-raised-button color="primary" (click)="confirmar()" [disabled]="!funcionarioDestinoId">Confirmar</button>
+    </div>
+  </div>
+</div>

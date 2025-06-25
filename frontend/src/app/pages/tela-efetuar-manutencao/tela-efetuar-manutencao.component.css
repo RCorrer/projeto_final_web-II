@@ -13,6 +13,11 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    width: 100%;
+    flex-direction: column;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 10%;
 }
 .visualizar-container {
     width: 80%;
@@ -53,8 +58,7 @@
 }
 
 .visualizar-left {
-    width: 40%;
-    height: auto;
+    width: 25%;
 }
 
 .visualizar-left p {
@@ -74,11 +78,9 @@
 }
 
 .visualizar-right {
-    width: 60%;
-    height: auto;
     display: flex;
-    flex-direction: column;
-    gap: 50px;
+    gap: 75px;
+    width: 60%;
 }
 
 .visualizar-contato {
@@ -106,6 +108,11 @@
     flex-direction: row;
     flex-grow: 1;
     flex-wrap: wrap;
+}
+
+.visualizar-contato,
+.visualizar-endereco {
+    flex: 1;
 }
 
 .visualizar-endereco p {

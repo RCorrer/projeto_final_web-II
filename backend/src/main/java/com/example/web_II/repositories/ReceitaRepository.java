@@ -11,15 +11,23 @@ import java.util.List;
 
 public interface ReceitaRepository  extends JpaRepository<Receita,String> {
 
-    @Query("SELECT FUNCTION('DATE', r.data_hora), SUM(r.valor) " +
-            "FROM Receita r " +
-            "WHERE (:inicio IS NULL OR r.data_hora >= :inicio) " +
-            "AND (:fim IS NULL OR r.data_hora < :fim) " +
-            "GROUP BY FUNCTION('DATE', r.data_hora) " +
-            "ORDER BY FUNCTION('DATE', r.data_hora)")
+    @Query(value = """
+    SELECT 
+        CAST(r.data_hora AS DATE) as data_dia, 
+        SUM(r.valor) as total
+    FROM 
+        receita r
+    WHERE 
+        r.data_hora >= :inicio AND r.data_hora <= :fim
+    GROUP BY 
+        CAST(r.data_hora AS DATE)
+    ORDER BY 
+        CAST(r.data_hora AS DATE)
+    """, nativeQuery = true)
     List<Object[]> findReceitaDiariaPorPeriodo(
             @Param("inicio") LocalDateTime inicio,
             @Param("fim") LocalDateTime fim);
+
 
     @Query("SELECT NEW com.example.web_II.domain.receita.RelatorioCategoriaDTO(" +
         "c.descricao, " + 

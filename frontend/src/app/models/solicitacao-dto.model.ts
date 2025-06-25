@@ -37,3 +37,28 @@ export interface SolicitacaoComHistoricoDTO {
   historico: HistoricoAlteracaoDTO[];
   idFormatado?: string; 
 }
+
+// Interface que corresponde ao MudarEstadoDTO.java
+export interface MudarEstadoDTO {
+  idSolicitacao: string;
+}
+
+// Interface OrcamentoDTO.java
+export interface OrcamentoDTO {
+  id: string;
+  valor: number;
+}
+
+// Interface EfetuarManutencaoDTO.java
+export interface EfetuarManutencaoDTO {
+  idSolicitacao: string;
+  descricaoManutencao: string;
+  orientacoesCliente: string;
+}
+
+// Interface RedirecionarSolicitacaoDTO.java
+export interface RedirecionarSolicitacaoDTO {
+  idSolicitacao: string;
+  idFuncionarioOrigem: string;
+  idFuncionarioDestino: string;
+}

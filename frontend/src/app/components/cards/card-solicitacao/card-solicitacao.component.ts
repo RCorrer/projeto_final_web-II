@@ -20,19 +20,17 @@ export class CardSolicitacaoComponent implements OnInit, OnChanges {
   @Output() orcamentoAcao = new EventEmitter<string>();
   @Output() resgatarAcao = new EventEmitter<string>();
   @Output() pagarAcao = new EventEmitter<string>();
+  @Output() finalizarAcao = new EventEmitter<string>();
 
   backgroundColor: string = 'var(--color-aberto)';
 
-  constructor(private solicitacaoService: SolicitacaoService) {}
+  constructor() {}
 
   ngOnInit(): void {
 
     if (this.solicitacao && this.solicitacao.estado) {
       this.backgroundColor = this.getColor(this.solicitacao.estado);
-    } else {
-      console.warn('CardSolicitacaoComponent: Solicitação ou estado da solicitação indefinido no ngOnInit.');
-      this.backgroundColor = 'gray';
-    }
+    } 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -70,49 +68,30 @@ export class CardSolicitacaoComponent implements OnInit, OnChanges {
     }
   }
 
-  realizarAcao(novoEstadoId: string) {
-    if (this.solicitacao && this.solicitacao.id) {
-      console.log(`CardSolicitacao: Ação para OS ${this.solicitacao.id}, novo estado ID: ${novoEstadoId}`);
-      this.solicitacaoService.atualizarSolicitacao(this.solicitacao.id, novoEstadoId)
-        .subscribe({
-          next: (response) => {
-            if (response && response.success) {
-              console.log(`CardSolicitacao: Mock de atualização para estado ${novoEstadoId} bem-sucedido.`);
-            } else {
-              console.error('CardSolicitacao: Falha no mock de atualização de estado.');
-            }
-          },
-          error: (err) => {
-            console.error('CardSolicitacao: Erro ao tentar atualizar estado (mock):', err);
-          }
-        });
-    } else {
-      console.error('CardSolicitacao: Tentativa de realizar ação sem solicitação ou ID de solicitação.');
-    }
-  }
-
-  realizarAcaoNoBackend(acao: string, novoEstadoSeNecessario?: string) {
-    if (!this.solicitacao || !this.solicitacao.id) {
-      console.error('CardSolicitacaoComponent: Tentativa de realizar ação sem solicitação ou ID.');
+realizarAcao(acao: 'finalizar' | 'orcamento' | 'manutencao'): void {
+    if (!this.solicitacao?.id) {
+      console.error('CardSolicitacao: Tentativa de realizar ação sem ID de solicitação.');
       return;
     }
-
+    
     switch (acao) {
-      case 'efetuarOrcamento': 
-        this.orcamentoAcao.emit(this.solicitacao.id);
+      case 'finalizar':
+        console.log(`CardSolicitacao: Emitindo evento 'finalizarAcao' para a OS ID: ${this.solicitacao.id}`);
+        this.finalizarAcao.emit(this.solicitacao.id);
         break;
-      case 'efetuarManutencao': 
-        this.visualizarAcao.emit(this.solicitacao.id); 
-        break;
-      case 'finalizarSolicitacao': 
-        if (novoEstadoSeNecessario) {
-             this.solicitacaoService.atualizarSolicitacao(this.solicitacao.id, novoEstadoSeNecessario).subscribe(res => {
-                 console.log("Mock: Ação realizada para OS " + this.solicitacao.id + ", novo estado: " + novoEstadoSeNecessario, res);
-             });
-        }
-        break;
+      
+      // As ações de navegação podem ser tratadas com routerLink diretamente no HTML
+      // ou podem emitir um evento se houver lógica adicional no componente pai.
+      // Exemplo se você quisesse emitir em vez de usar routerLink:
+      // case 'orcamento':
+      //   this.orcamentoAcao.emit(this.solicitacao.id);
+      //   break;
+      // case 'manutencao':
+      //   this.manutencaoAcao.emit(this.solicitacao.id);
+      //   break;
+        
       default:
-        console.warn(`CardSolicitacaoComponent: Ação desconhecida '${acao}'`);
+        console.warn(`CardSolicitacao: Ação desconhecida '${acao}'`);
     }
   }
 }

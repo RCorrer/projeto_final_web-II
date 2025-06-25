@@ -6,35 +6,49 @@ import { MatButtonModule } from "@angular/material/button";
 import { RouterLink, Router } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from "@angular/common";
 import { AuthService } from "../../services/auth/auth.service";
+import { MatDialog } from "@angular/material/dialog";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { environment } from "../../../environments/environment";
 
 interface LoginResponse {
   token: string;
   nome: string;
   id: string;
-  role: 'FUNCIONARIO' | 'CLIENTE';
+  role: "FUNCIONARIO" | "CLIENTE";
   mensagem: string;
   idRole: string;
 }
 
 @Component({
   selector: "app-login",
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterLink,
+    ReactiveFormsModule,
+  ],
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.css",
 })
-
 export class LoginComponent implements AfterViewInit {
-
   private audio = new Audio("bipbip-sound.mp3");
   loginForm: FormGroup;
-  private readonly url = "http://localhost:8080/login";
+  private readonly url = environment.apiURL + "/login";
 
-  constructor(private fb: FormBuilder, private http:HttpClient, private router: Router, private authService: AuthService) {
-    this.loginForm = this.fb.group ({
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router,
+    private authService: AuthService,
+    private dialog: MatDialog
+  ) {
+    this.loginForm = this.fb.group({
       login: ["", [Validators.required]],
-      password: ["", [Validators.required]]
+      password: ["", [Validators.required]],
     });
   }
 
@@ -81,7 +95,7 @@ export class LoginComponent implements AfterViewInit {
             id: data.id,
             role: data.role,
             idRole: data.idRole,
-            mensagem: data.mensagem
+            mensagem: data.mensagem,
           });
 
           if (data.role === "FUNCIONARIO") {
@@ -90,9 +104,13 @@ export class LoginComponent implements AfterViewInit {
             this.router.navigate(["/home-cliente"]);
           }
         },
-        error: (error) => console.error("Login failed", error),
+        error: (error) => {
+          const mensagem = error?.error?.mensagem || "Erro ao fazer login. Verifique suas credenciais.";
+          this.dialog.open(ModalErroComponent, {
+            data: {mensagem},
+          });
+        },
       });
     }
   }
 }
-

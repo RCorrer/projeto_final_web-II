@@ -14,9 +14,13 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(unique = true)
     private String descricao;
-    public  Categoria (String descricao){
+
+    private boolean ativa = true;
+
+    public Categoria(String descricao) {
         this.descricao = descricao;
     }
-
 }

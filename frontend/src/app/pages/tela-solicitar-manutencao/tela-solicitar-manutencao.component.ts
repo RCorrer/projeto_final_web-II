@@ -1,54 +1,104 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormField } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatOption, MatSelect } from '@angular/material/select';
-import { Router, RouterLink } from '@angular/router';
-import { SolicitacaoService } from '../../services/solicitacao/solicitacao.service';
-import { AuthService } from '../../services/auth/auth.service';
+import { CommonModule } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormField } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { Router, RouterLink } from "@angular/router";
+import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
+import { AuthService } from "../../services/auth/auth.service";
+import { environment } from "../../../environments/environment";
 
 @Component({
-  selector: 'app-tela-solicitar-manutencao',
-  imports: [CommonModule, MatButtonModule, MatFormField, MatInputModule, MatSelect, MatOption, RouterLink, FormsModule],
-  templateUrl: './tela-solicitar-manutencao.component.html',
-  styleUrl: './tela-solicitar-manutencao.component.css'
+  selector: "app-tela-solicitar-manutencao",
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatFormField,
+    MatInputModule,
+    MatSelect,
+    MatOption,
+    RouterLink,
+    FormsModule,
+  ],
+  templateUrl: "./tela-solicitar-manutencao.component.html",
+  styleUrl: "./tela-solicitar-manutencao.component.css",
 })
-export class TelaSolicitarManutencaoComponent {
-  equipamento: string = '';
-  categoria: string = '';
-  defeito: string = '';
-
+export class TelaSolicitarManutencaoComponent implements OnInit {
+  categorias: string[] = [];
   mostrarRejeicao = false;
 
-  constructor(private solicitacaoService: SolicitacaoService, private router: Router, private authService: AuthService) {}
+  readonly apiUrl = `${environment.apiURL}/categoria`;
 
-  abrirSolicitacao() {
-    const nomeClienteLogado = this.authService.getUserName();
-    const idClienteLogado = this.authService.getUserId();
+  data = {
+    idCliente: "",
+    descEquip: "",
+    categoria: "",
+    descDefeito: "",
+  };
 
-    if (this.equipamento && this.categoria && this.defeito && nomeClienteLogado) {
-      this.solicitacaoService.adicionarSolicitacao({
-        equipamento: this.equipamento,
-        categoria: this.categoria,
-        defeito: this.defeito,
-        cliente: nomeClienteLogado,
-      });
+  constructor(
+    private solicitacaoService: SolicitacaoService,
+    private router: Router,
+    private authService: AuthService,
+    private http: HttpClient
+  ) {}
 
-      this.router.navigate(['/home-cliente']);
-    }
+  ngOnInit() {
+    this.carregarCategorias();
   }
 
-  mostarModalRejeitar(){
+  carregarCategorias() {
+    this.http.get<string[]>(this.apiUrl).subscribe({
+      next: (res) => {
+        this.categorias = res;
+        console.log("Categorias carregadas:", this.categorias);
+      },
+      error: (error) => {
+        console.error("Erro ao carregar categorias:", error);
+      },
+    });
+  }
+
+  abrirSolicitacao() {
+    this.data.idCliente = this.authService.getIdRole() ?? "";
+
+    if (!this.data.idCliente) {
+      console.error(
+        "ID do cliente não encontrado. Não é possível criar a solicitação."
+      );
+      return;
+    }
+
+    const solicitacao = {
+      idCliente: this.data.idCliente,
+      descEquip: this.data.descEquip,
+      categoria: this.data.categoria,
+      descDefeito: this.data.descDefeito,
+    };
+
+    this.solicitacaoService.adicionarSolicitacao(solicitacao).subscribe({
+      next: () => {
+        console.log("Solicitação de manutenção criada com sucesso.");
+        this.router.navigate(["/home-cliente"]);
+      },
+      error: (error) => {
+        console.error("Erro ao criar solicitação de manutenção:", error);
+      },
+    });
+  }
+
+  mostarModalRejeitar() {
     this.mostrarRejeicao = true;
   }
 
-  cancelarRejeicao(){
+  cancelarRejeicao() {
     this.mostrarRejeicao = false;
   }
 
-  confirmarRejeicao(){
+  confirmarRejeicao() {
     this.mostrarRejeicao = false;
   }
 }

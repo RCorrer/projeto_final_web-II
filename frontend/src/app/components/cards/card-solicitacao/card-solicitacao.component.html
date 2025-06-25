@@ -61,7 +61,7 @@
 
       <a
         *ngIf="solicitacao?.estado === '5'"
-        routerLink="/manutencao"
+        [routerLink]="['/manutencao', solicitacao.id]"
         class="action-button"
       >
         Realizar manutenção
@@ -76,7 +76,7 @@
 
       <a
         *ngIf="solicitacao?.estado === '7'"
-        (click)="realizarAcao('FINALIZADA')"
+        (click)="realizarAcao('finalizar')"
         class="action-button"
       >
         Finalizar Solicitação
