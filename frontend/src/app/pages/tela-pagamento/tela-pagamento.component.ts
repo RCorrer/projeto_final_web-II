@@ -35,9 +35,6 @@ export class TelaPagamentoComponent {
       const idDaRota: string = params["id"];
 
       if (!idDaRota) {
-        console.error(
-          "tela-pagamento: ID da solicitação não encontrado na rota."
-        );
         this.isLoaded = true;
         return;
       }
@@ -51,9 +48,6 @@ export class TelaPagamentoComponent {
               idFormatado: "OS-" + String(detalhes.numeroOs).padStart(6, "0"),
             };
           } else {
-            console.warn(
-              `tela-pagamento: solicitação com ID ${idDaRota} não encontrada no backend.`
-            );
             this.solicitacao = this.mergeWithDefault({
               id: idDaRota,
               estado: "DESCONHECIDO",
@@ -113,8 +107,7 @@ export class TelaPagamentoComponent {
     }
 
     this.solicitacaoService.pagarSolicitacao(this.solicitacao.id).subscribe({
-      next: (response) => {
-        console.log("Solicitação paga com sucesso:", response);
+      next: () => {
         this.router.navigate(["/home-cliente"]);
       },
       error: (error) => {

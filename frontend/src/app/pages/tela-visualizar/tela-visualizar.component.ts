@@ -58,9 +58,6 @@ export class TelaVisualizarComponent {
       const idDaRota: string = params["id"];
 
       if (!idDaRota) {
-        console.error(
-          "TelaVisualizarComponent: ID da solicitação não encontrado na rota!"
-        );
         this.isLoaded = true;
         return;
       }
@@ -79,14 +76,9 @@ export class TelaVisualizarComponent {
               "OS-" + String(this.solicitacao.numeroOs).padStart(4, "0");
 
             this.atualizarEtapas();
-          } else {
-            console.error(
-              `TelaVisualizarComponent: Solicitação com ID ${idDaRota} não foi encontrada no backend.`
-            );
           }
         },
         error: (err) => {
-          console.error("Erro ao buscar detalhes da solicitação:", err);
           this.isLoaded = true;
         },
         complete: () => {

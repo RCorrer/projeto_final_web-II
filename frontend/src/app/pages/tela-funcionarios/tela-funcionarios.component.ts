@@ -51,12 +51,6 @@ export class TelaFuncionariosComponent implements OnInit {
             senha: "",
           },
     });
-
-    dialogRef.afterClosed().subscribe((foiSalvo) => {
-      if (foiSalvo) {
-        console.log("Funcionário salvo com sucesso");
-      }
-    });
   }
 
   excluirFuncionario(funcionario: Funcionario): void {
@@ -69,10 +63,7 @@ export class TelaFuncionariosComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((confirmado) => {
       if (confirmado) {
-        this.funcionarioService.removerFuncionario(funcionario.id).subscribe({
-          next: () => console.log("Funcionário excluído com sucesso"),
-          error: (err) => console.error("Erro ao excluir:", err),
-        });
+        this.funcionarioService.removerFuncionario(funcionario.id);
       }
     });
   }

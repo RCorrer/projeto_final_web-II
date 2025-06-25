@@ -16,7 +16,6 @@ export class CardFuncionarioComponent extends CardBaseComponent<Funcionario> {
   private dialog = inject(MatDialog);
 
   @Input() set funcionario(value: Funcionario) {
-    console.log('Recebido no card:', value);
     this.data = value;
   }
 

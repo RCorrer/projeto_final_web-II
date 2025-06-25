@@ -63,10 +63,6 @@ export class TelaSolicitarManutencaoComponent implements OnInit {
     this.http.get<string[]>(this.apiUrl).subscribe({
       next: (res) => {
         this.categorias = res;
-        console.log("Categorias carregadas:", this.categorias);
-      },
-      error: (error) => {
-        console.error("Erro ao carregar categorias:", error);
       },
     });
   }
@@ -101,7 +97,6 @@ export class TelaSolicitarManutencaoComponent implements OnInit {
 
     this.solicitacaoService.adicionarSolicitacao(solicitacao).subscribe({
       next: () => {
-        console.log("Solicitação de manutenção criada com sucesso.");
         this.router.navigate(["/home-cliente"]);
       },
       error: (error) => {
