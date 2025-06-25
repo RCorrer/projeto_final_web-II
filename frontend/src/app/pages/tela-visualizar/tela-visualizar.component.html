@@ -84,8 +84,11 @@
     </div>
 
     <div class="details">
-      <button *ngIf="estado >= 6" mat-button
-        (click)="abrirModalOrientacoes()">
+      <button *ngIf="motivoRejeicao" mat-button color="warn" (click)="abrirModalMotivoRejeicao()">
+        Motivo do rejeite
+      </button>
+
+      <button *ngIf="estado >= 6" mat-button (click)="abrirModalOrientacoes()">
         Ver orientações
       </button>
     </div>
@@ -95,18 +98,18 @@
         <div class="stepper" [class.tres-etapas]="etapas.length === 3"
           [class.rejeitado]="solicitacao.estado === 'REJEITADA'">
           <div *ngFor="let etapa of etapas; let i = index" class="step" [class.rejeitado]="
-              solicitacao.estado === 'REJEITADA' && etapa.estado === 'completo'
-            ">
+                solicitacao.estado === 'REJEITADA' && etapa.estado === 'completo'
+              ">
             <div class="step-connector" *ngIf="i !== 0" [class.completo]="
-                etapa.estado === 'completo' || etapa.estado === 'ativo'
-              " [class.rejeitado]="solicitacao.estado === 'REJEITADA'"></div>
+                  etapa.estado === 'completo' || etapa.estado === 'ativo'
+                " [class.rejeitado]="solicitacao.estado === 'REJEITADA'"></div>
 
             <div class="step-circle" [class.completo]="etapa.estado === 'completo'"
               [class.ativo]="etapa.estado === 'ativo'" [class.rejeitado]="
-                etapa.nome === 'REJEITADA' ||
-                (solicitacao.estado === 'REJEITADA' &&
-                  etapa.estado === 'completo')
-              ">
+                  etapa.nome === 'REJEITADA' ||
+                  (solicitacao.estado === 'REJEITADA' &&
+                    etapa.estado === 'completo')
+                ">
               <span *ngIf="etapa.estado === 'completo' || etapa.estado === 'ativo'">✓</span>
             </div>
 

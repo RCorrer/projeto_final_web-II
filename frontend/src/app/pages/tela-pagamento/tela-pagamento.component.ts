@@ -8,6 +8,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { environment } from "../../../environments/environment";
 import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
 import { ModalOrientacoesComponent } from "../../modals/modal-orientacoes/modal-orientacoes.component";
+import { SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
 
 @Component({
   selector: "app-tela-pagamento",
@@ -18,7 +19,7 @@ import { ModalOrientacoesComponent } from "../../modals/modal-orientacoes/modal-
 export class TelaPagamentoComponent {
   apiUrl = environment.apiURL + "/solicitacao/atualizarEstado/paga";
 
-  @Input() solicitacao: any;
+  @Input() solicitacao!: SolicitacaoComHistoricoDTO;
   isLoaded = false;
 
   constructor(
@@ -45,7 +46,10 @@ export class TelaPagamentoComponent {
         .fetchDetalhesSolicitacao(idDaRota)
         .subscribe((detalhes) => {
           if (detalhes) {
-            this.solicitacao = this.mergeWithDefault(detalhes);
+            this.solicitacao = {
+              ...detalhes,
+              idFormatado: "OS-" + String(detalhes.numeroOs).padStart(6, "0"),
+            };
           } else {
             console.warn(
               `tela-pagamento: solicitação com ID ${idDaRota} não encontrada no backend.`
@@ -124,16 +128,14 @@ export class TelaPagamentoComponent {
   }
 
   abrirModalOrientacoes() {
-    const dialogRef = this.dialog.open(ModalOrientacoesComponent, {
+    this.dialog.open(ModalOrientacoesComponent, {
       data: {
-        descricaoManutencao: this.solicitacao.descricaoManutencao,
-        orientacoesCliente: this.solicitacao.orientacoesCliente,
+        descricaoManutencao: this.solicitacao.descricao_manutencao,
+        orientacoesCliente: this.solicitacao.orientacoes_cliente,
       },
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      localStorage.setItem(`orientacoes-vistas-${this.solicitacao.id}`, "true");
-    });
+    localStorage.setItem(`orientacoes-vistas-${this.solicitacao.id}`, "true");
   }
 
   verificarSeOrientacoesForamVistas(): boolean {

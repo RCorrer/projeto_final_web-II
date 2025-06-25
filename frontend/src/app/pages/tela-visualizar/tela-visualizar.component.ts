@@ -8,6 +8,7 @@ import {
 } from "../../models/solicitacao-dto.model";
 import { MatDialog } from "@angular/material/dialog";
 import { ModalOrientacoesComponent } from "../../modals/modal-orientacoes/modal-orientacoes.component";
+import { ModalMotivoRejeicaoComponent } from "../../modals/modal-motivo-rejeicao/modal-motivo-rejeicao.component";
 
 interface Etapa {
   nome: string;
@@ -27,6 +28,7 @@ export class TelaVisualizarComponent {
   @Input() funcionario!: HistoricoAlteracaoDTO;
 
   isLoaded = false;
+  motivoRejeicao: string | null = null;
   estado!: number;
 
   etapas: Etapa[] = [];
@@ -69,6 +71,8 @@ export class TelaVisualizarComponent {
           if (dados) {
             this.solicitacao = dados;
 
+            this.extrairMotivoRejeicao();
+
             this.estado = Number(this.solicitacao.estado); // <- NOVO: define o valor para o template
 
             this.solicitacao.idFormatado =
@@ -92,6 +96,21 @@ export class TelaVisualizarComponent {
     });
   }
 
+  private extrairMotivoRejeicao(): void {
+    const historico = this.solicitacao.historico;
+
+    const entradaRejeitada = historico.find((h) =>
+      h.descricao?.toLowerCase().includes("motivo:")
+    );
+
+    if (entradaRejeitada) {
+      const partes = entradaRejeitada.descricao.split("Motivo:");
+      if (partes.length > 1) {
+        this.motivoRejeicao = partes[1].trim();
+      }
+    }
+  }
+
   private atualizarEtapas(): void {
     const estadoAtual = this.solicitacao.estado;
     const historico = this.solicitacao.historico;
@@ -105,16 +124,24 @@ export class TelaVisualizarComponent {
       mapaDeDatas.set(h.estadoNovo, h.dataHora);
 
       if (["2", "6", "8"].includes(h.estadoNovo)) {
-        if (h.estadoNovo === "6") {
-          mapaDeFuncionarios.set(
-            "6",
-            h.funcionarioRedirecionado || this.solicitacao.funcionarioNome
-          );
-        } else {
-          mapaDeFuncionarios.set(
-            h.estadoNovo,
-            this.solicitacao.funcionarioNome
-          );
+        const desc = h.descricao.toLowerCase();
+
+        if (h.estadoNovo === "2" && desc.includes("orçamento de")) {
+          const nome =
+            h.funcionarioRedirecionado ?? this.solicitacao.funcionarioNome;
+          mapaDeFuncionarios.set("2", nome);
+        }
+
+        if (h.estadoNovo === "6" && desc.includes("arrumada")) {
+          const nome =
+            h.funcionarioRedirecionado ?? this.solicitacao.funcionarioNome;
+          mapaDeFuncionarios.set("6", nome);
+        }
+
+        if (h.estadoNovo === "8" && desc.includes("finalizada")) {
+          const nome =
+            h.funcionarioRedirecionado ?? this.solicitacao.funcionarioNome;
+          mapaDeFuncionarios.set("8", nome);
         }
       }
     });
@@ -155,7 +182,7 @@ export class TelaVisualizarComponent {
       if (etapaNome === "3" && temRejeitada) {
         this.etapas.push({
           nome: this.mapaDeEstados[this.etapaRejeitada],
-          estado: estadoAtual === "REJEITADA" ? "ativo" : "completo",
+          estado: "completo",
           dataHora: mapaDeDatas.get("4"),
         });
       }
@@ -196,6 +223,13 @@ export class TelaVisualizarComponent {
     } else {
       return "incompleto";
     }
+  }
+
+  abrirModalMotivoRejeicao() {
+    if (!this.motivoRejeicao) return;
+    this.dialog.open(ModalMotivoRejeicaoComponent, {
+      data: { motivo: this.motivoRejeicao },
+    });
   }
 
   abrirModalOrientacoes() {

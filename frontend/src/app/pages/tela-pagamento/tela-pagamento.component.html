@@ -1,55 +1,53 @@
 <div class="layout-container" *ngIf="solicitacao">
-    <div class="visualizar-container">
-        <div class="visualizar-header">
-            <div class="OS">
-                <h1 class="os-id">{{ solicitacao.idFormatado || 'OS-000000' }}</h1>
-            </div>
-
-            <div class="x">
-                <a routerLink="/home-cliente">X</a>
-            </div>
-        </div>
-
-        <div class="visualizar-content">
-            <div class="visualizar-left">
-                <p><strong>Descrição do equipamento</strong><br>{{ solicitacao.equipamento || 'N/A' }}</p>
-                <p><strong>Categoria do equipamento</strong><br>{{ solicitacao.categoria || 'N/A' }}</p>
-                <p><strong>Descrição do problema</strong><br>{{ solicitacao.problema || 'N/A' }}</p>
-                <p><strong>Data/Hora</strong><br>{{ (solicitacao.dataHora | date:'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
-            </div>
-
-            <div class="visualizar-divider"></div>
-            <div class="visualizar-right">
-                <div class="visualizar-contato">
-                    <p><strong>Cliente</strong><br>{{ solicitacao.cliente?.nome || 'N/A' }}</p>
-                    <p><strong>CPF</strong><br>{{ solicitacao.cliente?.cpf || 'N/A' }}</p>
-                    <p><strong>E-mail</strong><br>{{ solicitacao.cliente?.email || 'N/A' }}</p>
-                    <p><strong>Telefone</strong><br>{{ solicitacao.cliente?.telefone || 'N/A' }}</p>
-                </div>
-
-                <div class="visualizar-endereco">
-                    <p><strong>CEP</strong><br>{{ solicitacao.cliente?.endereco?.cep || 'N/A' }}</p>
-                    <p><strong>Logradouro</strong><br>{{ solicitacao.cliente?.endereco?.logradouro || 'N/A' }}</p>
-                    <p><strong>Complemento</strong><br>{{ solicitacao.cliente?.endereco?.complemento || 'N/A' }}</p>
-                    <p><strong>Cidade</strong><br>{{ solicitacao.cliente?.endereco?.cidade || 'N/A' }}</p>
-                    <p><strong>Estado</strong><br>{{ solicitacao.cliente?.endereco?.estado || 'N/A' }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="valor">
-            <p>Valor do serviço</p>
-            <strong>{{ solicitacao.orcamento | currency:'BRL':'symbol':'1.2-2' }}</strong>
-        </div>
-
-        <div class="details">
-            <button mat-button (click)="abrirModalOrientacoes()">
-                Ver orientações
-            </button>
-        </div>
-
-        <div class="visualizar-footer">
-            <button id="btnEfetua" mat-button (click)="pagarManutencao()">Pagar</button>
-        </div>
+  <div class="visualizar-container">
+    <div class="visualizar-header">
+      <div class="OS">
+        <h1 class="os-id">{{ solicitacao.idFormatado || 'OS-000000' }}</h1>
+      </div>
+      <div class="x">
+        <a routerLink="/home-cliente">X</a>
+      </div>
     </div>
+
+    <div class="visualizar-content">
+      <div class="visualizar-left">
+        <p><strong>Descrição do equipamento</strong><br />{{ solicitacao.descricaoEquipamento || 'N/A' }}</p>
+        <p><strong>Categoria do equipamento</strong><br />{{ solicitacao.categoriaEquipamento || 'N/A' }}</p>
+        <p><strong>Descrição do problema</strong><br />{{ solicitacao.descricaoDefeito || 'N/A' }}</p>
+        <p><strong>Data/Hora</strong><br />{{ solicitacao.dataHora | date: 'dd/MM/yyyy HH:mm' }}</p>
+      </div>
+
+      <div class="visualizar-divider"></div>
+
+      <div class="visualizar-right">
+        <div class="visualizar-contato">
+          <p><strong>Cliente</strong><br />{{ solicitacao.cliente?.nome || 'N/A' }}</p>
+          <p><strong>CPF</strong><br />{{ solicitacao.cliente?.cpf || 'N/A' }}</p>
+          <p><strong>E-mail</strong><br />{{ solicitacao.cliente?.email || 'N/A' }}</p>
+          <p><strong>Telefone</strong><br />{{ solicitacao.cliente?.telefone || 'N/A' }}</p>
+        </div>
+
+        <div class="visualizar-endereco">
+          <p><strong>CEP</strong><br />{{ solicitacao.cliente?.cep || 'N/A' }}</p>
+          <p><strong>Logradouro</strong><br />{{ solicitacao.cliente?.logradouro || 'N/A' }}</p>
+          <p><strong>Complemento</strong><br />{{ solicitacao.cliente?.complemento || 'N/A' }}</p>
+          <p><strong>Cidade</strong><br />{{ solicitacao.cliente?.localidade || 'N/A' }}</p>
+          <p><strong>Estado</strong><br />{{ solicitacao.cliente?.uf || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="valor">
+      <p>Valor do serviço</p>
+      <strong>{{ solicitacao.orcamento | currency:'BRL':'symbol':'1.2-2' }}</strong>
+    </div>
+
+    <div class="details">
+      <button mat-button (click)="abrirModalOrientacoes()">Ver orientações</button>
+    </div>
+
+    <div class="visualizar-footer">
+      <button id="btnEfetua" mat-button (click)="pagarManutencao()">Pagar</button>
+    </div>
+  </div>
 </div>
