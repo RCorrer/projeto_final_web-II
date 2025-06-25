@@ -20,6 +20,7 @@ export interface HistoricoAlteracaoDTO {
   estadoAnterior: string;
   estadoNovo: string;
   dataHora: string;
+  funcionarioRedirecionado?: string
 }
 
 // Interface principal, refletindo o back SolicitacaoComHistoricoDTO.java
@@ -29,6 +30,8 @@ export interface SolicitacaoComHistoricoDTO {
   descricaoEquipamento: string;
   categoriaEquipamento: string;
   descricaoDefeito: string;
+  orientacoes_cliente: string;
+  descricao_manutencao: string;
   estado: string;
   funcionarioNome: string;
   cliente: EnviarClienteDTO;
@@ -46,6 +49,7 @@ export interface MudarEstadoDTO {
 // Interface OrcamentoDTO.java
 export interface OrcamentoDTO {
   id: string;
+  ifFuncionario: string;
   valor: number;
 }
 

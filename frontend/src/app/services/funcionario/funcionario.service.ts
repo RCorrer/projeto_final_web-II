@@ -36,7 +36,6 @@ export class FuncionarioService {
   private carregarFuncionarios() {
     this.http.get<Funcionario[]>(this.apiUrl).subscribe({
       next: (funcionarios) => {
-        console.log("Funcionários carregados:", funcionarios);
         this.funcionariosSource.next(funcionarios);
       },
       error: (error) => {
@@ -113,11 +112,7 @@ export class FuncionarioService {
 
   fetchAllFuncionarios(): Observable<Funcionario[]> {
     return this.http.get<Funcionario[]>(`${this.apiUrl}`).pipe(
-      catchError((error) => {
-        console.error(
-          "[FuncionarioService] Erro ao buscar todos os funcionários:",
-          error
-        );
+      catchError(() => {
         return of([]);
       })
     );

@@ -45,14 +45,10 @@ export class ModalMostarOrcamentoComponent implements OnChanges {
     this.solicitacaoService.fetchDetalhesSolicitacao(id).subscribe({
       next: (dados) => {
         this.informacoesSolicitacao = dados;
-        console.log("Dados: ", dados);
-      },
-      error: (erro) => {
-        console.error("Ocorreu um erro: ", erro);
       },
     });
   }
-  // assim que o modal for aberto, buscará informações da solicitação
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isOpen && this.solicitacao && this.solicitacao.id) {
       this.mostrarDetalhesSolicitacao(this.solicitacao.id);
@@ -74,12 +70,9 @@ export class ModalMostarOrcamentoComponent implements OnChanges {
       next: () => {
         this.alterarEstado.emit({
           id: this.solicitacao.id,
-          novoEstado: "3", // Estado "APROVADA"
+          novoEstado: "3",
         });
         this.mostrarAprovacao = true;
-      },
-      error: (err) => {
-        console.error("Erro ao aprovar:", err);
       },
     });
 
@@ -112,9 +105,6 @@ export class ModalMostarOrcamentoComponent implements OnChanges {
         });
         this.mostrarRejeicao = false;
         this.close();
-      },
-      error: (err) => {
-        console.error("Erro ao rejeitar:", err);
       },
     });
   }

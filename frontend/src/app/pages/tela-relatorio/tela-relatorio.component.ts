@@ -142,6 +142,5 @@ export class TelaRelatorioComponent implements OnInit {
   }
   
   gerarRelatorio(): void {
-    console.log('Dados agrupados:', this.relatorio);
   }
 }

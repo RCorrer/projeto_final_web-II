@@ -137,7 +137,7 @@ export class CadastroComponent implements AfterViewInit {
 
   playSound() {
     this.audio.currentTime = 0;
-    this.audio.play().catch((e) => console.error("Audio playback failed:", e));
+    this.audio.play();
   }
 
   onSubmit() {
