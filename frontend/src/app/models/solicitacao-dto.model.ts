@@ -30,6 +30,8 @@ export interface SolicitacaoComHistoricoDTO {
   descricaoEquipamento: string;
   categoriaEquipamento: string;
   descricaoDefeito: string;
+  orientacoes_cliente: string;
+  descricao_manutencao: string;
   estado: string;
   funcionarioNome: string;
   cliente: EnviarClienteDTO;

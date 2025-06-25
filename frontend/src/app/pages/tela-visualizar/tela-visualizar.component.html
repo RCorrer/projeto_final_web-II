@@ -83,6 +83,13 @@
       </div>
     </div>
 
+    <div class="details">
+      <button *ngIf="estado >= 6" mat-button
+        (click)="abrirModalOrientacoes()">
+        Ver orientações
+      </button>
+    </div>
+
     <div class="visualizar-bottom">
       <div class="passos">
         <div class="stepper" [class.tres-etapas]="etapas.length === 3"

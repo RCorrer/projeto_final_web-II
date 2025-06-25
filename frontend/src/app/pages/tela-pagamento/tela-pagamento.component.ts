@@ -5,8 +5,9 @@ import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { HttpClient } from "@angular/common/http";
 import { MatDialog } from "@angular/material/dialog";
-import { environment } from '../../../environments/environment';
+import { environment } from "../../../environments/environment";
 import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { ModalOrientacoesComponent } from "../../modals/modal-orientacoes/modal-orientacoes.component";
 
 @Component({
   selector: "app-tela-pagamento",
@@ -70,7 +71,8 @@ export class TelaPagamentoComponent {
 
     return {
       id: solicitacao.id || 0,
-      idFormatado: 'OS-' + (solicitacao.numeroOs || 0).toString().padStart(6, '0'),
+      idFormatado:
+        "OS-" + (solicitacao.numeroOs || 0).toString().padStart(6, "0"),
       equipamento: solicitacao.equipamento || "Teclado DELL KB216 USB",
       categoria: solicitacao.categoria || "Periférico",
       problema: solicitacao.defeito || solicitacao.problema || "N/A",
@@ -97,17 +99,47 @@ export class TelaPagamentoComponent {
   }
 
   pagarManutencao() {
+    if (!this.verificarSeOrientacoesForamVistas()) {
+      const mensagem =
+        "Por favor, leia as orientações antes de efetuar o pagamento.";
+      this.dialog.open(ModalErroComponent, {
+        data: { mensagem },
+      });
+      return;
+    }
+
     this.solicitacaoService.pagarSolicitacao(this.solicitacao.id).subscribe({
       next: (response) => {
         console.log("Solicitação paga com sucesso:", response);
         this.router.navigate(["/home-cliente"]);
       },
       error: (error) => {
-        const mensagem = error?.error?.mensagem || "Erro ao pagar a solicitação.";
+        const mensagem =
+          error?.error?.mensagem || "Erro ao pagar a solicitação.";
         this.dialog.open(ModalErroComponent, {
-          data: {mensagem}
+          data: { mensagem },
         });
       },
-    })
+    });
+  }
+
+  abrirModalOrientacoes() {
+    const dialogRef = this.dialog.open(ModalOrientacoesComponent, {
+      data: {
+        descricaoManutencao: this.solicitacao.descricaoManutencao,
+        orientacoesCliente: this.solicitacao.orientacoesCliente,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      localStorage.setItem(`orientacoes-vistas-${this.solicitacao.id}`, "true");
+    });
+  }
+
+  verificarSeOrientacoesForamVistas(): boolean {
+    return (
+      localStorage.getItem(`orientacoes-vistas-${this.solicitacao.id}`) ===
+      "true"
+    );
   }
 }

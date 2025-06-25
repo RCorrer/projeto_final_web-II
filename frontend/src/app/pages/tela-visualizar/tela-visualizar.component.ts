@@ -6,6 +6,8 @@ import {
   HistoricoAlteracaoDTO,
   SolicitacaoComHistoricoDTO,
 } from "../../models/solicitacao-dto.model";
+import { MatDialog } from "@angular/material/dialog";
+import { ModalOrientacoesComponent } from "../../modals/modal-orientacoes/modal-orientacoes.component";
 
 interface Etapa {
   nome: string;
@@ -25,6 +27,7 @@ export class TelaVisualizarComponent {
   @Input() funcionario!: HistoricoAlteracaoDTO;
 
   isLoaded = false;
+  estado!: number;
 
   etapas: Etapa[] = [];
   private mapaDeEstados: { [key: string]: string } = {
@@ -44,7 +47,8 @@ export class TelaVisualizarComponent {
   constructor(
     private solicitacaoService: SolicitacaoService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +68,8 @@ export class TelaVisualizarComponent {
         next: (dados) => {
           if (dados) {
             this.solicitacao = dados;
+
+            this.estado = Number(this.solicitacao.estado); // <- NOVO: define o valor para o template
 
             this.solicitacao.idFormatado =
               "OS-" + String(this.solicitacao.numeroOs).padStart(4, "0");
@@ -143,11 +149,9 @@ export class TelaVisualizarComponent {
       return;
     }
 
-    // Caso contrário, etapas normais
     for (let i = 0; i < this.etapasNormais.length; i++) {
       const etapaNome = this.etapasNormais[i];
 
-      // Se foi rejeitada logo após orçada
       if (etapaNome === "3" && temRejeitada) {
         this.etapas.push({
           nome: this.mapaDeEstados[this.etapaRejeitada],
@@ -192,5 +196,14 @@ export class TelaVisualizarComponent {
     } else {
       return "incompleto";
     }
+  }
+
+  abrirModalOrientacoes() {
+    this.dialog.open(ModalOrientacoesComponent, {
+      data: {
+        descricaoManutencao: this.solicitacao.descricao_manutencao,
+        orientacoesCliente: this.solicitacao.orientacoes_cliente,
+      },
+    });
   }
 }
