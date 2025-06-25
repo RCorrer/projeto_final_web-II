@@ -84,7 +84,7 @@
     </div>
 
     <div class="details">
-      <button *ngIf="motivoRejeicao" mat-button color="warn" (click)="abrirModalMotivoRejeicao()">
+      <button *ngIf="solicitacao.estado === '4'" mat-button color="warn" (click)="abrirModalMotivoRejeicao()">
         Motivo do rejeite
       </button>
 
