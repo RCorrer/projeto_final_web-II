@@ -131,6 +131,9 @@ public class SolicitacoesService {
             throw new FalhaPegarSolicitacao();
         }
 
+        AtribuirFuncionarioDTO atribuirFuncioario = new AtribuirFuncionarioDTO(data.id(),data.ifFuncionario());
+
+        atribuirFuncionario(atribuirFuncioario);
         Solicitacao solicitacao = solicitacaoOpt.get();
 
         String estadoAnterior = solicitacao.getFk_estado();
@@ -145,7 +148,7 @@ public class SolicitacoesService {
 
         HistoricoAlteracao historico = new HistoricoAlteracao(
                 data.id(),
-                "Orçamento de R$ " + data.valor() + " registrado",
+                "Orçamento de R$ " + data.valor() + " registrado por " + solicitacao.getFuncionario().getUsuario().getNome(),
                 estadoAnterior,
                 "2"
         );
@@ -242,7 +245,7 @@ public class SolicitacoesService {
 
         Solicitacao solicitacao = solicitacaoOpt.get();
         String estadoAnterior = solicitacao.getFk_estado();
-        if (!Objects.equals(estadoAnterior, "3")){
+        if (!Objects.equals(estadoAnterior, "1" )&& (!Objects.equals(estadoAnterior,"3"))){
             throw new SolicitacaoAtualizarInvalido();
         }
 
@@ -444,10 +447,19 @@ public class SolicitacoesService {
                     if ("5".equals(historico.getEstadoNovo())) {
                         String descricao = historico.getDescricao();
                         // Extrai o nome do funcionário destino da descrição
-                        if (descricao.startsWith("Solicitação redirecionada de ")) {
+                        if (descricao.startsWith("Solicitação redirecionada de ")){
                             String[] partes = descricao.split(" para ");
                             if (partes.length > 1) {
                                 funcionarioRedirecionado = partes[1];
+                            }
+                        }
+                    } else if ("2".equals(historico.getEstadoNovo())){
+                        String descricao = historico.getDescricao();
+                        if (descricao.startsWith("Orçamento de")) {
+                            String[] partes = descricao.split(" registrado por ");
+                            if (partes.length > 1) {
+                                funcionarioRedirecionado = partes[1].trim();
+
                             }
                         }
                     }

@@ -141,8 +141,7 @@ export class SolicitacaoService {
       const mensagem =
         error?.error?.mensagem ||
         `${contexto} falhou. Verifique os dados e tente novamente.`;
-      this.dialog.open(ModalErroComponent, { data: { mensagem } });
-      console.error(`${contexto} - Erro:`, error);
+      this.dialog.open(ModalErroComponent, { data: { mensagem } })
       return of(result as T);
     };
   }

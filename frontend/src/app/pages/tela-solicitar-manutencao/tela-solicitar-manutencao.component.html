@@ -2,41 +2,47 @@
     <div class="solicitacao">
         <div class="content">
             <h1>Solicitação de Manutenção</h1>
-            <div class="formulario">
-                <form>
-                    <label>Descrição do Equipamento</label>
 
-                    <mat-form-field id="topo" appearance="outline">
-                        <input matInput placeholder="Descrição do Equipamento" type="text" [(ngModel)]="data.descEquip"
-                            name="descEquip" required>
-                    </mat-form-field>
+            <form [formGroup]="solicitacaoForm" class="formulario">
+                <label for="descEquip">Descrição do Equipamento</label>
+                <mat-form-field id="topo" appearance="outline">
+                    <input matInput formControlName="descEquip" placeholder="Descrição do Equipamento" required />
+                    <mat-error *ngIf="solicitacaoForm.get('descEquip')?.hasError('required')">
+                        Campo obrigatório
+                    </mat-error>
+                </mat-form-field>
 
-                    <label>Escolha a categoria do Equipamento</label>
-                    <mat-form-field appearance="outline">
-                        <mat-select [(ngModel)]="data.categoria" name="categoria" placeholder="Categoria" required>
-                            <mat-option *ngFor="let categoria of categorias" [value]="categoria">
-                                {{ categoria }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                <label for="categoria">Escolha a categoria do Equipamento</label>
+                <mat-form-field appearance="outline">
+                    <mat-select formControlName="categoria" placeholder="Categoria" required>
+                        <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+                            {{ categoria }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="solicitacaoForm.get('categoria')?.hasError('required')">
+                        Campo obrigatório
+                    </mat-error>
+                </mat-form-field>
 
-                    <label>Descrição do Defeito</label>
-                    <mat-form-field appearance="outline">
-                        <textarea matInput rows="8" placeholder="Descrição do Defeito" style="resize:none;"
-                            [(ngModel)]="data.descDefeito" name="descDefeito" required></textarea>
-                    </mat-form-field>
+                <label for="descDefeito">Descrição do Defeito</label>
+                <mat-form-field appearance="outline">
+                    <textarea matInput formControlName="descDefeito" rows="8" style="resize: none;"
+                        placeholder="Descrição do Defeito" required></textarea>
+                    <mat-error *ngIf="solicitacaoForm.get('descDefeito')?.hasError('required')">
+                        Campo obrigatório
+                    </mat-error>
+                </mat-form-field>
 
-                    <div class="botoes">
-                        <button id="cancelar" mat-stroked-button (click)="mostarModalRejeitar()">
-                            Cancelar
-                        </button>
+                <div class="botoes">
+                    <button id="cancelar" mat-stroked-button type="button" (click)="mostarModalRejeitar()">
+                        Cancelar
+                    </button>
 
-                        <button id="abrir" mat-button (click)="abrirSolicitacao()">
-                            Abrir Solicitação
-                        </button>
-                    </div>
-                </form>
-            </div>
+                    <button id="abrir" mat-button type="button" (click)="abrirSolicitacao()">
+                        Abrir Solicitação
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

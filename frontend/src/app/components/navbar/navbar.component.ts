@@ -13,11 +13,24 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  rotaInicial: string = '/';
 
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {
+    this.definirRotaInicial();
+  }
+
+  definirRotaInicial(): void {
+    if (this.authService.isCliente()) {
+      this.rotaInicial = '/home-cliente';
+    } else if (this.authService.isFuncionario()) {
+      this.rotaInicial = '/home';
+    } else {
+      this.rotaInicial = '/'; // fallback
+    }
+  }
 
   logout(): void {
     this.authService.logout();
   }
-  
 }
+

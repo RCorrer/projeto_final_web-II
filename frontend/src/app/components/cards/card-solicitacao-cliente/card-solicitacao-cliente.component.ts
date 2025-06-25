@@ -49,7 +49,10 @@ export class CardSolicitacaoClienteComponent {
   }
 
   modalResgatarServico() {
-    this.mostrarResgate = true;
+    const confirmacao = confirm("Deseja realmente resgatar esta solicitação?");
+    if (confirmacao) {
+      this.confirmarResgate();
+    }
   }
 
   cancelarResgate() {
