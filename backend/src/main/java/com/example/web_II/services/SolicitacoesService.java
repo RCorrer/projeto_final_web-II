@@ -173,7 +173,7 @@ public class SolicitacoesService {
 
         Solicitacao solicitacao = solicitacaoOpt.get();
         String estadoAnterior = solicitacao.getFk_estado();
-        if (!Objects.equals(estadoAnterior, "2")){
+        if (!Objects.equals(estadoAnterior, "2") && !Objects.equals(estadoAnterior,"4")){
             throw new SolicitacaoAtualizarInvalido();
         }
 
