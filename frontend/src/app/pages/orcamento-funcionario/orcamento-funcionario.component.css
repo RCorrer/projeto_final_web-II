@@ -25,11 +25,11 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 10%;
   align-items: center;
-  /* background: rgb(149, 197, 255);
-    background: linear-gradient(90deg,
-            rgba(149, 197, 255, 0.699) 0%,
-            rgba(213, 213, 255, 0.651) 49%,
-            rgba(217, 217, 217, 0.774) 100%); */
+}
+
+.orcamento-header {
+  display: flex;
+  flex-direction: row;
 }
 
 .x a {
