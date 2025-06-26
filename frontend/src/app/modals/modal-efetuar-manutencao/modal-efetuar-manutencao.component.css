@@ -1,33 +1,29 @@
-/* Em modal-redirecionar.component.css */
-
-/* A camada de fundo semi-transparente que cobre a tela inteira */
 .modal-overlay {
-    position: fixed; /* Fica fixo na tela, mesmo com rolagem */
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* 100% da largura da tela */
-    height: 100vh; /* 100% da altura da tela */
-    background-color: rgba(0, 0, 0, 0.6); /* Cor preta com 60% de opacidade */
-    z-index: 1000; /* Garante que fique sobre todo o conteúdo da página */
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
 
-    /* Centraliza a janela do modal no meio da tela */
     display: flex;
     justify-content: center;
     align-items: center;
 
-    /* Animação suave de entrada */
     animation: fadeIn 0.3s ease-out;
 }
 
-/* A janela de diálogo branca */
+
 .modal-container {
     background-color: white;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    max-width: 500px; /* Largura máxima do modal */
-    width: 90%; /* Em telas pequenas, ocupa 90% da largura */
+    min-width: 800px;
     text-align: left;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .modal-container h3 {

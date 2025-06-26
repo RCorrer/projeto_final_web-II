@@ -7,20 +7,23 @@
 }
 
 .layout-container {
-  left: 0;
-  top: 0;
+  position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
+
+  overflow-y: scroll;
 }
 
 .visualizar-container {
-  width: 60%;
-  min-height: 60%;
+  width: fit-content;
+  max-width: 80%;
+  min-width: 60%;
+  height: fit-cont1ent;
   background-color: hsla(0, 0%, 100%, 0.5);
   border-radius: 20px;
   display: flex;
@@ -56,6 +59,7 @@
   transition: 0.3s ease-out;
 }
 
+/* CONTEÚDO LATERAL RESPONSIVO */
 .visualizar-content {
   align-self: center;
   display: flex;
@@ -65,10 +69,29 @@
   justify-content: space-between;
   padding: 20px 0;
   flex-grow: 1;
+  gap: 20px;
+  flex-wrap: wrap;
+  /* <-- adiciona quebra automática quando necessário */
+}
+
+.visualizar-left {
+  flex: 1;
+  min-width: 300px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .visualizar-left {
   width: 40%;
+  flex-shrink: 0;
+}
+
+.visualizar-right {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .visualizar-left p,
@@ -86,18 +109,14 @@
 }
 
 .visualizar-divider {
-  height: 400px;
   width: 2px;
-  color: #333;
+  min-height: 100%;
+  background-color: #333;
+  opacity: 0.2;
+  margin: 0 40px;
 }
 
-.visualizar-right {
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
+/* BLOCO DIREITO */
 .visualizar-contato,
 .visualizar-endereco {
   display: flex;
@@ -112,12 +131,7 @@
   margin: 10px;
 }
 
-.visualizar-divider {
-  height: 400px;
-  width: 2px;
-  color: #333;
-}
-
+/* BOTÕES DO FOOTER */
 .visualizar-footer {
   display: flex;
   justify-content: center;
@@ -138,7 +152,7 @@
   width: 180px;
 }
 
-/* Responsive adjustments */
+/* RESPONSIVIDADE */
 @media (max-width: 1200px) {
   .visualizar-container {
     width: 80%;
@@ -153,15 +167,17 @@
   .visualizar-content {
     flex-direction: column;
     width: 90%;
+    gap: 20px;
   }
 
   .visualizar-left,
   .visualizar-right {
     width: 100%;
   }
+
   .visualizar-divider {
-    height: 400px;
-    width: 2px;
-    color: #333;
+    width: 100%;
+    height: 2px;
+    margin: 20px 0;
   }
 }

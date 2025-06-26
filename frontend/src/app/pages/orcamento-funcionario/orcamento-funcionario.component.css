@@ -1,14 +1,14 @@
 .content {
-  overflow-y: scroll;
-  
+    overflow-y: scroll;
+
 }
 
 .orcamento-container {
     background-color: rgba(var(--color-surface-rgb), 0.5);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 50px;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -39,6 +39,8 @@
 .orcamento-content {
     display: flex;
     gap: 20px;
+    align-items: flex-start;
+    flex-wrap: nowrap;
 }
 
 .orcamento-input {
@@ -61,6 +63,14 @@
 
 .orcamento-left {
     width: 25%;
+    max-width: 100%;
+}
+
+.orcamento-left p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
 }
 
 .botoes {
@@ -114,4 +124,3 @@
     width: 1px;
     background-color: #aaa;
 }
-
