@@ -1,0 +1,83 @@
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px 20px;
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.content {
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 30px 40px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+h2[mat-dialog-title] {
+    font-family: "Poppins", sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-primary, #444);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+mat-dialog-content p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+    word-break: break-word;
+    margin: 0;
+    padding: 0 5px;
+}
+
+mat-dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+mat-dialog-actions button {
+    align-self: center;
+    background-color: var(--color-finalizada);
+    color: white;
+    width: 150px;
+    transition: 0.3s ease;
+    border: none;
+    font-weight: 500;
+    font-size: 14px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+mat-dialog-actions button:hover {
+    background-color: var(--color-finalizada-hover, #43a047);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .content {
+        width: 100%;
+        max-width: 95%;
+        padding: 20px;
+    }
+}

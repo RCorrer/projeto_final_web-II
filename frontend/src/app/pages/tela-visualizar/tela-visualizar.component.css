@@ -14,13 +14,18 @@
   justify-content: center;
   width: 100%;
   min-height: 100vh;
+  height: fit-content;
   padding: 20px;
   box-sizing: border-box;
 }
 
 .visualizar-container {
-  width: 60%;
+  min-width: 60%;
   min-height: 60%;
+  max-width: 80%;
+  overflow-y: scroll;
+  width: fit-content;
+  height: fit-content;
   background-color: hsla(0, 0%, 100%, 0.5);
   border-radius: 20px;
   display: flex;
@@ -67,6 +72,7 @@
   justify-content: space-between;
   padding: 20px 0;
   flex-grow: 1;
+  gap: 20px;
 }
 
 .visualizar-left {
@@ -78,6 +84,13 @@
 .visualizar-endereco p {
   margin: 10px 0;
   line-height: 1.5;
+}
+
+.visualizar-left p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .visualizar-left strong,
@@ -132,6 +145,16 @@
   position: relative;
 }
 
+.stepper.tres-etapas {
+  justify-content: space-between;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.stepper.rejeitado .step:not(:last-child)::after {
+  background-color: var(--color-rejeitada, #e26768);
+}
+
 .step {
   display: flex;
   flex-direction: column;
@@ -143,6 +166,31 @@
   justify-content: flex-start;
 }
 
+/* Conector entre os steps (fica atrás dos círculos) */
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(0%);
+  width: 100%;
+  height: 2px;
+  background-color: #ccc;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+/* Conector completo */
+.step.completo:not(:last-child)::after {
+  background-color: var(--md-sys-color-primary, #4caf50);
+}
+
+/* Conector rejeitado */
+.step.rejeitado:not(:last-child)::after {
+  background-color: var(--color-rejeitada, #e26768);
+}
+
+/* Step circle */
 .step-circle {
   width: 30px;
   height: 30px;
@@ -154,7 +202,7 @@
   color: white;
   font-weight: bold;
   margin-bottom: 8px;
-  z-index: 2;
+  z-index: 2; /* Fica acima do conector */
   transition: all 0.3s ease;
 }
 
@@ -162,43 +210,19 @@
   background-color: var(--md-sys-color-primary, #4caf50);
 }
 
+.step-circle.ativo.finalizada {
+  background-color: var(--md-sys-color-primary, #4caf50);
+  z-index: 3;
+}
+
 .step-circle.ativo {
   background-color: #2196f3;
+  z-index: 5;
 }
 
 .step-circle.rejeitado,
 .step-circle.rejeitado.completo,
 .step-circle.rejeitado.ativo {
-  background-color: var(--color-rejeitada, #e26768);
-}
-
-.step-connector {
-  position: absolute;
-  top: 15px;
-  left: -50%;
-  width: 100%;
-  height: 2px;
-  background-color: #ccc;
-  z-index: 1;
-  transition: all 0.3s ease;
-}
-
-.stepper.tres-etapas {
-  justify-content: space-between;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.step-connector.completo {
-  background-color: var(--md-sys-color-primary, #4caf50);
-}
-
-.step-connector.rejeitado,
-.step-connector.rejeitado.completo {
-  background-color: var(--color-rejeitada, #e26768);
-}
-
-.stepper.rejeitado .step-connector.completo {
   background-color: var(--color-rejeitada, #e26768);
 }
 
@@ -208,22 +232,6 @@
   color: #333;
   white-space: nowrap;
   font-weight: 500;
-}
-
-.details button {
-  margin-left: 7rem;
-  padding-inline: 1rem;
-  padding-block: 0.5rem;
-  border-radius: 0.25rem;
-  border-style: none;
-  background-color: var(--color-arrumada);
-  color: var(--color-surface);
-  cursor: pointer;
-}
-
-.details button:hover {
-  opacity: 0.8;
-  transition: 0.3s ease-in-out;
 }
 
 .step-date,
@@ -273,7 +281,7 @@
     margin-bottom: 20px;
   }
 
-  .step-connector {
+  .step:not(:last-child)::after {
     display: none;
   }
 }

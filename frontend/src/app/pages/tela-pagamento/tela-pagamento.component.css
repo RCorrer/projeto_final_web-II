@@ -14,13 +14,17 @@
   justify-content: center;
   width: 100%;
   min-height: 100vh;
+  height: fit-content;
   padding: 20px;
   box-sizing: border-box;
+  overflow-y: scroll;
 }
 
 .visualizar-container {
-  width: 60%;
+  min-width: 60%;
+  max-width: 80%;
   min-height: 60%;
+  height: fit-content;
   background-color: hsla(0, 0%, 100%, 0.5);
   border-radius: 20px;
   display: flex;
@@ -70,6 +74,12 @@
 
 .visualizar-left {
   width: 40%;
+}
+
+.visualizar-left p {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .visualizar-left p,

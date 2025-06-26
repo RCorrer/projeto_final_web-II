@@ -1,10 +1,10 @@
-<div class="background">
-    <div class="content">
+<div class="background" (click)="fechar()">
+    <div class="content" (click)="$event.stopPropagation()">
         <h2 mat-dialog-title>Motivo do Rejeite</h2>
         <mat-dialog-content>
             <p>{{ data.motivo }}</p>
         </mat-dialog-content>
-        <mat-dialog-actions align="end">
+        <mat-dialog-actions>
             <button mat-button (click)="fechar()">Fechar</button>
         </mat-dialog-actions>
     </div>
