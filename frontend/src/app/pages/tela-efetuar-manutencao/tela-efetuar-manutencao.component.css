@@ -20,6 +20,7 @@
 }
 
 .visualizar-container {
+  align-self: center;
   width: fit-content;
   max-width: 80%;
   min-width: 60%;
