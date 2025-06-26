@@ -1,0 +1,13 @@
+.dialog-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  flex: 1;
+}
+
+mat-form-field {
+  width: 100%;
+}

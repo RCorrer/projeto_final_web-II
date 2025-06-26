@@ -1,126 +1,180 @@
-.content {
-    overflow-y: scroll;
+.initial-load {
+  display: none;
+}
 
+.initial-loaded .initial-load {
+  display: block;
+}
+
+.content {
+  overflow-y: scroll;
+  padding-inline: 10%;
+  margin-top: 3rem;
 }
 
 .orcamento-container {
-    background-color: rgba(var(--color-surface-rgb), 0.5);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    margin-bottom: 50px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 10%;
-    align-items: center;
-    /* background: rgb(149, 197, 255);
-    background: linear-gradient(90deg,
-            rgba(149, 197, 255, 0.699) 0%,
-            rgba(213, 213, 255, 0.651) 49%,
-            rgba(217, 217, 217, 0.774) 100%); */
+  background-color: rgba(var(--color-surface-rgb), 0.5);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10%;
+  align-items: center;
 }
 
 .orcamento-header {
-    text-align: left;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
 }
 
-.os-label {
-    background-color: #e0e0e0;
-    padding: 5px 15px;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 20px;
+.x a {
+  font-size: 25px;
+  color: #333;
+  padding-right: 40px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.x a:hover {
+  color: var(--color-rejeitada);
+  transition: 0.3s ease-in-out;
 }
 
 .orcamento-content {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    flex-wrap: nowrap;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: nowrap;
 }
 
 .orcamento-input {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .orcamento-input label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-#valor {
-    width: 80%;
-    margin-top: 6px;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* Content styles */
+.orcamento-content {
+  align-self: center;
+  display: flex;
+  width: 80%;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 0;
+  flex-grow: 1;
 }
 
 .orcamento-left {
-    width: 25%;
-    max-width: 100%;
+  width: 40%;
 }
 
-.orcamento-left p {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    max-width: 100%;
+.orcamento-left p,
+.orcamento-contato p,
+.orcamento-endereco p {
+  margin: 10px 0;
+  line-height: 1.5;
 }
 
-.botoes {
-    margin-top: 30px;
-    left: 0;
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-}
-
-#cancelar-button {
-    width: 100px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    border-color: var(--color-rejeitada);
-    color: var(--color-rejeitada);
-}
-
-#orcamento-button {
-    background-color: #60a0f0;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100px;
-}
-
-#orcamento-button:hover {
-    background-color: #4585d5;
-}
-
-.orcamento-right {
-    display: flex;
-    gap: 75px;
-    width: 60%;
-}
-
-.orcamento-content p {
-    margin-top: 10px;
-}
-
-.orcamento-cliente,
-.orcamento-endereco {
-    flex: 1;
+.orcamento-left strong,
+.orcamento-contato strong,
+.orcamento-endereco strong {
+  font-size: 1.2rem;
+  color: #444;
 }
 
 .orcamento-divider {
-    width: 1px;
-    background-color: #aaa;
+  width: 2px;
+  min-height: 100%;
+  background-color: #333;
+  margin: 0 40px;
+  opacity: 0.2;
+}
+
+.orcamento-right {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.orcamento-contato,
+.orcamento-endereco {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.orcamento-contato p,
+.orcamento-endereco p,
+.orcamento-input p {
+  flex: 1 1 45%;
+  min-width: 200px;
+}
+
+.botoes {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.orcamento-input {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+}
+
+#valor {
+  padding: 1rem;
+  border-style: none;
+  border-radius: 0.25rem;
+}
+
+button {
+  flex: 1;
+  border-radius: 0.25rem;
+}
+
+.orcamento-divider {
+  width: 1px;
+  background-color: #aaa;
+}
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .orcamento-container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .orcamento-container {
+    width: 95%;
+  }
+
+  .orcamento-content {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .orcamento-left,
+  .orcamento-right {
+    width: 100%;
+  }
+
+  .orcamento-divider {
+    width: 100%;
+    height: 2px;
+    margin: 20px 0;
+    color: #333;
+  }
 }
