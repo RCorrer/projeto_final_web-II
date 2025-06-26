@@ -26,15 +26,11 @@ import { CepPipe } from "../../shared/cep.pipe";
   standalone: true,
   imports: [
     ...materialImports,
-    MatInputModule,
-    FormsModule,
     CommonModule,
-    MatButtonModule,
     RouterLink,
-    MatProgressSpinnerModule,
     ModalEfetuarManutencaoComponent,
     ModalRedirecionarComponent,
-  , CpfPipe, CepPipe],
+    CpfPipe, CepPipe],
   templateUrl: "./tela-efetuar-manutencao.component.html",
   styleUrl: "./tela-efetuar-manutencao.component.css",
 })

@@ -1,13 +1,10 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { materialImports } from "../../material-imports";
-import { MatInputModule } from "@angular/material/input";
 import { FormsModule } from "@angular/forms";
 import { CommonModule, CurrencyPipe } from "@angular/common";
-import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { RouterLink, Router, ActivatedRoute } from "@angular/router";
 import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
-import { Observable, of } from "rxjs";
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import {
   OrcamentoDTO,
@@ -22,13 +19,13 @@ import { CepPipe } from "../../shared/cep.pipe";
   selector: "app-orcamento-funcionario",
   imports: [
     ...materialImports,
-    MatInputModule,
     FormsModule,
     CommonModule,
     NavbarComponent,
-    MatButtonModule,
     RouterLink,
-  , CpfPipe, CepPipe],
+    CpfPipe,
+    CepPipe,
+  ],
   providers: [CurrencyPipe],
   templateUrl: "./orcamento-funcionario.component.html",
   styleUrl: "./orcamento-funcionario.component.css",

@@ -139,7 +139,7 @@
   position: relative;
   flex: 1;
   z-index: 1;
-  min-height: 90px;
+  min-height: 110px;
   justify-content: flex-start;
 }
 
@@ -183,6 +183,7 @@
   transition: all 0.3s ease;
 }
 
+
 .stepper.tres-etapas {
   justify-content: space-between;
   max-width: 500px;
@@ -210,7 +211,12 @@
   font-weight: 500;
 }
 
-.step-date {
+.details button {
+  padding: 1rem;
+   
+}
+
+.step-date, .step-funcionario {
   font-size: 0.8rem;
   color: var(--color-icons);
   margin-top: 0.25rem;

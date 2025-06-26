@@ -115,7 +115,7 @@
 
             <div class="step-label">{{ etapa.nome }}</div>
             <div class="step-funcionario" *ngIf="etapa.funcionarioNome">
-              {{ etapa.funcionarioNome }}
+              Realizado por {{ etapa.funcionarioNome }}
             </div>
             <div class="step-date" *ngIf="etapa.dataHora">
               <p>{{ etapa.dataHora | date : "dd/MM/yyyy" }}</p>

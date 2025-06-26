@@ -11,8 +11,11 @@
   display: flex;
   flex-direction: column;
   margin-block: 4rem;
-  width: 60%;
+  width: 100%; /* Ocupa toda a largura do seu container pai */
+  max-width: 700px; /* Mas limita-se a 700px para não ficar muito largo em telas grandes */
+  margin-inline: auto; /* Centraliza o .content na tela */
   padding: 1.5rem;
+  padding-inline: 3rem;
   border-radius: 1.25rem;
   background-color: rgba(var(--color-surface-rgb), 0.5);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -28,19 +31,18 @@
 .formulario {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
 }
 
 .formulario label {
-  margin-bottom: .4rem;
+  margin-bottom: 0.4rem;
 }
 
 .formulario form {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
+  gap: 1rem;
 }
 
 mat-hint {
