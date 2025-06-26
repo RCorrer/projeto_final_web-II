@@ -12,26 +12,48 @@
 
     <div class="visualizar-content">
       <div class="visualizar-left">
-        <p>
-          <strong>Descrição do equipamento</strong><br />{{
-          solicitacao.descricaoEquipamento || "N/A"
-          }}
+        <div>
+
+          <p>
+            <strong>Descrição do equipamento</strong><br />{{
+              solicitacao.descricaoEquipamento || "N/A"
+            }}
         </p>
         <p>
           <strong>Categoria do equipamento</strong><br />{{
-          solicitacao.categoriaEquipamento || "N/A"
+            solicitacao.categoriaEquipamento || "N/A"
           }}
         </p>
         <p>
           <strong>Descrição do problema</strong><br />{{
-          solicitacao.descricaoDefeito || "N/A"
+            solicitacao.descricaoDefeito || "N/A"
           }}
         </p>
         <p>
           <strong>Data/Hora</strong><br />{{
-          (solicitacao.dataHora | date : "dd/MM/yyyy HH:mm") || "N/A"
+            (solicitacao.dataHora | date : "dd/MM/yyyy HH:mm") || "N/A"
           }}
         </p>
+      </div>
+
+        <div class="details">
+          <button
+            *ngIf="solicitacao.estado === '4'"
+            mat-button
+            color="warn"
+            (click)="abrirModalMotivoRejeicao()"
+          >
+            Motivo do rejeite
+          </button>
+
+          <button
+            *ngIf="estado >= 6"
+            mat-button
+            (click)="abrirModalOrientacoes()"
+          >
+            Ver orientações
+          </button>
+        </div>
       </div>
 
       <div class="visualizar-divider"></div>
@@ -39,41 +61,45 @@
         <div class="visualizar-contato">
           <p>
             <strong>Cliente</strong><br />{{
-            solicitacao.cliente.nome || "N/A"
+              solicitacao.cliente.nome || "N/A"
             }}
           </p>
           <p>
-            <strong>CPF</strong><br />{{ (solicitacao.cliente.cpf | cpf) || "N/A" }}
+            <strong>CPF</strong><br />{{
+              (solicitacao.cliente.cpf | cpf) || "N/A"
+            }}
           </p>
           <p>
             <strong>E-mail</strong><br />{{
-            solicitacao.cliente.email || "N/A"
+              solicitacao.cliente.email || "N/A"
             }}
           </p>
           <p>
             <strong>Telefone</strong><br />{{
-            solicitacao.cliente.telefone || "N/A"
+              solicitacao.cliente.telefone || "N/A"
             }}
           </p>
         </div>
 
         <div class="visualizar-endereco">
           <p>
-            <strong>CEP</strong><br />{{ (solicitacao.cliente.cep | cep) || "N/A" }}
+            <strong>CEP</strong><br />{{
+              (solicitacao.cliente.cep | cep) || "N/A"
+            }}
           </p>
           <p>
             <strong>Logradouro</strong><br />{{
-            solicitacao.cliente.logradouro || "N/A"
+              solicitacao.cliente.logradouro || "N/A"
             }}
           </p>
           <p>
             <strong>Complemento</strong><br />{{
-            solicitacao.cliente.complemento || "N/A"
+              solicitacao.cliente.complemento || "N/A"
             }}
           </p>
           <p>
             <strong>Cidade</strong><br />{{
-            solicitacao.cliente.localidade || "N/A"
+              solicitacao.cliente.localidade || "N/A"
             }}
           </p>
           <p>
@@ -82,35 +108,44 @@
         </div>
       </div>
     </div>
-    <div class="details">
-      <button *ngIf="solicitacao.estado === '4'" mat-button color="warn" (click)="abrirModalMotivoRejeicao()">
-        Motivo do rejeite
-      </button>
-
-      <button *ngIf="estado >= 6" mat-button (click)="abrirModalOrientacoes()">
-        Ver orientações
-      </button>
-    </div>
-
 
     <div class="visualizar-bottom">
       <div class="passos">
-        <div class="stepper" [class.tres-etapas]="etapas.length === 3"
-          [class.rejeitado]="solicitacao.estado === 'REJEITADA'">
-
-          <div *ngFor="let etapa of etapas; let i = index" class="step" [class.completo]="etapa.estado === 'completo'"
-            [class.ativo]="etapa.estado === 'ativo'" [class.rejeitado]="
-            etapa.nome === 'REJEITADA' ||
-            (solicitacao.estado === 'REJEITADA' && etapa.estado === 'completo')">
-
+        <div
+          class="stepper"
+          [class.tres-etapas]="etapas.length === 3"
+          [class.rejeitado]="solicitacao.estado === 'REJEITADA'"
+        >
+          <div
+            *ngFor="let etapa of etapas; let i = index"
+            class="step"
+            [class.completo]="etapa.estado === 'completo'"
+            [class.ativo]="etapa.estado === 'ativo'"
+            [class.rejeitado]="
+              etapa.nome === 'REJEITADA' ||
+              (solicitacao.estado === 'REJEITADA' &&
+                etapa.estado === 'completo')
+            "
+          >
             <div class="step-connector" *ngIf="i !== 0"></div>
 
-            <div class="step-circle" [class.completo]="etapa.estado === 'completo'"
+            <div
+              class="step-circle"
+              [class.completo]="etapa.estado === 'completo'"
               [class.ativo]="etapa.estado === 'ativo'"
-              [class.finalizada]="etapa.estado === 'ativo' && etapa.nome === 'FINALIZADA'" [class.rejeitado]="
-              etapa.nome === 'REJEITADA' ||
-              (solicitacao.estado === 'REJEITADA' && etapa.estado === 'completo')">
-              <span *ngIf="etapa.estado === 'completo' || etapa.estado === 'ativo'">✓</span>
+              [class.finalizada]="
+                etapa.estado === 'ativo' && etapa.nome === 'FINALIZADA'
+              "
+              [class.rejeitado]="
+                etapa.nome === 'REJEITADA' ||
+                (solicitacao.estado === 'REJEITADA' &&
+                  etapa.estado === 'completo')
+              "
+            >
+              <span
+                *ngIf="etapa.estado === 'completo' || etapa.estado === 'ativo'"
+                >✓</span
+              >
             </div>
 
             <div class="step-label">{{ etapa.nome }}</div>

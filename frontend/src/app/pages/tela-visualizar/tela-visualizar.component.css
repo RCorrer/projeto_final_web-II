@@ -75,10 +75,6 @@
   gap: 20px;
 }
 
-.visualizar-left {
-  width: 40%;
-}
-
 .visualizar-left p,
 .visualizar-contato p,
 .visualizar-endereco p {
@@ -168,7 +164,7 @@
 
 /* Conector entre os steps (fica atrás dos círculos) */
 .step:not(:last-child)::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 15px;
   left: 50%;
@@ -240,6 +236,23 @@
   color: var(--color-icons);
   margin-top: 0.25rem;
   text-align: center;
+}
+
+button {
+  border-style: none;
+  background-color: var(--color-primary);
+  padding-inline: 1.5rem;
+  padding-block: 1rem;
+  color: var(--color-surface);
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  opacity: 0.8;
+  margin-top: 1rem;
+}
+
+button:hover {
+  opacity: 0.6;
 }
 
 /* Responsive adjustments */
