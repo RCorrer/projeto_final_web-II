@@ -15,6 +15,9 @@
         <p><strong>Categoria do equipamento</strong><br />{{ solicitacao.categoriaEquipamento || 'N/A' }}</p>
         <p><strong>Descrição do problema</strong><br />{{ solicitacao.descricaoDefeito || 'N/A' }}</p>
         <p><strong>Data/Hora</strong><br />{{ solicitacao.dataHora | date: 'dd/MM/yyyy HH:mm' }}</p>
+        <div class="details">
+          <button mat-button (click)="abrirModalOrientacoes()">Ver orientações</button>
+        </div>
       </div>
 
       <div class="visualizar-divider"></div>
@@ -42,9 +45,6 @@
       <strong>{{ solicitacao.orcamento | currency:'BRL':'symbol':'1.2-2' }}</strong>
     </div>
 
-    <div class="details">
-      <button mat-button (click)="abrirModalOrientacoes()">Ver orientações</button>
-    </div>
 
     <div class="visualizar-footer">
       <button id="btnEfetua" mat-button (click)="pagarManutencao()">Pagar</button>
