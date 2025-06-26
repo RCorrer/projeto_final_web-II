@@ -56,7 +56,7 @@ export class TelaCategoriasComponent implements OnInit {
     const isEditing = !!descricaoAtual;
 
     const dialogRef = this.dialog.open(DialogCategoriaComponent, {
-      width: "450px",
+      width: "500px",
       data: {
         titulo: isEditing ? "Editar Categoria" : "Nova Categoria",
         categoria: { descricao: descricaoAtual || "" },
