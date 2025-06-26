@@ -1,12 +1,27 @@
 <div class="layout-container">
   <app-navbar class="sidenav"></app-navbar>
-    <div class="content">
-      <h2 *ngIf="nomeCliente">Olá, {{ nomeCliente }}!</h2>
 
-      <a routerLink="/abrir-solicitacao">Abrir solicitação</a>
+  <main class="content">
+    <section class="container">
+      <header class="header">
+        <h1 class="title" *ngIf="nomeCliente">Olá, {{ nomeCliente }}!</h1>
+        <h2>Minhas Solicitações</h2>
+        <button
+          mat-raised-button
+          color="primary"
+          aria-label="Abrir solicitação"
+        >
+          <a routerLink="/abrir-solicitacao">Abrir solicitação</a>
+        </button>
+      </header>
 
-      <section class="solicitacoes-container">
-        <h3>Minhas Solicitações</h3>
+      
+      <div class="solicitacoes-content">
+        
+        <div class="info-text">
+          <mat-icon class="info-icon" aria-hidden="true">info</mat-icon>
+          <p>Visualize todas as suas solicitações, com detalhes como descrição do equipamento, data/hora de abertura e estado.</p>
+        </div>
         <mat-list-item *ngFor="let solicitacao of solicitacoes">
           <app-card-solicitacao-cliente
             [solicitacao]="solicitacao"
@@ -14,10 +29,11 @@
             (mostrarOrcamento)="mostrarOrcamento($event)"
             (resgatarServico)="resgatarServico($event)"
             (pagarServico)="pagarServico($event)"
-            (alterarEstado)="alterarEstadoSolicitacao($event)">
+            (alterarEstado)="alterarEstadoSolicitacao($event)"
+          >
           </app-card-solicitacao-cliente>
         </mat-list-item>
-      </section>
-    </div>
+      </div>
+    </section>
+  </main>
 </div>
-  

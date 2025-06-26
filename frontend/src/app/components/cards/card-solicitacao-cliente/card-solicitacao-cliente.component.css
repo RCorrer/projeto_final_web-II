@@ -1,5 +1,18 @@
+.title-solicitacao {
+  font-size: 1.25rem;
+}
+
+.estado-solicitacao {
+  padding-inline: .5rem;
+  background-color: var(--color-surface);
+  border-radius: 4px;
+}
+
 .solicitacao-info {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .solicitacao-info p {
@@ -26,31 +39,31 @@
 }
 
 .status.orcada {
-  color: #9C6644;
+  color: #9c6644;
 }
 
 .status.rejeitada {
-  color: #E26768;
+  color: #e26768;
 }
 
 .status.aprovada {
-  color: #FBB91B;
+  color: #fbb91b;
 }
 
 .status.redirecionada {
-  color: #8080FF;
+  color: #8080ff;
 }
 
 .status.arrumada {
-  color: #138EFF;
+  color: #138eff;
 }
 
 .status.paga {
-  color: #FB8B24;
+  color: #fb8b24;
 }
 
 .status.finalizada {
-  color: #14AE5C;
+  color: #14ae5c;
 }
 
 .modal-overlay {

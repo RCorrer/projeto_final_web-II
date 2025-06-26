@@ -1,34 +1,58 @@
 <div class="solicitacao-info">
-  <p>
-    <strong>Equipamento:</strong>
-    {{ solicitacao.equipamento }}
-  </p>
+  <div>
+    <p class="title-solicitacao">{{ solicitacao.equipamento }}</p>
+  </div>
 
-  <p>
-    <strong>Data/Hora:</strong>
-    {{ solicitacao.data | dataFormatada }} {{ solicitacao.hora | horaFormatada }}
-  </p>
+  <div>
+    <p>
+      <strong>Data/Hora:</strong>
+      {{ solicitacao.data | dataFormatada }}
+      {{ solicitacao.hora | horaFormatada }}
+    </p>
 
-  <p>
-    <strong>Estado:</strong>
-    <span class="status {{ getCssClasseEstado(solicitacao.estado) }}">
-      {{ getEstadoDisplay(solicitacao.estado) }}
-    </span>
-  </p>
+    <p>
+      <strong>Estado:</strong>
+      <span class="status {{ getCssClasseEstado(solicitacao.estado) }}">
+        {{ getEstadoDisplay(solicitacao.estado) }}
+      </span>
+    </p>
+  </div>
 </div>
 
 <div class="acoes">
-  <button mat-button color="primary" [routerLink]="['/visualizar', solicitacao.id]">
+  <button mat-button="tonal" [routerLink]="['/visualizar', solicitacao.id]">
     Visualizar
   </button>
 
-  <button *ngIf="solicitacao.estado === '2'" mat-button color="primary" (click)="abrirModal()">Aprovar/Rejeitar</button>
-  <button *ngIf="solicitacao.estado === '4'" mat-button color="primary" (click)="modalResgatarServico()">Resgatar
-    Serviço</button>
-  <button *ngIf="solicitacao.estado === '6'" mat-button color="primary"
-    [routerLink]="['/pagamento', solicitacao.id]">Pagar Serviço</button>
+  <button
+    *ngIf="solicitacao.estado === '2'"
+    mat-button="tonal"
+    (click)="abrirModal()"
+  >
+    Aprovar/Rejeitar
+  </button>
+  <button
+    *ngIf="solicitacao.estado === '4'"
+    mat-button
+    color="primary"
+    (click)="modalResgatarServico()"
+  >
+    Resgatar Serviço
+  </button>
+  <button
+    *ngIf="solicitacao.estado === '6'"
+    mat-button
+    color="primary"
+    [routerLink]="['/pagamento', solicitacao.id]"
+  >
+    Pagar Serviço
+  </button>
 </div>
 
-<app-modal-mostar-orcamento [isOpen]="modalAberto" [solicitacao]="solicitacao" (closed)="fecharModal()"
-  (alterarEstado)="onAlterarEstado($event)">
+<app-modal-mostar-orcamento
+  [isOpen]="modalAberto"
+  [solicitacao]="solicitacao"
+  (closed)="fecharModal()"
+  (alterarEstado)="onAlterarEstado($event)"
+>
 </app-modal-mostar-orcamento>

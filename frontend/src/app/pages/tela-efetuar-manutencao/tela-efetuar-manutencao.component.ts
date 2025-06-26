@@ -12,11 +12,13 @@ import { SolicitacaoComHistoricoDTO, EfetuarManutencaoDTO, RedirecionarSolicitac
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth/auth.service';
 import { ManutencaoConfirmadaEvent } from '../../modals/modal-efetuar-manutencao/modal-efetuar-manutencao.component';
+import { CpfPipe } from "../../shared/cpf.pipe";
+import { CepPipe } from "../../shared/cep.pipe";
 
 @Component({
   selector: 'app-tela-efetuar-manutencao',
   standalone: true,
-  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, MatButtonModule, RouterLink, MatProgressSpinnerModule, ModalEfetuarManutencaoComponent, ModalRedirecionarComponent],
+  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, MatButtonModule, RouterLink, MatProgressSpinnerModule, ModalEfetuarManutencaoComponent, ModalRedirecionarComponent, CpfPipe, CepPipe],
   templateUrl: './tela-efetuar-manutencao.component.html',
   styleUrl: './tela-efetuar-manutencao.component.css'
 })

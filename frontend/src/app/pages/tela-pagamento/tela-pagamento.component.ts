@@ -7,10 +7,12 @@ import { HttpClient } from "@angular/common/http";
 import { MatDialog } from "@angular/material/dialog";
 import { environment } from '../../../environments/environment';
 import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { CepPipe } from "../../shared/cep.pipe";
+import { CpfPipe } from "../../shared/cpf.pipe";
 
 @Component({
   selector: "app-tela-pagamento",
-  imports: [CommonModule, RouterLink, MatButtonModule],
+  imports: [CommonModule, RouterLink, MatButtonModule, CepPipe, CpfPipe],
   templateUrl: "./tela-pagamento.component.html",
   styleUrl: "./tela-pagamento.component.css",
 })

@@ -10,10 +10,12 @@ import { Observable, of } from 'rxjs';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { OrcamentoDTO, SolicitacaoComHistoricoDTO } from '../../models/solicitacao-dto.model';
 import { AuthService } from '../../services/auth/auth.service';
+import { CpfPipe } from "../../shared/cpf.pipe";
+import { CepPipe } from "../../shared/cep.pipe";
 
 @Component({
   selector: "app-orcamento-funcionario",
-  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, NavbarComponent, MatButtonModule, RouterLink],
+  imports: [...materialImports, MatInputModule, FormsModule, CommonModule, NavbarComponent, MatButtonModule, RouterLink, CpfPipe, CepPipe],
   providers: [CurrencyPipe],
   templateUrl: "./orcamento-funcionario.component.html",
   styleUrl: "./orcamento-funcionario.component.css",

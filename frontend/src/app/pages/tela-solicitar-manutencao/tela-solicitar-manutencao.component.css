@@ -1,120 +1,124 @@
 .solicitacao {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
 }
 
 .content {
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    max-height: 80%;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50px;
-    box-shadow: 10px 10px 20px rgba(190, 190, 190, 0.2);
+  display: flex;
+  flex-direction: column;
+  margin-block: 4rem;
+  width: 60%;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  background-color: rgba(var(--color-surface-rgb), 0.5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .content h1 {
-    align-self: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    margin-top: 80px;
-    color: var(--color-primary);
+  align-self: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  margin-top: 3rem;
 }
 
 .formulario {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.formulario label {
+  margin-bottom: .4rem;
 }
 
 .formulario form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
 }
 
 mat-hint {
-    color: var(--color-rejeitada);
+  color: var(--color-rejeitada);
 }
 
 #topo {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .botoes {
-    align-self: center;
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    align-items: center;
-    margin-top: 48px;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  align-items: center;
+  margin-top: 3rem;
 }
 
 #cancelar {
-    border-color: var(--color-rejeitada);
-    color: var(--color-rejeitada);
-    width: 150px;
+  border-color: var(--color-rejeitada);
+  color: var(--color-rejeitada);
+  width: 150px;
 }
 
 #abrir {
-    background-color: var(--color-finalizada);
-    color: white;
-    width: 150px;
-    transition: 0.3s ease;
+  background-color: var(--color-finalizada);
+  color: white;
+  width: 150px;
+  transition: 0.3s ease;
 }
 
 #abrir:hover {
-    background-color: var(--color-finalizada-hover);
+  background-color: var(--color-finalizada-hover);
 }
 
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.modal-confirmacao{
-    background: white;
-    padding: 20px;
-    border-radius: 20px;
-    width: 50vh;
-    height: 20vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
+.modal-confirmacao {
+  background: white;
+  padding: 20px;
+  border-radius: 1.25rem;
+  width: 50vh;
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
 }
 
-.btnsRejeitar{
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
+.btnsRejeitar {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
 }
 
-#btnCancelar{
-    background-color: var(--color-rejeitada);
-    color: white;
-    width: 100px;
+#btnCancelar {
+  background-color: var(--color-rejeitada);
+  color: white;
+  width: 100px;
 }
 
-#btnRejeitar{
-    border-color: var(--color-finalizada);
-    color: var(--color-finalizada);
-    width: 100px;
+#btnRejeitar {
+  border-color: var(--color-finalizada);
+  color: var(--color-finalizada);
+  width: 100px;
 }

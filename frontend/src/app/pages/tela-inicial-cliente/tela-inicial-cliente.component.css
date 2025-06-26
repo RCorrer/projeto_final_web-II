@@ -1,52 +1,62 @@
-  .layout-container {
-    margin: auto;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    min-height: 100vh;
-  }
+.layout-container {
+  margin: auto;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+}
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    margin-top: 2rem;
-  }
-  
-  .content h2 {
-    text-align: left;
-    margin-bottom: 20px;
-  }
+.content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
 
-  .content a {
-    align-self: flex-end;
-  }
+.content h2 {
+  text-align: left;
+  margin-bottom: 20px;
+}
 
-  .solicitacoes-container {
-    width: 100%;
-    height: auto;
-  }
+.content a {
+  align-self: flex-end;
+}
 
-  .solicitacoes-container h3 {
-    text-align: left;
-    margin-top: 50px;
-    margin-bottom: 20px;
-  }
-  
-  .solicitacoes-container mat-list {
-    width: 100%;
-  }
-  
-  .solicitacoes-container mat-list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1rem;
-    margin-bottom: 0,5rem;
-    border-bottom: 1px solid #ddd;
-    transition: background 0.3s ease;
-    min-height: 150px;
-  }
-  
-  .solicitacoes-container mat-list-item:hover {
-    background: #a9a9a9;
-  }
+.solicitacoes-content {
+  width: 100%;
+  height: auto;
+  background-color: rgba(var(--color-surface-rgb), 0.5);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 50px;
+}
+
+.solicitacoes-content h3 {
+  text-align: left;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.solicitacoes-content mat-list {
+  width: 100%;
+}
+
+.solicitacoes-content mat-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem;
+  margin-bottom: 0, 5rem;
+  border-bottom: 1px solid #ddd;
+  transition: background 0.3s ease;
+  min-height: 150px;
+}
+
+.solicitacoes-content mat-list-item:hover {
+  background: var(--color-surface-alt);
+  transition: all 0.3s ease-in-out;
+}
+
+.solicitacoes-content mat-list-item:last-child {
+  border-bottom: none;
+}

@@ -1,63 +1,112 @@
 <div class="layout-container">
   <app-navbar class="sidenav"></app-navbar>
 
-  <div *ngIf="isLoaded && solicitacao" class="orcamento-container">
-    <div class="orcamento-header">
-      <span class="os-label">{{ solicitacao.idFormatado || 'OS-0000' }}</span>
-    </div>
+  <main class="content">
+    <section class="container">
 
-    <div class="orcamento-content">
-      <div class="orcamento-left">
-        <p><strong>Descrição do equipamento</strong><br>{{ solicitacao.descricaoEquipamento }}</p>
-        <p><strong>Descrição do problema</strong><br>{{ solicitacao.descricaoDefeito }}</p>
+      <header class="header">
+        <h1 class="title">Visualizar solicitação</h1>
+        <p class="subtitle">
+          Conheça os detalhes da solicitação selecionada.
+        </p>
 
-        <div class="orcamento-input">
+      </header>
+    
+    <div *ngIf="isLoaded && solicitacao" class="orcamento-container">
+      <div class="orcamento-header">
+        <span class="os-label">{{ solicitacao.idFormatado || "OS-0000" }}</span>
+      </div>
+
+      <div class="orcamento-content">
+        <div class="orcamento-left">
+          <p>
+            <strong>Descrição do equipamento</strong><br />{{
+              solicitacao.descricaoEquipamento
+            }}
+          </p>
+          <p>
+            <strong>Descrição do problema</strong><br />{{
+              solicitacao.descricaoDefeito
+            }}
+          </p>
+
+          <div class="orcamento-input">
             <label>Defina o orçamento:</label>
-            <input id="valor" matInput type="text" placeholder="Valor em R$" [(ngModel)]="valorOrcamento" (input)="formatarMoeda()" />
-        </div>
-        <div class="botoes">
+            <input
+              id="valor"
+              matInput
+              type="text"
+              placeholder="Valor em R$"
+              [(ngModel)]="valorOrcamento"
+              (input)="formatarMoeda()"
+            />
+          </div>
+          <div class="botoes">
             <div class="cancelar-button">
-                <button id="cancelar-button" mat-stroked-button routerLink="/home">Cancelar</button>
+              <button
+                id="cancelar-button"
+                mat-stroked-button
+                routerLink="/home"
+              >
+                Cancelar
+              </button>
             </div>
             <div class="orcamento-button">
-                <button
-                    id="orcamento-button" 
-                    mat-button
-                    color="primary"
-                    (click)="enviarOrcamento()" >
-                    Enviar
-                </button>
+              <button
+                id="orcamento-button"
+                mat-button
+                color="primary"
+                (click)="enviarOrcamento()"
+              >
+                Enviar
+              </button>
             </div>
+          </div>
         </div>
-      </div>
 
-      <div class="orcamento-divider"></div>
+        <div class="orcamento-divider"></div>
 
-      <div class="orcamento-right">
-        <div class="orcamento-contato">
-          <p><strong>Cliente</strong><br>{{ solicitacao.cliente.nome }}</p>
-          <p><strong>CPF</strong><br>{{ solicitacao.cliente.cpf }}</p>
-          <p><strong>E-mail</strong><br>{{ solicitacao.cliente.email }}</p>
-          <p><strong>Telefone</strong><br>{{ solicitacao.cliente.telefone }}</p>
-        </div>
-        <div class="orcamento-endereco">
-          <p><strong>CEP</strong><br>{{ solicitacao.cliente.cep }}</p>
-          <p><strong>Logradouro</strong><br>{{ solicitacao.cliente.logradouro }}</p>
-          <p><strong>Complemento</strong><br>{{ solicitacao.cliente.complemento }}</p>
-          <p><strong>Cidade</strong><br>{{ solicitacao.cliente.localidade }}</p>
-          <p><strong>Estado</strong><br>{{ solicitacao.cliente.uf }}</p>
+        <div class="orcamento-right">
+          <div class="orcamento-contato">
+            <p><strong>Cliente</strong><br />{{ solicitacao.cliente.nome }}</p>
+            <p><strong>CPF</strong><br />{{ solicitacao.cliente.cpf | cpf }}</p>
+            <p><strong>E-mail</strong><br />{{ solicitacao.cliente.email }}</p>
+            <p>
+              <strong>Telefone</strong><br />{{ solicitacao.cliente.telefone }}
+            </p>
+          </div>
+          <div class="orcamento-endereco">
+            <p><strong>CEP</strong><br />{{ solicitacao.cliente.cep | cep }}</p>
+            <p>
+              <strong>Logradouro</strong><br />{{
+                solicitacao.cliente.logradouro
+              }}
+            </p>
+            <p>
+              <strong>Complemento</strong><br />{{
+                solicitacao.cliente.complemento
+              }}
+            </p>
+            <p>
+              <strong>Cidade</strong><br />{{ solicitacao.cliente.localidade }}
+            </p>
+            <p><strong>Estado</strong><br />{{ solicitacao.cliente.uf }}</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div *ngIf="!isLoaded" class="loading-indicator">
-      <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+    <div *ngIf="!isLoaded" class="loading-indicator">
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="50"
+      ></mat-progress-spinner>
       <p>Carregando detalhes da solicitação...</p>
-  </div>
+    </div>
 
-  <div *ngIf="isLoaded && !solicitacao" class="error-indicator">
+    <div *ngIf="isLoaded && !solicitacao" class="error-indicator">
       <p>Não foi possível carregar os dados da solicitação.</p>
-  </div>
-
+    </div>
+    </section>
+  </main>
 </div>
