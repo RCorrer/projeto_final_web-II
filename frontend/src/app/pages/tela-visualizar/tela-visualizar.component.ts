@@ -2,7 +2,13 @@ import { Component, Input } from "@angular/core";
 import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
 import { Router, RouterLink, ActivatedRoute } from "@angular/router";
 import { CommonModule, DatePipe } from "@angular/common";
-import { SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
+import {
+  HistoricoAlteracaoDTO,
+  SolicitacaoComHistoricoDTO,
+} from "../../models/solicitacao-dto.model";
+import { MatDialog } from "@angular/material/dialog";
+import { ModalOrientacoesComponent } from "../../modals/modal-orientacoes/modal-orientacoes.component";
+import { ModalMotivoRejeicaoComponent } from "../../modals/modal-motivo-rejeicao/modal-motivo-rejeicao.component";
 import { CpfPipe } from "../../shared/cpf.pipe";
 import { CepPipe } from "../../shared/cep.pipe";
 
@@ -10,6 +16,7 @@ interface Etapa {
   nome: string;
   estado: "completo" | "ativo" | "incompleto";
   dataHora?: string;
+  funcionarioNome?: string;
 }
 
 @Component({
@@ -20,7 +27,11 @@ interface Etapa {
 })
 export class TelaVisualizarComponent {
   @Input() solicitacao!: SolicitacaoComHistoricoDTO;
+  @Input() funcionario!: HistoricoAlteracaoDTO;
+
   isLoaded = false;
+  motivoRejeicao: string | null = null;
+  estado!: number;
 
   etapas: Etapa[] = [];
   private mapaDeEstados: { [key: string]: string } = {
@@ -40,7 +51,8 @@ export class TelaVisualizarComponent {
   constructor(
     private solicitacaoService: SolicitacaoService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -48,9 +60,6 @@ export class TelaVisualizarComponent {
       const idDaRota: string = params["id"];
 
       if (!idDaRota) {
-        console.error(
-          "TelaVisualizarComponent: ID da solicitação não encontrado na rota!"
-        );
         this.isLoaded = true;
         return;
       }
@@ -61,18 +70,17 @@ export class TelaVisualizarComponent {
           if (dados) {
             this.solicitacao = dados;
 
+            this.extrairMotivoRejeicao();
+
+            this.estado = Number(this.solicitacao.estado);
+
             this.solicitacao.idFormatado =
               "OS-" + String(this.solicitacao.numeroOs).padStart(4, "0");
 
             this.atualizarEtapas();
-          } else {
-            console.error(
-              `TelaVisualizarComponent: Solicitação com ID ${idDaRota} não foi encontrada no backend.`
-            );
           }
         },
         error: (err) => {
-          console.error("Erro ao buscar detalhes da solicitação:", err);
           this.isLoaded = true;
         },
         complete: () => {
@@ -82,35 +90,57 @@ export class TelaVisualizarComponent {
     });
   }
 
+  private extrairMotivoRejeicao(): void {
+    const historico = this.solicitacao.historico;
+
+    const entradaRejeitada = historico.find((h) =>
+      h.descricao?.toLowerCase().includes("motivo:")
+    );
+
+    if (entradaRejeitada) {
+      const partes = entradaRejeitada.descricao.split("Motivo:");
+      if (partes.length > 1) {
+        this.motivoRejeicao = partes[1].trim();
+      }
+    }
+  }
+
   private atualizarEtapas(): void {
     const estadoAtual = this.solicitacao.estado;
-    const historicoIds = this.solicitacao.historico.map((h) => h.estadoNovo);
+    const historico = this.solicitacao.historico;
+    const historicoIds = historico.map((h) => h.estadoNovo);
     const temRejeitada = historicoIds.includes(this.etapaRejeitada);
 
     const mapaDeDatas = new Map<string, string>();
-    this.solicitacao.historico.forEach((h) => {
+    const mapaDeFuncionarios = new Map<string, string>();
+
+    historico.forEach((h) => {
       mapaDeDatas.set(h.estadoNovo, h.dataHora);
+
+      if (["2", "6", "8"].includes(h.estadoNovo)) {
+        const desc = h.descricao.toLowerCase();
+
+        if (h.estadoNovo === "2" && desc.includes("orçamento de")) {
+          const nome =
+            h.funcionarioRedirecionado ?? this.solicitacao.funcionarioNome;
+          mapaDeFuncionarios.set("2", nome);
+        }
+
+        if (h.estadoNovo === "6" && desc.includes("arrumada")) {
+          const nome =
+            h.funcionarioRedirecionado ?? this.solicitacao.funcionarioNome;
+          mapaDeFuncionarios.set("6", nome);
+        }
+
+        if (h.estadoNovo === "8" && desc.includes("finalizada")) {
+          const nome =
+            h.funcionarioRedirecionado ?? this.solicitacao.funcionarioNome;
+          mapaDeFuncionarios.set("8", nome);
+        }
+      }
     });
 
     this.etapas = [];
-
-    for (let i = 0; i < this.etapasNormais.length; i++) {
-      const etapaNome = this.etapasNormais[i];
-
-      if (etapaNome === "3" && temRejeitada) {
-        this.etapas.push({
-          nome: this.mapaDeEstados[this.etapaRejeitada],
-          estado: estadoAtual === "REJEITADA" ? "ativo" : "completo",
-          dataHora: mapaDeDatas.get(etapaNome),
-        });
-      }
-
-      this.etapas.push({
-        nome: this.mapaDeEstados[etapaNome],
-        estado: this.getEstadoEtapa(etapaNome, estadoAtual, i),
-        dataHora: mapaDeDatas.get(etapaNome),
-      });
-    }
 
     if (estadoAtual === this.etapaRejeitada) {
       const etapasAteRejeicao: Etapa[] = [];
@@ -120,19 +150,43 @@ export class TelaVisualizarComponent {
         nome: this.mapaDeEstados["1"],
         estado: "completo",
       });
+
       if (orcou) {
         etapasAteRejeicao.push({
           nome: this.mapaDeEstados["2"],
           estado: "completo",
+          funcionarioNome: mapaDeFuncionarios.get("2") ?? undefined,
+          dataHora: mapaDeDatas.get("2") ?? undefined,
         });
       }
+
       etapasAteRejeicao.push({
         nome: this.mapaDeEstados[this.etapaRejeitada],
         estado: "ativo",
+        dataHora: mapaDeDatas.get("4") ?? undefined,
       });
+
       this.etapas = etapasAteRejeicao;
-    } else {
-      this.etapas = this.etapas;
+      return;
+    }
+
+    for (let i = 0; i < this.etapasNormais.length; i++) {
+      const etapaNome = this.etapasNormais[i];
+
+      if (etapaNome === "3" && temRejeitada) {
+        this.etapas.push({
+          nome: this.mapaDeEstados[this.etapaRejeitada],
+          estado: "completo",
+          dataHora: mapaDeDatas.get("4"),
+        });
+      }
+
+      this.etapas.push({
+        nome: this.mapaDeEstados[etapaNome],
+        estado: this.getEstadoEtapa(etapaNome, estadoAtual, i),
+        dataHora: mapaDeDatas.get(etapaNome),
+        funcionarioNome: mapaDeFuncionarios.get(etapaNome),
+      });
     }
   }
 
@@ -163,5 +217,21 @@ export class TelaVisualizarComponent {
     } else {
       return "incompleto";
     }
+  }
+
+  abrirModalMotivoRejeicao() {
+    if (!this.motivoRejeicao) return;
+    this.dialog.open(ModalMotivoRejeicaoComponent, {
+      data: { motivo: this.motivoRejeicao },
+    });
+  }
+
+  abrirModalOrientacoes() {
+    this.dialog.open(ModalOrientacoesComponent, {
+      data: {
+        descricaoManutencao: this.solicitacao.descricao_manutencao,
+        orientacoesCliente: this.solicitacao.orientacoes_cliente,
+      },
+    });
   }
 }

@@ -10,6 +10,7 @@ import { Categoria } from "../../models/categoria.model";
 import { CategoriaService } from "../../services/categoria/categoria.service";
 import { DialogCategoriaComponent } from "../../components/dialog-categoria/dialog-categoria.component";
 import { BehaviorSubject, catchError, Observable, of, tap } from "rxjs";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
 
 @Component({
   selector: "app-tela-categorias",
@@ -36,27 +37,23 @@ export class TelaCategoriasComponent implements OnInit {
     this.listarCategorias();
   }
 
-  // --------------------------------------------------------------------------------------------------
   listarCategorias(): void {
     this.errorOccurred = false;
     this.categorias$ = this.categoriaService.listarCategorias().pipe(
-      tap((data) => console.log("Dados recebidos:", data)),
+      tap(),
       catchError((error) => {
-        console.error("Erro ao buscar categorias:", error);
+        const mensagem = error?.mensagem || "Erro ao buscar categorias";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
         this.errorOccurred = true;
         return of([]);
       })
     );
   }
 
-  // --------------------------------------------------------------------------------------------------
   abrirDialog(descricaoAtual?: string): void {
     const isEditing = !!descricaoAtual;
-    console.log(
-      isEditing
-        ? `Editando categoria: ${descricaoAtual}`
-        : "Adicionando nova categoria"
-    );
 
     const dialogRef = this.dialog.open(DialogCategoriaComponent, {
       width: "450px",
@@ -74,31 +71,22 @@ export class TelaCategoriasComponent implements OnInit {
           const novaDescricao = result.descricao.trim();
 
           if (isEditing) {
-            console.log(
-              `Atualizando de '${descricaoAtual}' para '${novaDescricao}'`
-            );
             this.categoriaService
               .atualizarCategoria(descricaoAtual, novaDescricao)
               .subscribe({
                 next: () => this.listarCategorias(),
-                error: (err) =>
-                  console.error("Erro ao atualizar categoria", err),
               });
           } else {
-            console.log(`Adicionando nova categoria '${novaDescricao}'`);
             this.categoriaService
               .adicionarCategoria({ descricao: novaDescricao })
               .subscribe({
                 next: () => this.listarCategorias(),
-                error: (err) =>
-                  console.error("Erro ao adicionar categoria", err),
               });
           }
         }
       });
   }
 
-  // --------------------------------------------------------------------------------------------------
   excluirCategoria(descricao: string): void {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       data: {
@@ -111,18 +99,10 @@ export class TelaCategoriasComponent implements OnInit {
       if (confirmado) {
         this.categoriaService.removerCategoria(descricao).subscribe({
           next: () => {
-            console.log("Categoria removida com sucesso.");
             this.listarCategorias();
           },
-          error: (err) => console.error("Erro ao remover categoria", err),
         });
-      } else {
-        console.log("Exclusão cancelada pelo usuário.");
       }
     });
-  }
-
-  excluirTeste(descricao: string): void {
-    console.log("Teste");
   }
 }

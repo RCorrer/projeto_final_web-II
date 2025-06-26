@@ -48,12 +48,10 @@ export class DialogFuncionarioComponent {
         })
         .subscribe({
           next: () => this.dialogRef.close(true),
-          error: (err) => console.error("Erro ao atualizar:", err),
         });
     } else {
       this.funcionarioService.adicionarFuncionario(funcionario).subscribe({
-        next: () => this.dialogRef.close(true),
-        error: (err) => console.error("Erro ao adicionar:", err),
+        next: () => this.dialogRef.close(true)
       });
     }
   }

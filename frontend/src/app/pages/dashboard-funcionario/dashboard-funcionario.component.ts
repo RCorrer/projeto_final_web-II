@@ -5,11 +5,17 @@ import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { Solicitacao } from "../../models/Solicitacao.model";
 import { CommonModule } from "@angular/common";
 import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatNativeDateModule, provideNativeDateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import {
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+  MAT_DATE_LOCALE,
+} from "@angular/material/core";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../services/auth/auth.service";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-dashboard-funcionario",
@@ -21,7 +27,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     CardSolicitacaoComponent,
     NavbarComponent,
     MatNativeDateModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   providers: [
     provideNativeDateAdapter({
@@ -36,13 +42,13 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
   ],
   templateUrl: "./dashboard-funcionario.component.html",
-  styleUrl: "./dashboard-funcionario.component.css"
+  styleUrl: "./dashboard-funcionario.component.css",
 })
 export class DashboardFuncionarioComponent implements OnInit {
   todasSolicitacoesBase: Solicitacao[] = [];
   solicitacoesParaExibicao: Solicitacao[] = [];
 
-  filtroStatus: string = '1';
+  filtroStatus: string = "1";
   filtroForm!: FormGroup;
   isLoading: boolean = false;
   funcionarioLogadoId: string | null = null;
@@ -51,58 +57,56 @@ export class DashboardFuncionarioComponent implements OnInit {
     private solicitacaoService: SolicitacaoService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.filtroForm = this.fb.group({
-      tipoFiltroData: ['TODAS'],
+      tipoFiltroData: ["TODAS"],
       start: [null],
       end: [null],
     });
 
     this.funcionarioLogadoId = this.authService.getIdRole();
 
-    this.route.queryParams.subscribe(params => {
-      this.filtroStatus = params["estado"] ?? '1';
-      this.carregarDadosDoBackend(); // Chama o método de busca principal
+    this.route.queryParams.subscribe((params) => {
+      this.filtroStatus = params["estado"] ?? "1";
+      this.carregarDadosDoBackend();
     });
 
     this.filtroForm.valueChanges.subscribe(() => {
       this.aplicarFiltrosEOrdenar();
     });
-
-    // A subscrição permanente ao Observable do serviço foi REMOVIDA daqui.
   }
 
   carregarDadosDoBackend(): void {
     if (!this.authService.isFuncionario() || !this.funcionarioLogadoId) {
-      console.warn("Usuário não é funcionário ou ID não encontrado.");
+      const mensagem = "Usuário não é funcionário ou ID não encontrado.";
+      this.dialog.open(ModalErroComponent, {
+        data: { mensagem },
+      });
       return;
     }
 
     this.isLoading = true;
-    this.solicitacaoService.fetchSolicitacoesDashboard(this.funcionarioLogadoId)
+    this.solicitacaoService
+      .fetchSolicitacoesDashboard(this.funcionarioLogadoId)
       .subscribe({
         next: (listaDoServico) => {
-          // AQUI ESTÁ A LÓGICA CENTRALIZADA:
-          // 1. Substitui a lista base com os novos dados do backend.
           this.todasSolicitacoesBase = listaDoServico;
-          // 2. Aplica os filtros sobre esta nova lista.
           this.aplicarFiltrosEOrdenar();
-          console.log('DashboardFuncionario: Dados carregados e filtros aplicados.');
         },
-        error: (err) => {
-          console.error('DashboardFuncionario: Erro ao buscar solicitações:', err);
+        error: () => {
           this.todasSolicitacoesBase = [];
-          this.aplicarFiltrosEOrdenar(); // Limpa a exibição em caso de erro
+          this.aplicarFiltrosEOrdenar();
         },
         complete: () => {
           this.isLoading = false;
-        }
+        },
       });
   }
-  
+
   onFiltroStatusChange(): void {
     this.aplicarFiltrosEOrdenar();
   }
@@ -110,36 +114,38 @@ export class DashboardFuncionarioComponent implements OnInit {
   aplicarFiltrosEOrdenar(): void {
     let resultadoFiltrado = [...this.todasSolicitacoesBase];
 
-    if (this.filtroStatus && this.filtroStatus !== '') {
-      resultadoFiltrado = resultadoFiltrado.filter(s => s.estado === this.filtroStatus);
+    if (this.filtroStatus && this.filtroStatus !== "") {
+      resultadoFiltrado = resultadoFiltrado.filter(
+        (s) => s.estado === this.filtroStatus
+      );
     }
 
     const { tipoFiltroData, start, end } = this.filtroForm.value;
 
-    if (tipoFiltroData === 'HOJE') {
+    if (tipoFiltroData === "HOJE") {
       const hoje = new Date();
       hoje.setHours(0, 0, 0, 0);
-      resultadoFiltrado = resultadoFiltrado.filter(s => {
+      resultadoFiltrado = resultadoFiltrado.filter((s) => {
         if (!s.data) return false;
-        const dataSolicitacao = new Date(s.data + 'T00:00:00');
+        const dataSolicitacao = new Date(s.data + "T00:00:00");
         return dataSolicitacao.getTime() === hoje.getTime();
       });
-    } else if (tipoFiltroData === 'PERIODO' && start && end) {
+    } else if (tipoFiltroData === "PERIODO" && start && end) {
       const dataInicio = new Date(start);
-      dataInicio.setHours(0,0,0,0);
+      dataInicio.setHours(0, 0, 0, 0);
       const dataFim = new Date(end);
-      dataFim.setHours(23,59,59,999);
-      resultadoFiltrado = resultadoFiltrado.filter(s => {
+      dataFim.setHours(23, 59, 59, 999);
+      resultadoFiltrado = resultadoFiltrado.filter((s) => {
         if (!s.data) return false;
-        const dataSolicitacao = new Date(s.data + 'T00:00:00');
+        const dataSolicitacao = new Date(s.data + "T00:00:00");
         return dataSolicitacao >= dataInicio && dataSolicitacao <= dataFim;
       });
     }
-    
+
     this.solicitacoesParaExibicao = resultadoFiltrado.sort((a, b) => {
-        const dataHoraA = new Date(`${a.data}T${a.hora}`);
-        const dataHoraB = new Date(`${b.data}T${b.hora}`);
-        return dataHoraA.getTime() - dataHoraB.getTime();
+      const dataHoraA = new Date(`${a.data}T${a.hora}`);
+      const dataHoraB = new Date(`${b.data}T${b.hora}`);
+      return dataHoraA.getTime() - dataHoraB.getTime();
     });
   }
 
@@ -151,13 +157,9 @@ export class DashboardFuncionarioComponent implements OnInit {
     if (!solicitacaoId) return;
 
     this.solicitacaoService.finalizarSolicitacao(solicitacaoId).subscribe({
-      next: (response) => {
-        console.log(`Resposta ao finalizar OS ${solicitacaoId}:`, response);
-        this.carregarDadosDoBackend(); // Recarrega os dados para refletir a mudança
+      next: () => {
+        this.carregarDadosDoBackend();
       },
-      error: (err) => {
-        console.error(`Erro ao finalizar a OS ${solicitacaoId}:`, err);
-      }
     });
   }
 }

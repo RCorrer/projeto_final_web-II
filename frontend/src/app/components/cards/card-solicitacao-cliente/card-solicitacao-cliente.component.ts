@@ -49,7 +49,10 @@ export class CardSolicitacaoClienteComponent {
   }
 
   modalResgatarServico() {
-    this.mostrarResgate = true;
+    const confirmacao = confirm("Deseja realmente resgatar esta solicitação?");
+    if (confirmacao) {
+      this.confirmarResgate();
+    }
   }
 
   cancelarResgate() {
@@ -57,10 +60,19 @@ export class CardSolicitacaoClienteComponent {
   }
 
   confirmarResgate() {
-    this.mostrarResgate = false;
-    this.alterarEstado.emit({
+    const body = {
       id: this.solicitacao.id,
-      novoEstado: "3",
+      motivo: ".",
+    };
+
+    this.solicitacaoService.aprovarSolicitacao(body).subscribe({
+      next: () => {
+        this.alterarEstado.emit({
+          id: this.solicitacao.id,
+          novoEstado: "3",
+        });
+        this.mostrarAprovacao = true;
+      },
     });
   }
 

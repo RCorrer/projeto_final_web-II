@@ -1,50 +1,59 @@
 import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
-import { MatFormField } from "@angular/material/form-field";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-import { MatOption, MatSelect } from "@angular/material/select";
+import { MatSelectModule } from "@angular/material/select";
+import { MatDialog } from "@angular/material/dialog";
 import { Router, RouterLink } from "@angular/router";
 import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
 import { AuthService } from "../../services/auth/auth.service";
 import { environment } from "../../../environments/environment";
+import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
 
 @Component({
   selector: "app-tela-solicitar-manutencao",
+  standalone: true,
   imports: [
     CommonModule,
-    MatButtonModule,
-    MatFormField,
+    MatFormFieldModule,
     MatInputModule,
-    MatSelect,
-    MatOption,
+    MatButtonModule,
+    MatSelectModule,
+    ReactiveFormsModule,
     RouterLink,
-    FormsModule,
   ],
   templateUrl: "./tela-solicitar-manutencao.component.html",
-  styleUrl: "./tela-solicitar-manutencao.component.css",
+  styleUrls: ["./tela-solicitar-manutencao.component.css"],
 })
 export class TelaSolicitarManutencaoComponent implements OnInit {
   categorias: string[] = [];
   mostrarRejeicao = false;
+  solicitacaoForm: FormGroup;
 
   readonly apiUrl = `${environment.apiURL}/categoria`;
-
-  data = {
-    idCliente: "",
-    descEquip: "",
-    categoria: "",
-    descDefeito: "",
-  };
 
   constructor(
     private solicitacaoService: SolicitacaoService,
     private router: Router,
     private authService: AuthService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private dialog: MatDialog
+  ) {
+    this.solicitacaoForm = this.fb.group({
+      descEquip: ["", Validators.required],
+      categoria: ["", Validators.required],
+      descDefeito: ["", Validators.required],
+    });
+  }
 
   ngOnInit() {
     this.carregarCategorias();
@@ -54,38 +63,49 @@ export class TelaSolicitarManutencaoComponent implements OnInit {
     this.http.get<string[]>(this.apiUrl).subscribe({
       next: (res) => {
         this.categorias = res;
-        console.log("Categorias carregadas:", this.categorias);
-      },
-      error: (error) => {
-        console.error("Erro ao carregar categorias:", error);
       },
     });
   }
 
   abrirSolicitacao() {
-    this.data.idCliente = this.authService.getIdRole() ?? "";
-
-    if (!this.data.idCliente) {
-      console.error(
-        "ID do cliente não encontrado. Não é possível criar a solicitação."
-      );
+    if (this.solicitacaoForm.invalid) {
+      const mensagem = "Formulário inválido. Verifique os campos.";
+      this.dialog.open(ModalErroComponent, {
+        data: { mensagem },
+      });
       return;
     }
 
+    const idCliente = this.authService.getIdRole() ?? "";
+
+    if (!idCliente) {
+      const mensagem =
+        "ID do cliente não encontrado. Não é possível criar a solicitação.";
+      this.dialog.open(ModalErroComponent, {
+        data: { mensagem },
+      });
+      return;
+    }
+
+    const formData = this.solicitacaoForm.getRawValue();
     const solicitacao = {
-      idCliente: this.data.idCliente,
-      descEquip: this.data.descEquip,
-      categoria: this.data.categoria,
-      descDefeito: this.data.descDefeito,
+      idCliente: idCliente,
+      descEquip: formData.descEquip,
+      categoria: formData.categoria,
+      descDefeito: formData.descDefeito,
     };
 
     this.solicitacaoService.adicionarSolicitacao(solicitacao).subscribe({
       next: () => {
-        console.log("Solicitação de manutenção criada com sucesso.");
         this.router.navigate(["/home-cliente"]);
       },
       error: (error) => {
-        console.error("Erro ao criar solicitação de manutenção:", error);
+        const mensagem =
+          error?.error?.mensagem ||
+          "Erro ao abrir a solicitação. Verifique os dados e tente novamente.";
+        this.dialog.open(ModalErroComponent, {
+          data: { mensagem },
+        });
       },
     });
   }

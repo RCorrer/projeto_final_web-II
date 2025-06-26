@@ -1,0 +1,14 @@
+<div class="background">
+    <div class="content">
+        <h1 mat-dialog-title>Orientações ao Cliente</h1>
+        <div mat-dialog-content>
+            <p><strong>Descrição da Manutenção:</strong></p>
+            <p>{{ data.descricaoManutencao || 'Não informado' }}</p>
+            <p><strong>Orientações ao Cliente:</strong></p>
+            <p>{{ data.orientacoesCliente || 'Não informado' }}</p>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-button mat-dialog-close>Fechar</button>
+        </div>
+    </div>
+</div>

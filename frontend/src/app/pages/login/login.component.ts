@@ -80,15 +80,14 @@ export class LoginComponent implements AfterViewInit {
 
   playSound() {
     this.audio.currentTime = 0;
-    this.audio.play().catch((e) => console.error("Audio playback failed:", e));
+    this.audio.play();
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
       this.http.post<LoginResponse>(this.url, this.loginForm.value).subscribe({
         next: (data: LoginResponse) => {
-          console.log("Login successful", data);
-
+          
           this.authService.login({
             token: data.token,
             nome: data.nome,
