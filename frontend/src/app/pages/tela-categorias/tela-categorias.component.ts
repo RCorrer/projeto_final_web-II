@@ -27,7 +27,6 @@ import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component
 export class TelaCategoriasComponent implements OnInit {
   categorias$!: Observable<string[]>;
   errorOccurred: boolean = false;
-  private categoriasSubject = new BehaviorSubject<string[]>([]);
 
   constructor(
     private categoriaService: CategoriaService,

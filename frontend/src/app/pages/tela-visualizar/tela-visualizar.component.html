@@ -43,7 +43,7 @@
             }}
           </p>
           <p>
-            <strong>CPF</strong><br />{{ solicitacao.cliente.cpf || "N/A" }}
+            <strong>CPF</strong><br />{{ (solicitacao.cliente.cpf | cpf) || "N/A" }}
           </p>
           <p>
             <strong>E-mail</strong><br />{{
@@ -59,7 +59,7 @@
 
         <div class="visualizar-endereco">
           <p>
-            <strong>CEP</strong><br />{{ solicitacao.cliente.cep || "N/A" }}
+            <strong>CEP</strong><br />{{ (solicitacao.cliente.cep | cep) || "N/A" }}
           </p>
           <p>
             <strong>Logradouro</strong><br />{{
@@ -115,7 +115,7 @@
 
             <div class="step-label">{{ etapa.nome }}</div>
             <div class="step-funcionario" *ngIf="etapa.funcionarioNome">
-              {{ etapa.funcionarioNome }}
+              Realizado por {{ etapa.funcionarioNome }}
             </div>
             <div class="step-date" *ngIf="etapa.dataHora">
               <p>{{ etapa.dataHora | date : "dd/MM/yyyy" }}</p>

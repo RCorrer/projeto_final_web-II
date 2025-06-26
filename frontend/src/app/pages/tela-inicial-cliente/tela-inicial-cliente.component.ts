@@ -1,31 +1,26 @@
-import { AuthService } from './../../services/auth/auth.service';
+import { AuthService } from "./../../services/auth/auth.service";
 import { Component, OnInit } from "@angular/core"; // Certifique-se que OnInit está importado
 import { CommonModule } from "@angular/common";
-import { MatButtonModule } from "@angular/material/button";
-import { MatListModule } from "@angular/material/list";
 import { SolicitacaoService } from "../../services/solicitacao/solicitacao.service";
 import { RouterLink } from "@angular/router";
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { CardSolicitacaoClienteComponent } from "../../components/cards/card-solicitacao-cliente/card-solicitacao-cliente.component";
 import { Solicitacao } from "../../models/Solicitacao.model";
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { materialImports } from "../../material-imports";
 
 @Component({
   selector: "app-tela-inicial-cliente",
   standalone: true,
   imports: [
     CommonModule,
-    MatButtonModule,
-    MatListModule,
     NavbarComponent,
     RouterLink,
     CardSolicitacaoClienteComponent,
-    MatProgressSpinnerModule
+    ...materialImports,
   ],
   templateUrl: "./tela-inicial-cliente.component.html",
   styleUrl: "./tela-inicial-cliente.component.css",
 })
-
 export class TelaInicialClienteComponent implements OnInit {
   solicitacoes: Solicitacao[] = [];
   nomeCliente: string | null = null;
@@ -36,10 +31,10 @@ export class TelaInicialClienteComponent implements OnInit {
     public authService: AuthService
   ) {}
 
-  ngOnInit() { 
+  ngOnInit() {
     this.nomeCliente = this.authService.getUserName();
-    
-    const clienteId = this.authService.getIdRole(); 
+
+    const clienteId = this.authService.getIdRole();
 
     if (this.authService.isCliente() && clienteId) {
       this.carregarMinhasSolicitacoes(clienteId);
@@ -89,7 +84,10 @@ export class TelaInicialClienteComponent implements OnInit {
     const index = this.solicitacoes.findIndex((s) => s.id === evento.id);
     if (index !== -1) {
       const solicitacoesAtualizadas = [...this.solicitacoes];
-      solicitacoesAtualizadas[index] = { ...solicitacoesAtualizadas[index], estado: evento.novoEstado };
+      solicitacoesAtualizadas[index] = {
+        ...solicitacoesAtualizadas[index],
+        estado: evento.novoEstado,
+      };
       this.solicitacoes = solicitacoesAtualizadas;
     }
   }

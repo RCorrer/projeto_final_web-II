@@ -30,11 +30,13 @@ public interface ReceitaRepository  extends JpaRepository<Receita,String> {
 
 
     @Query("SELECT NEW com.example.web_II.domain.receita.RelatorioCategoriaDTO(" +
-            "s.fkCategoriaEquipamento, " + 
-            "SUM(r.valor), " +
-            "COUNT(r.id)) " +
-            "FROM Receita r JOIN Solicitacao s ON r.fk_solicitacao = s.id " +
-            "GROUP BY s.fkCategoriaEquipamento")
+        "c.descricao, " + 
+       "SUM(r.valor), " +
+       "COUNT(r.id)) " +
+       "FROM Receita r " +
+       "JOIN Solicitacao s ON r.fk_solicitacao = s.id " +
+       "JOIN Categoria c ON s.fkCategoriaEquipamento = c.id " +
+       "GROUP BY c.descricao")
     List<RelatorioCategoriaDTO> findReceitaPorCategoria();
 
 

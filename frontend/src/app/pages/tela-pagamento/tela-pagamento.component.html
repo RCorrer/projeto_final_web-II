@@ -22,13 +22,13 @@
       <div class="visualizar-right">
         <div class="visualizar-contato">
           <p><strong>Cliente</strong><br />{{ solicitacao.cliente.nome || 'N/A' }}</p>
-          <p><strong>CPF</strong><br />{{ solicitacao.cliente.cpf || 'N/A' }}</p>
+          <p><strong>CPF</strong><br />{{ (solicitacao.cliente.cpf | cpf)|| 'N/A' }}</p>
           <p><strong>E-mail</strong><br />{{ solicitacao.cliente.email || 'N/A' }}</p>
           <p><strong>Telefone</strong><br />{{ solicitacao.cliente.telefone || 'N/A' }}</p>
         </div>
 
         <div class="visualizar-endereco">
-          <p><strong>CEP</strong><br />{{ solicitacao.cliente.cep || 'N/A' }}</p>
+          <p><strong>CEP</strong><br />{{ (solicitacao.cliente.cep | cep) || 'N/A' }}</p>
           <p><strong>Logradouro</strong><br />{{ solicitacao.cliente.logradouro || 'N/A' }}</p>
           <p><strong>Complemento</strong><br />{{ solicitacao.cliente.complemento || 'N/A' }}</p>
           <p><strong>Cidade</strong><br />{{ solicitacao.cliente.localidade || 'N/A' }}</p>

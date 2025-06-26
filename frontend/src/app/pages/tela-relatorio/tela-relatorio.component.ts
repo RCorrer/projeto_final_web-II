@@ -1,146 +1,225 @@
-import { CategoriaService } from './../../services/categoria/categoria.service';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
-import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { materialImports } from '../../material-imports';
+import { Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { NavbarComponent } from "../../components/navbar/navbar.component";
+import { materialImports } from "../../material-imports";
+import {
+  RelatorioPorCategoria,
+  RelatorioPorDia,
+} from "../../models/relatorio.model";
+import { RelatorioService } from "../../services/relatorio/relatorio.service";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import {
+  MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
+} from "@angular/material/core";
 
 @Component({
-  selector: 'app-tela-relatorio',
+  selector: "app-tela-relatorio",
   standalone: true,
   imports: [CommonModule, NavbarComponent, ...materialImports],
-  templateUrl: './tela-relatorio.component.html',
-  styleUrl: './tela-relatorio.component.css',
   providers: [
-    provideNativeDateAdapter({
-      parse: { dateInput: 'DD/MM/YYYY' },
-      display: {
-        dateInput: 'DD/MM/YYYY',
-        monthYearLabel: 'MM YYYY',
-        dateA11yLabel: 'DD de MMMM de YYYY',
-        monthYearA11yLabel: 'MMMM de YYYY'
-      },
-    }),
-    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
   ],
+  templateUrl: "./tela-relatorio.component.html",
+  styleUrl: "./tela-relatorio.component.css",
 })
 export class TelaRelatorioComponent implements OnInit {
+  tipoRelatorio: "porData" | "porCategoria" = "porData";
   filtroForm!: FormGroup;
-  categorias: string[] = [];
-  totalCategoria: number | null = null;
 
-  tipoRelatorio: 'porData' | 'porCategoria' = 'porData';
-  dadosOriginais = [
-    { data: '01/04/2025', receita: 2000, categoria: 'Impressora' },
-    { data: '01/04/2025', receita: 2000, categoria: 'Impressora' },
-    { data: '02/04/2025', receita: 1500, categoria: 'Monitor' },
-    { data: '02/04/2025', receita: 1500, categoria: 'Monitor' },
-    { data: '03/04/2025', receita: 1500, categoria: 'Monitor' },
-    { data: '03/04/2025', receita: 2300, categoria: 'Teclado' },
+  relatorioPorCategoria: RelatorioPorCategoria[] = [];
+  totalCategoria = 0;
+  displayedColumnsCategoria: string[] = [
+    "categoria",
+    "quantidadeServicos",
+    "receitaTotal",
   ];
-  relatorio: any[] = [];
 
-  constructor(private fb: FormBuilder, private categoriaService: CategoriaService) {}
+  relatorioDia: RelatorioPorDia[] = [];
+  totalPeriodo = 0;
+  displayedColumnsData: string[] = ["dia", "receitaTotal"];
+
+  constructor(
+    private fb: FormBuilder,
+    private relatorioService: RelatorioService
+  ) {}
 
   ngOnInit(): void {
-    this.filtroForm = this.fb.group({ start: [null], end: [null], categoria: [null] });
-    this.filtroForm.valueChanges.subscribe(() => this.atualizarRelatorio());
-    this.carregarCategorias();
-    this.atualizarRelatorio();
+    const hoje = new Date();
+    const umMesAtras = new Date();
+    umMesAtras.setMonth(hoje.getMonth() - 1);
 
+    this.filtroForm = this.fb.group({
+      start: [umMesAtras],
+      end: [hoje],
+    });
+
+    this.ouvirFiltro();
+    this.atualizarRelatorio();
   }
 
-  carregarCategorias(): void {
-    // this.categorias = this.categoriaService.getCategorias().map(c => c.descricao);
+  ouvirFiltro(): void {
+    this.filtroForm.valueChanges
+      .pipe(debounceTime(400), distinctUntilChanged())
+      .subscribe(() => {
+        if (this.tipoRelatorio === "porData") {
+          this.carregarRelatorioPorDia();
+        }
+      });
+  }
+
+  atualizarRelatorio(): void {
+    if (this.tipoRelatorio === "porCategoria") {
+      this.filtroForm.disable({ emitEvent: false });
+      this.carregarRelatorioPorCategoria();
+    } else {
+      this.filtroForm.enable({ emitEvent: false });
+      this.carregarRelatorioPorDia();
+    }
+  }
+
+  carregarRelatorioPorDia(): void {
+    const { start, end } = this.filtroForm.value;
+    const dataInicial = start
+      ? new Date(start).toISOString().split("T")[0]
+      : undefined;
+    const dataFinal = end
+      ? new Date(end).toISOString().split("T")[0]
+      : undefined;
+
+    this.relatorioService
+      .getRelatorioPorPeriodo(dataInicial, dataFinal)
+      .subscribe({
+        next: (data) => {
+          this.relatorioDia = data;
+          this.totalPeriodo = data.reduce(
+            (acc, item) => acc + item.receitaTotal,
+            0
+          );
+        },
+        error: (err) =>
+          console.error("Erro ao carregar relatório por dia:", err),
+      });
+  }
+
+  carregarRelatorioPorCategoria(): void {
+    this.relatorioService.getRelatorioPorCategoria().subscribe({
+      next: (data) => {
+        this.relatorioPorCategoria = data;
+        this.totalCategoria = data.reduce(
+          (acc, item) => acc + item.receitaTotal,
+          0
+        );
+      },
+      error: (err) =>
+        console.error("Erro ao carregar relatório por categoria:", err),
+    });
   }
 
   formatarData(dataStr: string): string {
-    const [dia, mes, ano] = dataStr.split('/');
-    const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
-  
-    return data.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
+    const data = new Date(dataStr + "T00:00:00-03:00");
+    return data.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
     });
   }
-  
 
-  atualizarRelatorio(): void {
-    const { start, end, categoria } = this.filtroForm.value;
-    let dados = [...this.dadosOriginais];
-  
-    // 🔸 RF020 - Relatório por Categoria (sem filtro de data)
-    if (this.tipoRelatorio === 'porCategoria') {
-      const grupoMap: Record<string, number> = {};
-  
-      dados.forEach(item => {
-        grupoMap[item.categoria] = (grupoMap[item.categoria] || 0) + item.receita;
+  gerarPDF(): void {
+    const doc = new jsPDF();
+    const formatCurrency = (value: number) =>
+      new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(value);
+
+    if (this.tipoRelatorio === "porData") {
+      doc.text("Relatório de Receita por Período", 14, 20);
+      autoTable(doc, {
+        startY: 30,
+        headStyles: {
+          fillColor: "#8080ff",
+          textColor: "#ffffff",
+          fontStyle: "bold",
+        },
+        head: [
+          [
+            { content: "Data", styles: { halign: "left" } },
+            { content: "Receita Total do Dia", styles: { halign: "right" } },
+          ],
+        ],
+        body: this.relatorioDia.map((item) => [
+          this.formatarData(item.dia),
+          formatCurrency(item.receitaTotal),
+        ]),
+        foot: [
+          [
+            {
+              content: "Total do Período",
+              styles: { halign: "left", fontStyle: "bold" as const },
+            },
+            {
+              content: formatCurrency(this.totalPeriodo),
+              styles: { halign: "right", fontStyle: "bold" as const },
+            },
+          ],
+        ],
+        footStyles: {
+          fillColor: "#8080ff",
+          textColor: "#ffffff",
+          fontStyle: "bold",
+        },
+        columnStyles: { 1: { halign: "right" } },
+        showFoot: "lastPage",
       });
-  
-      this.relatorio = Object.entries(grupoMap).map(([categoria, receita]) => ({
-        categoria,
-        receita,
-      }));
-  
-      this.totalCategoria = dados.reduce((acc, item) => acc + item.receita, 0);
-      return;
-    }
-  
-    // 🔸 RF019 - Relatório por Data (com filtros)
-    if (start && end) {
-      dados = dados.filter(item => {
-        const [dia, mes, ano] = item.data.split('/');
-        const itemDate = new Date(Number(ano), Number(mes) - 1, Number(dia));
-        return itemDate >= start && itemDate <= end;
+    } else {
+      doc.text("Relatório de Receita por Categoria", 14, 20);
+      autoTable(doc, {
+        startY: 30,
+        headStyles: {
+          fillColor: "#8080ff",
+          textColor: "#ffffff",
+          fontStyle: "bold",
+        },
+        head: [
+          [
+            { content: "Categoria", styles: { halign: "left" } },
+            { content: "Quantidade de Serviços", styles: { halign: "center" } },
+            { content: "Receita Total", styles: { halign: "right" } },
+          ],
+        ],
+        body: this.relatorioPorCategoria.map((item) => [
+          item.categoria,
+          item.quantidadeServicos.toString(),
+          formatCurrency(item.receitaTotal),
+        ]),
+        foot: [
+          [
+            {
+              content: "Total",
+              colSpan: 2,
+              styles: { halign: "left" },
+            },
+            {
+              content: formatCurrency(this.totalCategoria),
+              styles: { halign: "right" },
+            },
+          ],
+        ],
+        footStyles: {
+          fillColor: "#8080ff",
+          textColor: "#ffffff",
+          fontStyle: "bold",
+        },
+        columnStyles: { 1: { halign: "center" }, 2: { halign: "right" } },
+        showFoot: "lastPage",
       });
     }
-  
-    if (categoria) {
-      dados = dados.filter(item => item.categoria === categoria);
-    }
-  
-    const grupoMap: Record<string, { data: string, itens: any[], total: number }> = {};
-  
-    dados.forEach(item => {
-      const grupo = grupoMap[item.data] || { data: item.data, itens: [], total: 0 };
-      grupo.itens.push(item);
-      grupo.total += item.receita;
-      grupoMap[item.data] = grupo;
-    });
-  
-    this.relatorio = Object.values(grupoMap);
-    this.totalCategoria = null;
-  }
-  
-  
 
-  agruparPor(dados: any[], chave: 'data' | 'categoria') {
-    return Object.entries(
-      dados.reduce((acc, item) => {
-        acc[item[chave]] = (acc[item[chave]] || 0) + item.receita;
-        return acc;
-      }, {} as Record<string, number>)
-    ).map(([key, receita]) => ({ [chave]: key, receita }));
-  }
-
-  agruparPorDataComDetalhes(dados: any[]) {
-    const agrupado: Record<string, { categoria: string; receita: number }[]> = {};
-  
-    dados.forEach(item => {
-      if (!agrupado[item.data]) {
-        agrupado[item.data] = [];
-      }
-      agrupado[item.data].push({ categoria: item.categoria, receita: item.receita });
-    });
-  
-    return Object.entries(agrupado).map(([data, registros]) => {
-      const total = registros.reduce((soma, r) => soma + r.receita, 0);
-      return { data, registros, total };
-    });
-  }
-  
-  gerarRelatorio(): void {
+    doc.save(`relatorio_${this.tipoRelatorio}.pdf`);
   }
 }

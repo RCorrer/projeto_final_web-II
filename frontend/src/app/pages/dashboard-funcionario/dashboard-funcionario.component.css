@@ -8,7 +8,7 @@
   flex-wrap: wrap;
   gap: 1rem;
   justify-items: center;
-  padding-inline: 1rem;
+  padding-inline: 4rem;
 }
 
 .solicitacoes-content {
@@ -40,8 +40,12 @@
   color: var(--color-primary);
 }
 
-.filtro-container {
+.filtros-container {
+  display: flex;
+  flex-direction: row;
   min-width: 200px;
+  padding-inline: 1.5rem;
+  gap: 1rem;
 }
 
 .filtros {

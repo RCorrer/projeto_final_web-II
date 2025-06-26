@@ -5,96 +5,165 @@
     <section class="container">
       <header>
         <h1 class="title">Relatórios</h1>
-        <p class="subtitle">Gerencie os relatórios da sua empresa</p>
+        <p class="subtitle">
+          Receita total da empresa, agrupada por categoria de equipamento ou
+          período.
+        </p>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="gerarPDF()"
+          [disabled]="
+            (tipoRelatorio === 'porData' && relatorioDia.length === 0) ||
+            (tipoRelatorio === 'porCategoria' &&
+              relatorioPorCategoria.length === 0)
+          "
+        >
+          <mat-icon>picture_as_pdf</mat-icon>
+          Gerar PDF
+        </button>
       </header>
 
       <div class="relatorio-content">
         <div class="info-text">
           <mat-icon class="info-icon" aria-hidden="true">info</mat-icon>
-          <p>
-            Visualize todos os relatórios ou utilize filtros por data ou
-            categoria.
-          </p>
+          <p>Visualize todos os registros financeiros da empresa.</p>
         </div>
+        <div class="filtros-container">
+          <mat-button-toggle-group
+            [(ngModel)]="tipoRelatorio"
+            (change)="atualizarRelatorio()"
+            aria-label="Tipo de Relatório"
+          >
+            <mat-button-toggle value="porData">Por Período</mat-button-toggle>
+            <mat-button-toggle value="porCategoria"
+              >Por Categoria</mat-button-toggle
+            >
+          </mat-button-toggle-group>
 
-        <div class="filtros">
-          <form [formGroup]="filtroForm" class="filtro">
-            <!-- Filtro por período -->
-            <div class="date-filter-container">
-              <mat-form-field appearance="outline" class="date-filter">
-                <mat-label>Selecione o período</mat-label>
-                <mat-date-range-input [rangePicker]="picker">
-                  <input
-                    matStartDate
-                    formControlName="start"
-                    placeholder="Data inicial"
-                  />
-                  <input
-                    matEndDate
-                    formControlName="end"
-                    placeholder="Data final"
-                  />
-                </mat-date-range-input>
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker"
-                ></mat-datepicker-toggle>
-              </mat-form-field>
+          <form [formGroup]="filtroForm" class="filtro-data">
+            <mat-form-field appearance="outline">
+              <mat-label>Selecione o período</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input
+                  matStartDate
+                  formControlName="start"
+                  placeholder="Data inicial"
+                />
+                <input
+                  matEndDate
+                  formControlName="end"
+                  placeholder="Data final"
+                />
+              </mat-date-range-input>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
-            </div>
-
-            <!-- Filtro por categoria -->
-            <form [formGroup]="filtroForm" class="form-filtros">
-              <mat-form-field appearance="outline" class="campo">
-                <mat-label>Categoria</mat-label>
-                <mat-select formControlName="categoria">
-                  <mat-option [value]="null">Todas</mat-option>
-                  <mat-option
-                    *ngFor="let categoria of categorias"
-                    [value]="categoria"
-                  >
-                    {{ categoria }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <!-- Campos para data podem estar aqui também -->
-            </form>
+            </mat-form-field>
           </form>
         </div>
 
-        <!-- Exibição dos dados -->
-        <div class="relatorio-lista" *ngIf="tipoRelatorio === 'porData'">
-          <div *ngFor="let grupo of relatorio" class="grupo-dia">
-            <h2>{{ formatarData(grupo.data) }}</h2>
-
-            <ul>
-              <li *ngFor="let item of grupo.registros">
-                <span>{{ item.categoria }}:</span>
-                <span>R${{ item.receita }}</span>
-              </li>
-            </ul>
-            <div class="total-dia">
-              <span>Total arrecadado: R${{ grupo.total | number: '1.2-2' }}</span>
+        <!-- SEÇÃO DAS TABELAS -->
+        <div class="relatorio-tabela">
+          <!-- Tabela para Relatório por Data (RF019) -->
+          <div *ngIf="tipoRelatorio === 'porData'">
+            <div *ngIf="relatorioDia.length === 0" class="empty-state">
+              <p>Nenhum resultado encontrado para o período selecionado.</p>
             </div>
+            <table
+              mat-table
+              [dataSource]="relatorioDia"
+              class="mat-elevation-z4"
+              *ngIf="relatorioDia.length > 0"
+            >
+              <ng-container matColumnDef="dia">
+                <th mat-header-cell *matHeaderCellDef>Data</th>
+                <td mat-cell *matCellDef="let item">
+                  {{ formatarData(item.dia) }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef>
+                  <strong>Total do Período</strong>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="receitaTotal">
+                <th mat-header-cell *matHeaderCellDef class="align-right">
+                  Receita Total
+                </th>
+                <td mat-cell *matCellDef="let item" class="align-right">
+                  {{ item.receitaTotal | currency : "BRL" }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="align-right">
+                  <strong>{{ totalPeriodo | currency : "BRL" }}</strong>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsData"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumnsData"
+              ></tr>
+              <tr
+                mat-footer-row
+                *matFooterRowDef="displayedColumnsData"
+                class="total-row"
+              ></tr>
+            </table>
           </div>
-        </div>
 
-        <!-- Mostrar total geral da categoria se houver filtro aplicado -->
-<!-- RF020: Relatório por Categoria -->
-<div *ngIf="tipoRelatorio === 'porCategoria'">
-  <ul>
-    <li *ngFor="let item of relatorio">
-      {{ item.categoria }} - R$ {{ item.receita | number: '1.2-2' }}
-    </li>
-  </ul>
-  <h4>Total arrecadado: R$ {{ totalCategoria | number: '1.2-2' }}</h4>
-</div>
-
-        <div class="relatorio-buttons">
-          <div class="tipo-relatorio-botoes">
-            <button mat-button (click)="tipoRelatorio = 'porData'; atualizarRelatorio()">Receita por Dia</button>
-            <button mat-button (click)="tipoRelatorio = 'porCategoria'; atualizarRelatorio()">Receita por Categoria</button>
+          <!-- Tabela para Relatório por Categoria (RF020) -->
+          <div *ngIf="tipoRelatorio === 'porCategoria'">
+            <div *ngIf="relatorioPorCategoria.length === 0" class="empty-state">
+              <p>Nenhuma categoria com receita encontrada.</p>
+            </div>
+            <table
+              mat-table
+              [dataSource]="relatorioPorCategoria"
+              class="mat-elevation-z4"
+              *ngIf="relatorioPorCategoria.length > 0"
+            >
+              <ng-container matColumnDef="categoria">
+                <th mat-header-cell *matHeaderCellDef>Categoria</th>
+                <td mat-cell *matCellDef="let item">{{ item.categoria }}</td>
+                <td mat-footer-cell *matFooterCellDef>
+                  <strong>Total</strong>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="quantidadeServicos">
+                <th mat-header-cell *matHeaderCellDef class="align-center">
+                  Quantidade de Serviços
+                </th>
+                <td mat-cell *matCellDef="let item" class="align-center">
+                  {{ item.quantidadeServicos }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="receitaTotal">
+                <th mat-header-cell *matHeaderCellDef class="align-right">
+                  Receita Total
+                </th>
+                <td mat-cell *matCellDef="let item" class="align-right">
+                  {{ item.receitaTotal | currency : "BRL" }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="align-right">
+                  <strong>{{ totalCategoria | currency : "BRL" }}</strong>
+                </td>
+              </ng-container>
+              <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumnsCategoria"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumnsCategoria"
+              ></tr>
+              <tr
+                mat-footer-row
+                *matFooterRowDef="displayedColumnsCategoria"
+                class="total-row"
+              ></tr>
+            </table>
           </div>
         </div>
       </div>

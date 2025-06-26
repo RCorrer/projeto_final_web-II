@@ -9,6 +9,8 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { ModalOrientacoesComponent } from "../../modals/modal-orientacoes/modal-orientacoes.component";
 import { ModalMotivoRejeicaoComponent } from "../../modals/modal-motivo-rejeicao/modal-motivo-rejeicao.component";
+import { CpfPipe } from "../../shared/cpf.pipe";
+import { CepPipe } from "../../shared/cep.pipe";
 
 interface Etapa {
   nome: string;
@@ -19,7 +21,7 @@ interface Etapa {
 
 @Component({
   selector: "app-tela-visualizar",
-  imports: [CommonModule, RouterLink, DatePipe],
+  imports: [CommonModule, RouterLink, DatePipe, CpfPipe, CepPipe],
   templateUrl: "./tela-visualizar.component.html",
   styleUrl: "./tela-visualizar.component.css",
 })

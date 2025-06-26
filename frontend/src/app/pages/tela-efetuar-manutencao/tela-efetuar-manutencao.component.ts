@@ -18,21 +18,19 @@ import { MatDialog } from "@angular/material/dialog";
 import { AuthService } from "../../services/auth/auth.service";
 import { ManutencaoConfirmadaEvent } from "../../modals/modal-efetuar-manutencao/modal-efetuar-manutencao.component";
 import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
+import { CpfPipe } from "../../shared/cpf.pipe";
+import { CepPipe } from "../../shared/cep.pipe";
 
 @Component({
   selector: "app-tela-efetuar-manutencao",
   standalone: true,
   imports: [
     ...materialImports,
-    MatInputModule,
-    FormsModule,
     CommonModule,
-    MatButtonModule,
     RouterLink,
-    MatProgressSpinnerModule,
     ModalEfetuarManutencaoComponent,
     ModalRedirecionarComponent,
-  ],
+    CpfPipe, CepPipe],
   templateUrl: "./tela-efetuar-manutencao.component.html",
   styleUrl: "./tela-efetuar-manutencao.component.css",
 })

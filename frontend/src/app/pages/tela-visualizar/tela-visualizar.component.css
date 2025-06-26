@@ -1,4 +1,3 @@
-/* Base styles */
 .initial-load {
   display: none;
 }
@@ -51,6 +50,11 @@
   cursor: pointer;
   text-decoration: none;
   font-weight: bold;
+}
+
+.x a:hover {
+  color: var(--color-rejeitada);
+  transition: 0.3s ease-in-out;
 }
 
 /* Content styles */
@@ -128,10 +132,6 @@
   position: relative;
 }
 
-.stepper.tres-etapas {
-  justify-content: center;
-}
-
 .step {
   display: flex;
   flex-direction: column;
@@ -139,19 +139,8 @@
   position: relative;
   flex: 1;
   z-index: 1;
-}
-
-.step:last-child {
-  flex: 0;
-}
-
-.stepper.tres-etapas .step {
-  flex: 0 1 auto;
-  min-width: 100px;
-}
-
-.stepper.tres-etapas .step:nth-child(2) {
-  margin: 0 40px;
+  min-height: 110px;
+  justify-content: flex-start;
 }
 
 .step-circle {
@@ -194,6 +183,13 @@
   transition: all 0.3s ease;
 }
 
+
+.stepper.tres-etapas {
+  justify-content: space-between;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
 .step-connector.completo {
   background-color: var(--md-sys-color-primary, #4caf50);
 }
@@ -215,7 +211,12 @@
   font-weight: 500;
 }
 
-.step-date {
+.details button {
+  padding: 1rem;
+   
+}
+
+.step-date, .step-funcionario {
   font-size: 0.8rem;
   color: var(--color-icons);
   margin-top: 0.25rem;

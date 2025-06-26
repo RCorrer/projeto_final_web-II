@@ -9,10 +9,12 @@ import { environment } from "../../../environments/environment";
 import { ModalErroComponent } from "../../modals/modal-erro/modal-erro.component";
 import { ModalOrientacoesComponent } from "../../modals/modal-orientacoes/modal-orientacoes.component";
 import { SolicitacaoComHistoricoDTO } from "../../models/solicitacao-dto.model";
+import { CepPipe } from "../../shared/cep.pipe";
+import { CpfPipe } from "../../shared/cpf.pipe";
 
 @Component({
   selector: "app-tela-pagamento",
-  imports: [CommonModule, RouterLink, MatButtonModule],
+  imports: [CommonModule, RouterLink, MatButtonModule, CepPipe, CpfPipe],
   templateUrl: "./tela-pagamento.component.html",
   styleUrl: "./tela-pagamento.component.css",
 })
